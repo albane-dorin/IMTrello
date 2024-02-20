@@ -1,6 +1,10 @@
 
 class User :
-    def __init__(self, id, name, password):
+    last_id = 0
+
+    def __init__(self, name, password):
+        User.last_id = User.last_id + 1
+        self.id = User.last_id
         self.id=id
         self.name = name
         self.password = password
@@ -8,17 +12,17 @@ class User :
         self.isManager = None
 
 class Developer(User):
-    def __init__(self, id, name, password):
-        super().__init__(id, name, password)
+    def __init__(self, name, password):
+        super().__init__(name, password)
         self.isDeveloper=True
 
 class Manager(User):
-    def __init__(self, id, name, password):
-        super().__init__(id, name, password)
+    def __init__(self, name, password):
+        super().__init__( name, password)
         self.isManager=True
 
 class ManDev(Developer, Manager):
-    def __init__(self, id, name, password):
-        Manager.__init__(self, id, name, password)
-        Developer.__init__(self, id, name, password)
+    def __init__(self, name, password):
+        Manager.__init__(self, name, password)
+        Developer.__init__(self, name, password)
 
