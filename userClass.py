@@ -8,8 +8,18 @@ class User :
         self.id=id
         self.name = name
         self.password = password
+        self.theirNotifs = []
         self.isDeveloper = None
         self.isManager = None
+
+    def addNotif(self, notif):
+        self.theirNotifs.append()
+
+    def delNotif(self, notif):
+        self.theirNotifs
+
+    def delAllNotifs(self):
+        self.theirNotifs = []
 
 class Developer(User):
     def __init__(self, name, password):

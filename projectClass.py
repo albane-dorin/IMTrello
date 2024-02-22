@@ -5,6 +5,15 @@ from datetime import date
 from enum import Enum
 
 
+###############################################################
+class Notification:
+
+    def __init__(self, project_id, notif_type: str, task_id = None):
+        self.project_id = project_id
+        if task_id != None:
+            self.task_id = task_id
+        self.notif_type = notif_type
+
 ##########################################
 class Column:
     last_id = 0
@@ -50,19 +59,23 @@ class Comment:
 
 #########################################################
 class Task:
+
     last_id = 0
 
 # Constructors
-    def __init__(self, name, description, column, developers: list[Developer], year, month, day):
+    def __init__(self, name, description, idProject, column, developers: list[Developer], year, month, day):
         Task.last_id = Task.last_id + 1
         self.id = Task.last_id
         self.name = name
         self.description = description
+        self.idProject = idProject
         self.column = column
         self.status = 0
         self.developers = developers
         self.endDate = datetime.date(year, month, day)
         self.comments = []
+        for dvp in developers:
+            dvp.addNotif(Notification(self.idProject, "Nouvelle tâche", self.id))
 
     # Getter
     def get_id(self):
@@ -73,6 +86,9 @@ class Task:
 
     def get_description(self):
         return self.description
+
+    def get_idProject(self):
+        return self.idProject
 
     def get_column(self):
         return self.column
@@ -104,21 +120,26 @@ class Task:
 
     def add_developer(self, new_developer):
         self.developers.append(new_developer)
+        new_developer.addNotif(Notification(self.idProject, "Nouvelle tâche", self.get_id()))
 
     def remove_developer(self, new_developer):
         self.developers.remove(new_developer)
 
     def new_endDate(self, year, month, day):
         self.endDate = datetime.date(year, month, day)
+        for dvp in self.get_developers() :
+            dvp.addNotif(Notification(self.idProject, "Attention. Nouvelle date.", self.get_id()))
 
     def add_comments(self, new_comments : Comment):
         self.comments.append(new_comments)
+        for dvp in self.get_developers():
+            dvp.addNotif(Notification(self.idProject, "Nouveau commentaire", self.get_id()))
 
     #Check if the end date is near (less than 3 days)
     def  is_soon(self):
         if self.endDate - datetime.timedelta(days=3) < datetime.date.today() <= self.endDate:
             return True
-        else :
+        else:
             return False
 
     def is_late(self):
@@ -147,6 +168,8 @@ class Project:
         # Utilisateurs
         self.manager = manager
         self.workers = workers
+        for worker in workers:
+            worker.addNotif(self.get_id(), "Nouveau projet")
 
     # Getter
     def get_id(self):
@@ -202,22 +225,8 @@ class Project:
     # Add a developer. worker is a Developer
     def add_worker(self, worker):
         self.workers.append()
+        worker.addNotif(self.get_id(),"Nouveau Projet")
 
     # Delete a worker. worker in a Developer
     def delete_worker(self, worker):
         self.workers.remove(worker)
-
-
-###############################################################
-class Notification:
-    last_id = 0
-
-    def __init__(self, id, source, description):
-        Notification.last_id = Notification.last_id + 1
-        self.id = Notification.last_id
-        self.source = source
-        self.description = description
-
-
-
-
