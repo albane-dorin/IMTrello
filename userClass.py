@@ -1,4 +1,7 @@
+import datetime
+
 import TrelloClass
+import projectClass
 
 
 class User:
@@ -27,7 +30,7 @@ class User:
             while True:
                 name = input("Enter your username: ")
                 password = input("Enter your password: ")
-                if trello.can_connect_user(name, password):
+                if trello.can_get_user(name, password):
                     break
                 else:
                     print("Nom d'utilisateur ou mot de passe incorrect, réessayez ou créez un compte")
@@ -62,16 +65,28 @@ class User:
     def delAllNotifs(self):
         self.theirNotifs = []
 
+#############################################################
 class Developer(User):
     def __init__(self, name, password):
         super().__init__(name, password)
         self.isDeveloper=True
 
+#############################################################
 class Manager(User):
     def __init__(self, name, password):
         super().__init__( name, password)
         self.isManager=True
 
+#Créer un projet vide, sans collaborateur /!\ Date à implémenter ! /!\
+    def create_project(self, trello):
+        name = input("Enter the name of the project: ")
+        description = input("Enter the description of the project: ")
+        #date = input("Enter the predicted date for the end of this project: ")
+        trello.add_project(projectClass.Project(name, description, datetime.date.year,
+                            datetime.date.month, datetime.date.day,[], self, []))
+
+
+#############################################################
 class ManDev(Developer, Manager):
     def __init__(self, name, password):
         Manager.__init__(self, name, password)

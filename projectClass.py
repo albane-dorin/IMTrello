@@ -5,7 +5,7 @@ from datetime import date
 from enum import Enum
 
 
-###############################################################
+#############################################################
 class Notification:
 
     def __init__(self, project_id, notif_type: str, task_id = None):
@@ -14,7 +14,7 @@ class Notification:
             self.task_id = task_id
         self.notif_type = notif_type
 
-##########################################
+#############################################################
 class Column:
     last_id = 0
 
@@ -36,7 +36,7 @@ class Column:
 
 # Méthodes
 
-#######################################################
+#############################################################
 class Status(Enum):
     WAITING = 0
     IN_PROGRESS = 1
@@ -44,7 +44,7 @@ class Status(Enum):
     CANCELLED = 3
     BLOCKED = 4
 
-########################################################
+#############################################################
 class Comment:
 
     def __init__(self, author, name):
@@ -57,7 +57,7 @@ class Comment:
     def get_name(self):
         return self.name
 
-#########################################################
+#############################################################
 class Task:
 
     last_id = 0
@@ -148,7 +148,7 @@ class Task:
         else:
             return False
 
-#######################################################
+#############################################################
 
 class Project:
     last_id = 0
