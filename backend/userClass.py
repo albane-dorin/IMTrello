@@ -1,6 +1,3 @@
-import datetime
-
-import TrelloClass
 import projectClass
 
 
@@ -59,6 +56,11 @@ class User:
                     break
                 case _:
                     print("Invalid entry")
+
+    def suppress_account(self, trello):
+        for project in trello.get_projects():
+            if project.get_manager().get_id():
+                print("toto")
 
 
 
