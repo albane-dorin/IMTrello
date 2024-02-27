@@ -136,7 +136,7 @@ class Task:
             dvp.addNotif(Notification(self.idProject, "Nouveau commentaire", self.get_id()))
 
     #Check if the end date is near (less than 3 days)
-    def  is_soon(self):
+    def is_soon(self):
         if self.endDate - datetime.timedelta(days=3) < datetime.date.today() <= self.endDate:
             return True
         else:
@@ -224,7 +224,7 @@ class Project:
 
     # Add a developer. worker is a Developer
     def add_worker(self, worker):
-        self.workers.append()
+        self.workers.append(worker)
         worker.addNotif(self.get_id(),"Nouveau Projet")
 
     # Delete a worker. worker in a Developer
