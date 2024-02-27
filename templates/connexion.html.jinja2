@@ -13,9 +13,12 @@
             <button> Inscription</button>
         </div>
 
+
         <form class="formulaire">
-            <p>Email : <input type="text" placeholder="ex: name.surname@thing.com" value="" required> </p>
-            <p>Password : <input type="text" value </p>
+            {% block form %}
+                <p>Email : <input type="text" placeholder="ex: name.surname@thing.com" value="" required> </p>
+                <p>Password : <input type="text" value </p>
+            {% endblock %}
 
             <p><input type="submit"></p>
 
