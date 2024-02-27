@@ -10,8 +10,16 @@ class Trello:
     def get_users(self):
         return self.users
 
+    def get_user_by_id(self, id):
+        for user in self.users:
+            if user.get_id() == id: return user
+
     def get_projects(self):
         return self.projects
+
+    def get_project_by_id(self, id):
+        for project in self.projects:
+            if project.get_id() == id: return project
 
     def create_account(self, name, password, role):
         match role:
