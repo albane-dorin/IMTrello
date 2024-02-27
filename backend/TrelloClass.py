@@ -10,6 +10,9 @@ class Trello:
     def get_users(self):
         return self.users
 
+    def get_projects(self):
+        return self.projects
+
     def create_account(self, name, password, role):
         match role:
             case "0":

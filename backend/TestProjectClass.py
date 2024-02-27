@@ -42,7 +42,7 @@ print("Is it late ?", t1.is_late())
 
 #Tests Project
 
-p = projectClass.Project("imtrello", "Test project", 2024,3,30,[c0, c1],
+p = projectClass.Project("imtrello", "Test project", 2024, 3, 30, [c0, c1],
                          None, None)
 
 p.rename("IMTrello")
