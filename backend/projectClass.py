@@ -115,8 +115,9 @@ class Task:
     def move_column(self, new_column : Column) :
         self.column = new_column
 
-    def new_status(self, new_status : Status):
-        self.status = new_status
+    def new_status(self, new_status : Status, user):
+        if user in self.get_developers():
+            self.status = new_status
 
     def add_developer(self, new_developer):
         self.developers.append(new_developer)
@@ -136,7 +137,7 @@ class Task:
             dvp.addNotif(Notification(self.idProject, "Nouveau commentaire", self.get_id()))
 
     #Check if the end date is near (less than 3 days)
-    def  is_soon(self):
+    def is_soon(self):
         if self.endDate - datetime.timedelta(days=3) < datetime.date.today() <= self.endDate:
             return True
         else:
@@ -199,34 +200,47 @@ class Project:
     # Méthodes
 
     # Change the title of the project. new_name is a string
-    def rename(self, new_name):
-        self.name = new_name
+    def rename(self, new_name, user):
+        if user==self.get_manager() :
+            self.name = new_name
 
     # Change the description of the project. new_description is a string
-    def new_description(self, new_description):
-        self.description = new_description
+    def new_description(self, new_description, user):
+        if user == self.get_manager():
+            self.description = new_description
 
     # Add a new column. column is a Column
-    def new_column(self, column):
-        self.columns.append(column)
+    def new_column(self, column, user):
+        if user == self.get_manager():
+            self.columns.append(column)
 
     # delete a column. column is a Column
-    def delete_column(self, column):
-        self.columns.remove(column)
+    def delete_column(self, column,user):
+        if user == self.get_manager():
+            self.columns.remove(column)
 
     # add a new task. new_task is a task
-    def new_task(self, task:Task):
-        self.tasks.append(task)
+    def new_task(self, task:Task, user):
+        if user == self.get_manager():
+            self.tasks.append(task)
 
     # delete task. task is a Task
-    def delete_task(self, task):
-        self.tasks.remove(task)
+    def delete_task(self, task,user):
+        if user == self.get_manager():
+            self.tasks.remove(task)
 
     # Add a developer. worker is a Developer
-    def add_worker(self, worker):
-        self.workers.append()
-        worker.addNotif(self.get_id(),"Nouveau Projet")
+    def add_worker(self, worker, user):
+        if user == self.get_manager():
+            self.workers.append(worker)
+            worker.addNotif(self.get_id(),"Nouveau Projet")
 
     # Delete a worker. worker in a Developer
-    def delete_worker(self, worker):
-        self.workers.remove(worker)
+    def delete_worker(self, worker, user):
+        if user == self.get_manager():
+            self.workers.remove(worker)
+
+    #Changer le manager du projet
+    def change_manager(self, new_manager, user):
+        if user == self.get_manager():
+            self.manager = new_manager
