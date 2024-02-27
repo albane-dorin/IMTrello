@@ -65,10 +65,10 @@ class User:
 
 
     def addNotif(self, notif):
-        self.theirNotifs.append()
+        self.theirNotifs.append(notif)
 
     def delNotif(self, notif):
-        self.theirNotifs
+        self.theirNotifs.remove(notif)
 
     def delAllNotifs(self):
         self.theirNotifs = []
