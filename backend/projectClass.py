@@ -239,3 +239,8 @@ class Project:
     def delete_worker(self, worker, user):
         if user == self.get_manager():
             self.workers.remove(worker)
+
+    #Changer le manager du projet
+    def change_manager(self, new_manager, user):
+        if user == self.get_manager():
+            self.manager = new_manager
