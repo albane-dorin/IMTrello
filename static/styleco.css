@@ -3,6 +3,10 @@ html{
     height: 100%;
 }
 
+*{
+    font-size: 1vw;
+}
+
 body{
     margin: 0px;
 }
@@ -19,14 +23,55 @@ body{
     border-color: #ddb9ff;
     border: 100px;
     width: 50%;
-    height: 60vh;
+    height: fit-content;
+
     margin: auto;
     align-items: center;
     border-radius: 5%;
+}
+
+
+.button{
+    padding: 2em;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
 
 }
 
-.button{
+button{
+
+    font-size: 2vw;
+    height: auto;
+    border: 5px;
+    border-color: black;
+    border-radius: 10px;
+    background-color: #f4ecff;
+}
+
+form{
     display: flex;
-    
+    flex-direction: column;
+    height: 95%;
+    width: 90%;
+}
+label{
+    display: inline-block;
+    text-align: left;
+    margin-top: 1.5%;
+}
+
+input[type="text"] input[type="email"]{
+    display: inline-block;
+    width: 80%;
+}
+
+input[type="submit"]{
+    font-size: 1.5vw;
+}
+
+p{
+    text-align: right;
+    margin-bottom: 1.5vw;
+    margin-top: 1.5vw;
 }
