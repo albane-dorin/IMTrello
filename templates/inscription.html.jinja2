@@ -1,1 +1,14 @@
 {% extends "connexion.html.jinja2" %}
+
+ {% block button %}
+                <button>Connexion</button>
+                <button disabled> Inscription</button>
+            {% endblock %}
+
+{% block form %}
+    <p>Email : <input type="text" placeholder="ex: name.surname@thing.com" value="" required> </p>
+    <p> Username: <input type="text" value="" required> </p>
+    <p>Password : <input type="text" value="" required> </p>
+    <p>Repeat password : <input type="text" value="" required></p>
+
+{% endblock %}
