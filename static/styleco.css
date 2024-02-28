@@ -1,0 +1,32 @@
+html{
+    background-image: linear-gradient(to bottom left, #132bbe, #b872f1);
+    height: 100%;
+}
+
+body{
+    margin: 0px;
+}
+.all{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+.window{
+    display: flex;
+    flex-direction: column;
+    background-color: #ddb9ff;
+
+    border-color: #ddb9ff;
+    border: 100px;
+    width: 50%;
+    height: 60vh;
+    margin: auto;
+    align-items: center;
+    border-radius: 5%;
+
+}
+
+.button{
+    display: flex;
+    
+}

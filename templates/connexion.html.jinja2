@@ -2,24 +2,32 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="../static/styleco.css">
 
     <title>Connexion IMTrello</title>
 
   </head>
   <body>
-    <div class="window">
-        <div class="button">
-            <button>Connexion</button>
-            <button> Inscription</button>
+    <div class="all">
+        <div class="window">
+            <div class="button">
+                {% block button %}
+                    <button disabled>Connexion</button>
+                    <button> Inscription</button>
+                {% endblock %}
+            </div>
+
+
+            <form class="formulaire">
+                {% block form %}
+                    <p>Email : <input type="text" placeholder="ex: name.surname@thing.com" value="" required> </p>
+                    <p>Password : <input type="text" value="" required> </p>
+                {% endblock %}
+
+                <p><input type="submit"></p>
+
+            </form>
         </div>
-
-        <form class="formulaire">
-            <p>Email : <input type="text" placeholder="ex: name.surname@thing.com" value="" required> </p>
-            <p>Password : <input type="text" value </p>
-
-            <p><input type="submit"></p>
-
-        </form>
     </div>
 
   </body>
