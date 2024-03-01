@@ -14,7 +14,9 @@
                 <div class="button">
                     {% block button %}
                         <button disabled>Connexion</button>
-                        <button> Inscription</button>
+                        <a href="{{ url_for("inscription") }}">
+                            <button> Inscription</button>
+                        </a>
                     {% endblock %}
                 </div>
 

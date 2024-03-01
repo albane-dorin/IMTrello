@@ -1,5 +1,5 @@
 html{
-    background-image: linear-gradient(to bottom left, #132bbe, #b872f1);
+    background-image: linear-gradient(to bottom left, #0002a1, #9500bd);
     height: 100%;
 }
 
@@ -18,9 +18,10 @@ body{
 .window{
     display: flex;
     flex-direction: column;
-    background-color: #ddb9ff;
+    background-color: #e7b2ff;
+    opacity: .9;
 
-    border-color: #ddb9ff;
+    border-color: #e7b2ff;
     border: 100px;
     width: 50%;
     height: fit-content;
