@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../static/css/connexion.css">
+
+    <title>Home page</title>
+
+  </head>
+  <body>
+    <div class="profil">
+        <img src="/static/img/pp1.png" alt="Photo de profil">
+        <div class="nom">
+            <p class="username"> {{ user.name }}</p>
+            <a href="/">Deconnexion</a>
+        </div>
+    </div>
+    <div class="vues">
+        <button disabled>Vue par échéances</button>
+        <button>Vue par projets</button>
+        <button>Vue par tâches</button>
+        <button> + </button>
+
+    </div>
+
+    <div class="projets">
+
+    {% block projects %}
+        {% for project in projects %}
+
+            <button class="projet">{{ projet.name }}</button>
+        {% endfor %}
+    {% endblock %}
+
+    </div>
+
+    {%  block mess %}
+    <div class="message">
+        <div class="semaine">
+
+        </div>
+
+        <div class="mois">
+
+        </div>
+
+        <div class="apres">
+
+        </div>
+
+    </div>
+  {%  endblock   %}
+
+
+  </body>
+</html>

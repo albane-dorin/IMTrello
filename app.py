@@ -11,7 +11,9 @@ def inscription():
     return flask.render_template("inscription.html.jinja2")
 
 
-
+@app.route('/home')
+def home():
+    return flask.render_template("home.html.jinja2")
 
 
 if __name__ == '__main__':
