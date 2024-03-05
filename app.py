@@ -10,6 +10,9 @@ def connexion():
 def inscription():
     return flask.render_template("inscription.html.jinja2")
 
+@app.route('/list')
+def task_list():  # put application's code here
+    return flask.render_template('list.html.jinja2')
 
 
 
@@ -17,9 +20,3 @@ def inscription():
 if __name__ == '__main__':
     app.run()
 
-
-@app.route('/id/<int : user_id>/list')
-
-def list(user_id):
-    #user = Trello.onVerra!!!!!!!!
-    return flask.render_template("task_list_for_user.html.jinja2")#,user=user)

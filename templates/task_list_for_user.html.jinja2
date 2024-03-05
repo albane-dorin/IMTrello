@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Application Trello</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .menu {
+            flex: 1;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .task-list {
+            flex: 3;
+            padding: 20px;
+            background-color: #e0e0e0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+
+
+</head>
+<body>
+
+<div class="container">
+    <div class="menu">
+        <!-- Contenu du menu -->
+        <h2>Filtre</h2>
+
+            <!-- Barre de recherche pour le nom de la tâche -->
+            <input type="text" id="filter-task-by-name" placeholder="Filter by name">
+
+
+            <!-- Filtrer par projet -->
+            <h3>Vos projets </h3>
+            {% for poject in projects %}
+            <div>
+                <input type="checkbox" id="exampleUniq">
+                <label for="exampleUniq">Je m'inscris à la newsletter</label>
+            </div>
+
+            <!-- Filtrer par priorité -->
+            <!-- Filtrer par statut -->
+            <!-- Filtrer par date -->
+
+    </div>
+
+    <div class="task-list">
+        <!-- Contenu de la liste des tâches -->
+        <h2>Liste des Tâches</h2>
+        <table id="taches">
+            <thead>
+            <tr>
+                <th>Projet</th>
+                <th id="sort-name">Tâche</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Manager</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>IMTrello</td>
+                <td>Tâche1</td>
+                <td>en cours</td>
+                <td>01/02</td>
+                <td>Louis</td>
+            </tr>
+            <tr>
+                <td>IMTtrello</td>
+                <td>Tâche2</td>
+                <td>Fini</td>
+                <td>02/12</td>
+                <td>Louis</td>
+            </tr>
+            <tr>
+                <td>Projet</td>
+                <td>Tâche3</td>
+                <td>en attente</td>
+                <td>02/04</td>
+                <td>Amélie</td>
+            </tr>
+            </tbody>
+            <!-- Affichez vos tâches ici -->
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
