@@ -53,7 +53,7 @@ class Project_Dvp(db.Model):
     id_dvp = db.Column(db.Integer, ForeignKey('User.id') , primary_key=True)
 
 class Task_Dvp(db.Model):
-    id_task = db.Column(db.Integer, ForeignKey , primary_key=True)
+    id_task = db.Column(db.Integer, ForeignKey('Task.id') , primary_key=True)
     id_dvp = db.Column(db.Integer, ForeignKey('User.id') , primary_key=True)
 
 
