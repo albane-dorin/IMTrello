@@ -1,5 +1,6 @@
 import flask
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 @app.route('/')
@@ -13,7 +14,13 @@ def inscription():
 
 @app.route('/home')
 def home():
-    return flask.render_template("home.html.jinja2")
+
+    semaines = []
+    mois = []
+    apres = []
+
+    return flask.render_template("home.html.jinja2", semaines=semaines,
+                                 mois=mois, apres=apres)
 
 
 if __name__ == '__main__':
