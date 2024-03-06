@@ -1,25 +1,35 @@
-import flask
 from flask import Flask
+from flask import render_template
+
 app = Flask(__name__)
 
 @app.route('/')
-def connexion():
-    return flask.render_template("connexion.html.jinja2")
+def hello_world():  # put application's code here
+    return 'Hello World!'
 
-@app.route('/inscription')
-def inscription():
-    return flask.render_template("inscription.html.jinja2")
+@app.route('/vueColonne')
+def view_colonne():
+    dataTask = {
+        'taskColor' : "red",
+        'titreTache' : "Task Title",
+        'endDate': "06/04/2024",
+        'developers' : ["A", "B", "C"]
 
+    }
+    return render_template('vueColonne.html.jinja2', dataTask=dataTask)
 
-
-
+@app.route('/popUpTask')
+def view_popUp():
+    dataTask = {
+        'taskColor' : "red",
+        'titreTache' : "Task Title",
+        'status' : 'En cours',
+        'endDate': "06/04/2024",
+        'developers' : ["A", "B", "C"],
+        'description' : "Task Description",
+        'commentaires' : ["Task Commentaire1", "Task Commentaire2", "Task Commentaire3", "Task Commentaire4"]
+    }
+    return render_template('popUpTask.html.jinja2', dataTask=dataTask)
 
 if __name__ == '__main__':
     app.run()
-
-
-@app.route('/id/<int : user_id>/list')
-
-def list(user_id):
-    #user = Trello.onVerra!!!!!!!!
-    return flask.render_template("task_list_for_user.html.jinja2")#,user=user)
