@@ -23,7 +23,7 @@ button:enabled{
 
 .top{
     display: flex;
-    height: 100px;
+    height: 200px;
 }
 
 .in{
@@ -32,33 +32,41 @@ button:enabled{
 }
 
 .profil{
-    width: 10%;
+    width: 15vw;
     display: flex;
+    justify-content: left;
+    flex-direction: column;
 }
 
 img{
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 50%;
     width: auto;
     height: auto;
     align-self: center;
 }
 .image{
-        flex-grow: 1;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 .nom{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: start;
+    margin-left: 15px;
 }
 .username{
-    align-self: center;
+    display: flex;
+    flex-wrap: wrap;
+
     text-align: center;
     background-color: #ddb9ff;
-    border-radius: 10px ;
+    border-radius: 10px;
+
+    max-width: 12vw;
     width: fit-content;
+    height: fit-content;
     padding: 0vw 0.5vw;
     margin-bottom: 8px;
 }
@@ -96,23 +104,25 @@ img{
 .projets{
     display: flex;
     flex-direction: column;
-    width: 10%;
+    width: 15vw;
     justify-content: left;
     align-items: center;
-    padding-top: 2vw;
+    padding-top: 1vw;
 }
 
 .projet{
     height: fit-content;
-    font-size: 1vw;
-    margin-top: 1vw;
+    width: 80%;
+    font-size: 1.5vw;
+    margin-top: 1.5vw;
     padding: 0.5vw 2vw;
     border-radius: 30px;
 }
 
 .message{
-    padding: 2vw 5vw;
     font-size: 1.5vw;
+    flex-grow: 1;
+    padding-right: 2vw;
 }
 
 .titre{
@@ -132,7 +142,17 @@ img{
 .echeance{
     background-color: #ddb9ff;
     border-radius: 30px ;
-    width: 100%;
-    padding: 1vw 01vw;
+    padding: 0.6vw 1vw;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.fin{
+    width: 35%;
+    justify-self: end;
+    padding-right: 1vw;
+    display: flex;
+    justify-content: space-between;
 }

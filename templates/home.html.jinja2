@@ -12,7 +12,7 @@
         <div class="profil">
             <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
             <div class="nom">
-                <p class="username"> Toto </p>
+                <p class="username"> TotoTheThirdAndMarvelous </p>
                 <a href="/" class="deco">Deconnexion</a>
             </div>
         </div>
@@ -47,15 +47,15 @@
                 <p class="date">07/03/2024 :</p>
                 <div class="echeance">
                     <span> Fin de tâches : Tâche1 </span>
-                    <span> Dans "IMTrello2" </span>
-                    <span>Finis</span>
+                    <p class="fin"><span> Dans "IMTrello2" </span>
+                        <span>Finis</span></p>
                 </div>
 
                 <p class="date">09/03/2024 :</p>
                 <div class="echeance">
                     <span> Fin de tâches : Tâcheeeeeeeee </span>
-                    <span> Dans "IMTrello" </span>
-                    <span>En cours</span>
+                    <p class="fin"><span> Dans "IMTrello" </span>
+                    <span>En cours</span></p>
                 </div>
 
                 <p class="date">10/03/2024 :</p>
@@ -72,8 +72,8 @@
                     {% if len(object)==3 %}
                         <div class="echeance">
                             <span>Fin de tâches : {{ object[1].get_name() }}</span>
-                            <span> Dans " {{ object[2].get_name() }} "</span>
-                            <span> </span>
+                            <p class="fin"><span> Dans " {{ object[2].get_name() }} "</span>
+                            <span> </span></p>
                         </div class="echeance">
                     {% endif %}
                     {% if len(object)==2 %}
@@ -90,22 +90,22 @@
                 <p class="date">17/03/2024 :</p>
                 <div class="echeance">
                     <span> Fin de tâches : Courage! </span>
-                    <span> Dans "IMTrello3" </span>
-                    <span>Finis</span>
+                    <p class="fin"><span> Dans "IMTrello3" </span>
+                        <span>Finis</span></p>
                 </div>
 
                 <p class="date">18/03/2024 :</p>
                 <div class="echeance">
                     <span> Fin de tâches : Plus qu'une </span>
-                    <span> Dans "IMTrello3" </span>
-                    <span>En cours</span>
+                    <p class="fin"><span> Dans "IMTrello3" </span>
+                        <span>En cours</span></p>
                 </div>
 
                 <p class="date">03/04/2024 :</p>
                 <div class="echeance">
                     <span> Fin de tâches : C'est fini, enfin presque </span>
-                    <span> Dans "IMTrello" </span>
-                    <span>En cours</span>
+                    <p class="fin"><span> Dans "IMTrello" </span>
+                        <span>En cours</span></p>
                 </div>
 
                 <!--
@@ -114,8 +114,8 @@
                     {% if len(object)==3 %}
                         <div class="echeance">
                             <span>Fin de tâches : {{ object[1].get_name() }}</span>
-                            <span> Dans " {{ object[2].get_name() }} "</span>
-                            <span> </span>
+                            <p class="fin"><span> Dans " {{ object[2].get_name() }} "</span>
+                            <span> </span></p>
                         </div>
                     {% endif %}
                     {% if len(object)==2 %}
@@ -150,8 +150,8 @@
                     {% if len(object)==3 %}
                         <div class="echeance">
                             <span>Fin de tâches : {{ object[1].get_name() }}</span>
-                            <span> Dans " {{ object[2].get_name() }} "</span>
-                            <span> </span>
+                            <p class="fin"><span> Dans " {{ object[2].get_name() }} "</span>
+                            <span> </span></p>
                         </div>
                     {% endif %}
                     {% if len(object)==2 %}
