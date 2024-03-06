@@ -82,3 +82,9 @@ with app.test_request_context():
     dvp_of_task = database.Task_Dvp.query.filter_by(id_task=tasks[0].id).all()
     for dt in dvp_of_task:
         print(dt.id_dvp)
+        
+    #test projects_of_user et tasks_of_user
+    list = database.projects_of_user(user=users[0])
+    print(list)
+    list = database.tasks_of_user(user=users[0])
+    print(list)

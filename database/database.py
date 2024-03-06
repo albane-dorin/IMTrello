@@ -94,6 +94,25 @@ def project_of(task):
     project = Project.query.get(project_id)
     return project
 
+def projects_of_user(user):
+    id=user.id
+    ps_dvp=Project_Dvp.query.filter_by(id_dvp=id).all()
+    projects = []
+    for x in ps_dvp:
+        idx= x.id_project
+        projects.append(Project.query.get(idx))
+    return projects
+
+def tasks_of_user(user):
+    id=user.id
+    ts_dvp=Task_Dvp.query.filter_by(id_dvp=id).all()
+    tasks = []
+    for x in ts_dvp:
+        idx= x.id_task
+        tasks.append(Task.query.get(idx))
+    return tasks
+
+
 #Fonctions de modifications
 
 #Ajout d'utilisateur
