@@ -128,3 +128,11 @@ img{
     padding: 0vw 0.5vw;
     margin: 8px 0px;
 }
+
+.echeance{
+    background-color: #ddb9ff;
+    border-radius: 30px ;
+    width: 100%;
+    padding: 1vw 01vw;
+    margin-bottom: 20px;
+}
