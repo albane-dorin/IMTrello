@@ -3,6 +3,10 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2aba970ec06acc144f5f694366e2ff5716178240
 
 
 db = SQLAlchemy()
