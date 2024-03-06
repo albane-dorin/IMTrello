@@ -20,6 +20,7 @@ class User(db.Model):
     username = db.Column(db.Text)
     password = db.Column(db.Text)
     mail = db.Column(db.Text)
+    role = db.Column(db.Integer) #1=Manager, 2=Développeur, 3=ManDev
 
 class Project(db.Model):
     __tablename__ = 'project'
@@ -68,14 +69,16 @@ class Task_Dvp(db.Model):
 #Fonctions de modifications
 
 #Ajout d'utilisateur
-def new_user(username, password, mail):
-    user = User(username=username, password=password, mail=mail)
+def new_user(username, password, mail, role):
+    user = User(username=username, password=password, mail=mail, role=role)
     db.session.add(user)
     db.session.commit()
 
 #Ajout de projet
 def new_project(name, description, year, month, day, manager, users : list[User]):
-    project = Project(name=name, description=description, date=datetime.date(year, month, day), manager=manager)
+    if manager.role == 2 :
+        return
+    project = Project(name=name, description=description, date=datetime(year, month, day), manager=manager.id)
     db.session.add(project)
     db.session.commit()
     for user in users:
@@ -105,8 +108,8 @@ def clear_database():
 def peupler_db():
     clear_database()
 
-    user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>")
-    user2 = User(username="Two", password="<PASSWORD>", mail="<EMAIL>")
+    user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>", role=1)
+    user2 = User(username="Two", password="<PASSWORD>", mail="<EMAIL>", role=2)
     db.session.add(user2)
     db.session.add(user1)
     db.session.commit()
