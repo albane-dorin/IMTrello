@@ -21,8 +21,8 @@
                 <button disabled class="vue">Vue par échéances</button>
                 <button class="vue">Vue par projets</button>
                 <button class="vue">Vue par tâches</button>
-                </div>
-            <div class="vues"><button class="vue"> + </button></div>
+            </div>
+            <div class="plus"><button class="vue"> + </button></div>
 
         </div>
     </div>
@@ -42,12 +42,33 @@
 
         <div class="message">
             <div class="semaine">
-                <p> Pour cette semaine </p>
+                <p class="titre"> Pour cette semaine </p>
+
+                <p class="date">07/03/2024 :</p>
+                <div>
+                    <span> Fin de tâches : Tâche1 </span>
+                    <span> Dans "IMTrello2" </span>
+                    <span>Finis</span>
+                </div>
+
+                <p class="date">09/03/2024 :</p>
+                <div>
+                    <span> Fin de tâches : Tâcheeeeeeeee </span>
+                    <span> Dans "IMTrello" </span>
+                    <span>En cours</span>
+                </div>
+
+                <p class="date">10/03/2024 :</p>
+                <div>
+                    <span> Fin du projet : IMTRello2 </span>
+                </div>
+
+
 
 
             <!---
                 {%  for object in semaines %}
-                    <p> {{ object[0] }}</p>
+                    <p class="date"> {{ object[0] }}</p>
                     {% if len(object)==3 %}
                         <div>
                             <span>Fin de tâches : {{ object[1].get_name() }}</span>
@@ -64,11 +85,32 @@
             </div>
 
             <div class="mois">
-                <p> Pour ce mois </p>
+                <p class="titre"> Pour ce mois </p>
+
+                <p class="date">17/03/2024 :</p>
+                <div>
+                    <span> Fin de tâches : Courage! </span>
+                    <span> Dans "IMTrello3" </span>
+                    <span>Finis</span>
+                </div>
+
+                <p class="date">18/03/2024 :</p>
+                <div>
+                    <span> Fin de tâches : Plus qu'une </span>
+                    <span> Dans "IMTrello3" </span>
+                    <span>En cours</span>
+                </div>
+
+                <p class="date">03/04/2024 :</p>
+                <div>
+                    <span> Fin de tâches : C'est fini, enfin presque </span>
+                    <span> Dans "IMTrello" </span>
+                    <span>En cours</span>
+                </div>
 
                 <!--
                 {%  for object in mois %}
-                    <p> {{ object[0] }}</p>
+                    <p class="date"> {{ object[0] }}</p>
                     {% if len(object)==3 %}
                         <div>
                             <span>Fin de tâches : {{ object[1].get_name() }}</span>
@@ -86,11 +128,25 @@
             </div>
 
             <div class="apres">
-                <p> Après </p>
+                <p class="titre"> Après </p>
+
+                <p class="date">26/07/2024 :</p>
+                <div>
+                    <span> Fin du projet : IMTRello </span>
+                </div>
+
+                <p class="date">01/03/2025 :</p>
+                <div>
+                    <span> Fin du projet : IMTRello3 </span>
+                </div>
+
+
+
+
 
                 <!--
                 {%  for object in apres %}
-                    <p> {{ object[0] }}</p>
+                    <p class="date"> {{ object[0] }}</p>
                     {% if len(object)==3 %}
                         <div>
                             <span>Fin de tâches : {{ object[1].get_name() }}</span>
