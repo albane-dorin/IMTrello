@@ -1,1 +1,12 @@
 {% extends "home.html.jinja2" %}
+
+{% block projects %}
+    {% for projet in user.project %}
+        {% if projet.id == {{ project_id }} %}
+            <button class="projet" disabled>{{ projet.name }}</button>
+        {% else %}
+            <button class="projet">{{ projet.name }}</button>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
