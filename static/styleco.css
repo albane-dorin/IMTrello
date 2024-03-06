@@ -1,5 +1,5 @@
 html{
-    background-image: linear-gradient(to bottom left, #0002a1, #9500bd);
+    background-image: linear-gradient(to bottom left, #0d23b4, #9f0375);
     height: 100%;
 }
 
@@ -50,6 +50,10 @@ button{
     background-color: #f4ecff;
 }
 
+button:enabled{
+    cursor: pointer;
+}
+
 form{
     display: flex;
     flex-direction: column;
@@ -76,3 +80,18 @@ p{
     margin-bottom: 1.5vw;
     margin-top: 1.5vw;
 }
+
+.choix {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    margin-top: 1.5%;
+    }
+
+.radio{
+    margin: 0;
+}
+
+input[type=radio] {
+      margin-right: 5px;
+    }

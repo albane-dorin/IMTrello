@@ -9,8 +9,14 @@
 
 {% block form %}
     <label for="email">Email :</label> <input type="email" id="email" placeholder="ex: name.surname@thing.com" value="" required>
-    <label for="name"> Username:</label> <input type="text" id="name" value="" required>
-    <label for="p">Password :</label> <input type="text" id="p" value="" required>
-    <label for="p2">Repeat password :</label> <input type="text" id="p2" value="" required>
+    <label for="name"> Nom d'utilisateur (max. 20 caractères) :</label> <input type="text" id="name" value="" required>
+    <label for="p">Mot de passe :</label> <input type="text" id="p" value="" required>
+    <label for="p2">Répétez le mot de passe :</label> <input type="text" id="p2" value="" required>
+    <div class="choix">Choisissez votre rôle :
+        <p class="radio"><input type="radio" name="role" value="Developpeur"> Développeur </p>
+        <p class="radio"><input type="radio" name="role" value="Manager"> Manager </p>
+        <p class="radio"><input type="radio" name="role" value="ManDev"> Manager et Développeur </p>
+    </div>
+
 {% endblock %}
 
