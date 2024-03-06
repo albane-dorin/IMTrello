@@ -73,12 +73,26 @@ class Task_Dvp(db.Model):
 
 #Fonctions d'obtention d'informatio
 
-#Est-ce que l'utilisateur est le manager du projet
+#Est-ce que l'utilisateur est le manager du projet ?
 def is_manager(user, project):
     if project.manager == user.id:
         return True
     else:
         return False
+
+#Quel est le projet auquel appartient cette tâche
+def id_project_of(task):
+    id_task = task.id
+    project_task = Project_Task.query.filter_by(id_task=id_task).first()
+    if project_task:
+        return project_task.id_project
+    else:
+        return None
+
+def project_of(task):
+    project_id = id_project_of(task)
+    project = Project.query.get(project_id)
+    return project
 
 #Fonctions de modifications
 
@@ -133,7 +147,29 @@ def new_comment(author, task, content):
     db.session.commit()
 
 
-    #effacer le contenu de la base de données
+#Ajout de développeurs à un projet/tâche
+def add_dvp_to_project(user, project, dvp):
+    if is_manager(user, project):
+        dvp_project = Project_Dvp(id_project=project.id, id_dvp=dvp.id)
+        db.session.add(dvp_project)
+        db.session.commit()
+
+def add_dvp_to_task(user, task, dvp):
+    id = id_project_of(task)
+    dvp_in_project = Project_Dvp.query.filter_by(id_project=id).all()
+    dvps = []
+    for d in dvp_in_project:
+        dvps.append(d.id_dvp)
+    for i in range(0, len(dvps)):
+        if dvp.id==dvps[i]:
+            td = Task_Dvp(id_task=task.id, id_dvp=dvp.id)
+            db.session.add(td)
+            db.session.commit()
+
+
+
+
+#effacer le contenu de la base de données
 def clear_database():
     # Supprimer le contenu de chaque table
     db.session.query(User).delete()

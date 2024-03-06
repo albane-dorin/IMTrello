@@ -62,3 +62,23 @@ with app.test_request_context():
     comments = database.Comment.query.all()
     for comment in comments:
         print(comment.id, comment.author, comment.content)
+
+    #Test id_project_of()
+    print('Dans le projet :', database.id_project_of(tasks[4]))
+
+    #Test ajout
+    dvp_of_task = database.Project_Dvp.query.filter_by(id_project=projects[0].id).all()
+    for dt in dvp_of_task:
+        print(dt.id_dvp)
+    database.new_user(username='Smart', password='<PASSWORD>', mail='<EMAIL>', role=3)
+    user = database.User.query.order_by(database.User.id.desc()).first()
+    print('Le nouvel utilisateur est:', user.id)
+    database.add_dvp_to_task(user=users[1], task=tasks[0], dvp=user)
+    dvp_of_task=database.Project_Dvp.query.filter_by(id_project=projects[0].id).all()
+    for dt in dvp_of_task:
+        print(dt.id_dvp)
+    database.add_dvp_to_project(user=users[1], project=projects[0],dvp=user)
+    database.add_dvp_to_task(user=users[1], task=tasks[0], dvp=user)
+    dvp_of_task = database.Task_Dvp.query.filter_by(id_task=tasks[0].id).all()
+    for dt in dvp_of_task:
+        print(dt.id_dvp)
