@@ -3,11 +3,6 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 2aba970ec06acc144f5f694366e2ff5716178240
-
 
 db = SQLAlchemy()
 
@@ -47,12 +42,19 @@ class Task(db.Model):
     date = db.Column(db.DateTime)
     description = db.Column(db.Text)
     column = db.Column(db.Integer, db.ForeignKey('column.id'))
+    status = db.Column(db.Integer)
+    #WAITING = 0
+    #IN_PROGRESS = 1
+    #COMPLETED = 2
+    #CANCELLED = 3
+    #BLOCKED = 4
 
 class Comment(db.Model):
     __tablename__ = 'comment'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = db.Column(db.Integer, db.ForeignKey('user.id'))
     content = db.Column(db.Text)
+    task = db.Column(db.Integer, ForeignKey('task.id'))
 
 class Project_Task(db.Model):
     __tablename__ = 'project_task'
@@ -69,6 +71,14 @@ class Task_Dvp(db.Model):
     id_task = db.Column(db.Integer, ForeignKey('task.id') , primary_key=True)
     id_dvp = db.Column(db.Integer, ForeignKey('user.id') , primary_key=True)
 
+#Fonctions d'obtention d'informatio
+
+#Est-ce que l'utilisateur est le manager du projet
+def is_manager(user, project):
+    if project.manager == user.id:
+        return True
+    else:
+        return False
 
 #Fonctions de modifications
 
@@ -90,10 +100,40 @@ def new_project(name, description, year, month, day, manager, users : list[User]
         db.session.add(project_dvp)
     db.session.commit()
 
+#Ajout de colonne
+def new_column(name, project, user):
+    if is_manager(user, project):
+        column = Column(name=name, project=project.id)
+        db.session.add(column)
+        db.session.commit()
+        return
+    else:
+        return
+
+#Ajout tâche
+def new_task(user, project, name, year, month, day, description, column, status, dvps):
+    if is_manager(user, project):
+        task = Task(name=name, date=datetime(year, month, day), description=description, column=column.id, status=status)
+        db.session.add(task)
+        db.session.commit()
+        project_task = Project_Task(id_project=project.id, id_task=task.id)
+        db.session.add(project_task)
+        for dvp in dvps:
+            dvp_task = Task_Dvp(id_task=task.id, id_dvp=dvp.id)
+            db.session.add(dvp_task)
+        db.session.commit()
+        return
+    else:
+        return
+
+#Ajout comment
+def new_comment(author, task, content):
+    comment = Comment(author=author.id, content=content, task=task.id)
+    db.session.add(comment)
+    db.session.commit()
 
 
-
-#effacer le contenu de la base de données
+    #effacer le contenu de la base de données
 def clear_database():
     # Supprimer le contenu de chaque table
     db.session.query(User).delete()
@@ -108,9 +148,14 @@ def clear_database():
     # Confirmer les changements et vider la base de données
     db.session.commit()
 
+def clean():
+    db.drop_all()
+    db.create_all()
+    return "Cleaned!"
+
 #Peupler la base de donner pour les tests
 def peupler_db():
-    clear_database()
+    clean()
 
     user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>", role=1)
     user2 = User(username="Two", password="<PASSWORD>", mail="<EMAIL>", role=2)
