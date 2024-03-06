@@ -1,0 +1,18 @@
+body, html {
+    .titleTask {
+        color: #0d23b4;
+        font-weight: bold;
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .rectangle {
+        width: 16px; /* Largeur du rectangle */
+        height: 9px; /* Hauteur du rectangle */
+        background-color: var(--rectangle-color); /* Couleur de fond du rectangle */
+    }
+}

@@ -1,0 +1,38 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/popUpTask.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pop Up {{ dataTask.titreTache }}</title>
+
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h1>Titre</h1>
+            <p>
+                <div class="container2">
+                <div class="status" style="--status-color: {{dataTask.taskColor}}">{{ dataTask.status }}</div>
+                <div>{{ dataTask.endDate }}</div>
+                </div>
+            </p>
+            <p>
+                <div class="description">
+                    <span class="bold">Description :</span> {{ dataTask.description }}
+                </div>
+            </p>
+            <p>
+                {% for commentaire in dataTask.commentaires %}
+                    <div class="commentaire">
+                        {{ commentaire }}
+                    </div>
+                {% endfor %}
+            </p>
+            </div>
+        <div class="right">
+            Contenu de droite
+        </div>
+    </div>
+</body>
+</html>
