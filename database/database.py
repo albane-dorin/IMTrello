@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
+from sqlalchemy import join
 
 
 db = SQLAlchemy()
@@ -111,6 +112,34 @@ def tasks_of_user(user):
         idx= x.id_task
         tasks.append(Task.query.get(idx))
     return tasks
+
+def get_projects_tasks(user_id):
+    # Effectuer la jointure entre Project et Project_Task
+    project_and_id_tasks = join(Project, Project_Task, Project.id.label('id_project') == Project_Task.id_project)
+    #return project_and_id_tasks
+    # Effectuer la jointure entre Project_Task et Task
+    query = (db.session.query(
+        Project.id.label('p_id'),
+        Project.name.label('p_name'),
+        Project.manager,
+        Task.id.label('t_id'),
+        Task.name.label('t_name'),
+        Task.date,
+        Task.status,
+        Project_Task,
+        User.username.label('m_name')
+    ).filter(
+        Project.id==Project_Task.id_project
+    ).filter(
+        Task.id==Project_Task.id_task
+    ).filter(
+        Project.manager==User.id
+    ).filter(
+        Project.manager == user_id
+    ).all())
+    
+    return query
+
 
 
 #Fonctions de modifications

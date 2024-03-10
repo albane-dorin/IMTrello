@@ -88,3 +88,14 @@ with app.test_request_context():
     print(list)
     list = database.tasks_of_user(user=users[0])
     print(list)
+
+    print('---------')
+    user = database.db.session.get(database.User, 1)
+    print(user)
+
+    loves = database.get_projects_tasks(2)
+    print('hola')
+    print(loves)
+    for love in loves:
+       print('project : ', love.p_name, 'tâche:', love.t_name)
+

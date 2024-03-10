@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Application Trello</title>
+    <style>
+        html{
+            height: 100%;
+            display: flex;
+        }
+        body {
+            flex-grow: 1;
+            font-family: Arial, sans-serif;
+            margin: 0px;
+        }
+
+        .container {
+            height: 100%;
+            display: flex;
+
+        }
+
+        .menu {
+            flex: 1;
+            padding: 20px;
+            background-color: #132bbe;
+        }
+
+        .task-list {
+            flex: 3;
+            padding: 20px;
+            background-color: #ddb9ff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+
+
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- MENU DES FILTRES -->
+        <div class="menu">
+
+            <!-- Filtre des projets -->
+            <p>Nom de la tâche : <input type="text" id="filter-task-by-name" placeholder="Filter by name"> </p>
+
+
+            <!-- Filtre des projets -->
+            <form>
+              <fieldset>
+                  <legend>Vos projets:</legend>
+                  {% for project in projects %}
+                      <div>
+                        <input type="checkbox" id="projet_1">
+                        <label for="projet_1">project.name</label>
+                      </div>
+                  {% endfor %}
+                  <div>
+                    <input type="checkbox" id="projet_2">
+                    <label for="projet_2">Projet 2</label>
+                  </div>
+                </fieldset>
+            </form>
+
+            <!-- Filtre des status -->
+            <form>
+              <fieldset>
+                  <legend>Afficher les tâche dont les statuts sont :</legend>
+
+                  <div>
+                    <input type="checkbox" id="waiting">
+                    <label for="waiting">En attente</label>
+                  </div>
+                  <div>
+                    <input type="checkbox" id="in_progress">
+                    <label for="in_progress">En cours</label>
+                  </div>
+                  <div>
+                    <input type="checkbox" id="completed">
+                    <label for="completed">Completée</label>
+                  </div>
+                  <div>
+                    <input type="checkbox" id="cancelled">
+                    <label for="cancelled">Annulée</label>
+                  </div>
+                  <div>
+                    <input type="checkbox" id="blocked">
+                    <label for="blocked">En pause</label>
+                  </div>
+                </fieldset>
+            </form>
+
+
+            <!-- Autres filtres -->
+            <p>Plus de filtres</p>
+            <form>
+              <div>
+                    <input type="checkbox" id="chronology">
+                    <label for="chronology">Chronologiquement</label>
+                  </div>
+                  <div>
+                    <input type="checkbox" id="priority">
+                    <label for="priority">Par priorité</label>
+                  </div>
+            </form>
+
+        </div>
+
+
+
+        <div class="task-list">
+            <h2>Liste des Tâches</h2>
+        <table id="taches">
+            <thead>
+            <tr>
+                <th>Projet</th>
+                <th id="sort-name">Tâche</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Manager</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.p_name }}</td>
+                    <td>{{ task.t_name }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>{{ task.date }}</td>
+                    <td>{{ task.m_name }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>
