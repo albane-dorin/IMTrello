@@ -20,16 +20,25 @@
                     {% endblock %}
                 </div>
 
+                {% block form %}
+                <form class="formulaire" action="{{ url_for("connexion") }}" method="post">
 
-                <form class="formulaire">
-                    {% block form %}
-                        <label>Email :</label> <input type="email" placeholder="ex: name.surname@thing.com" value="" required>
-                        <label>Mot de passe :</label> <input type="text" value="" required>
-                    {% endblock %}
+                    <label for="email">Email :</label>
+                       <input type="email" id="email" name="email" placeholder="ex: name.surname@thing.com" value="" required>
+                    <label for="p">Mot de passe :</label>
+                       <input type="password" id="p" name="password" value="" required>
+
 
                     <p><input type="submit"></p>
 
                 </form>
+                {% endblock %}
+
+                {% if error %}
+
+                    <p class="error"> Erreur : {{ error[0] }} </p>
+
+                {% endif %}
             </div>
         {% endblock %}
     </div>
