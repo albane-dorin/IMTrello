@@ -1,79 +1,69 @@
 import flask
-from flask import Flask, redirect
+from flask import Flask, redirect, url_for
 import database.database as database
+from datetime import date, timedelta
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-database.db.init_app(app) # (1) flask prend en compte la base de donnee
+database.db.init_app(app)  # (1) flask prend en compte la base de donnee
 
-with app.test_request_context(): # (2) bloc exécuté à l'initialisation de Flask
+with app.test_request_context():  # (2) bloc exécuté à l'initialisation de Flask
     database.init_database()
 
 
-
 ############# FONCTIONS FORMULAIRE #######################
-def form_valide(form, i ):     # 0 pour connexion, 1 pour inscription
+def form_valide(form, i):  # 0 pour connexion, 1 pour inscription
     result = True
     errors = []
-
 
     email = flask.request.form.get("email", "")
     p1 = flask.request.form.get("password", "")
 
-    print(i)
-
-    if i==0:
+    if i == 0:
 
         if email == "":
             result = False
 
         else:
 
+            user = database.db.session.query(database.User).filter(database.User.mail == email).first()
 
-            mails = []
-            mdp = None
-            #Test de validité
-            for user in database.User.query.all():
-                mails += [user.mail]
-                if user.mail == email:
-                    mdp = user.password
-
-
-            if email not in mails:
+            if user is None:
                 result = False
                 errors += ["Cet email n'est lié à aucun compte. Utilisez un autre email ou inscrivez-vous."]
 
-            elif mdp is None or mdp != p1 :
-                result = False
-                errors += ["Mot de passe incorrect"]
+            else:
+                mdp = user.password
+                if mdp != p1:
+                    result = False
+                    errors += ["Mot de passe incorrect"]
 
-
-    if i==1:
+    if i == 1:
         name = form.get("username", "")
         p2 = flask.request.form.get("p2", "")
 
-        #Test de validité
+        # Test de validité
 
-        if p1 == "" or p2 == "" :
+        if p1 == "" or p2 == "":
             result = False
 
-        for user in database.User.query.all() :
-            if user.mail == email :
+        for user in database.User.query.all():
+            if user.mail == email:
                 result = False
                 errors += ["Cet email est déjà lié à un compte. Utilisez un autre email ou connectez vous."]
 
-        if len(name) > 20 :
+        if len(name) > 20:
             result = False
             errors += ["Le nom d'utilisateur ne peut exceder 20 caractères"]
 
-        if p1 != p2 :
+        if p1 != p2:
             result = False
             errors += ["Les mots de passe sont différents."]
 
-
     return result, errors
+
 
 ############# VUE CONEXION/INSCRIPTION ############################
 
@@ -85,38 +75,68 @@ def connexion():
     if not valide:
         return flask.render_template("connexion.html.jinja2", form=form, error=errors)
     else:
-        return redirect("/inscription")
-
+        user = database.db.session.query(database.User).filter(database.User.mail == form.get("email", "")).first()
+        return redirect(url_for('home', user_id=user.id))
 
 
 @app.route('/inscription', methods=["GET", "POST"])
 def inscription():
-
     database.clean()
     form = flask.request.form
     valide, errors = form_valide(form, 1)
     if not valide:
         return flask.render_template("inscription.html.jinja2", form=form, error=errors)
     else:
-        database.new_user(form.get("username", ""), form.get("password", ""), form.get("email", ""), role=(form.get("role", "")))
+        database.new_user(form.get("username", ""), form.get("password", ""), form.get("email", ""),
+                          role=(form.get("role", "")))
 
-        #Tout la base de données supprimés après pour le moment pour permettre de faire des tests. A supprimer après
-        database.clean()
+        # Tout la base de données supprimés après pour le moment pour permettre de faire des tests. A supprimer après
 
-        return redirect("/") #Change to true url afterwards
+        user = database.db.session.query(database.User).filter(database.User.mail == form.get("email", "")).first()
+
+        return redirect(url_for('home', user_id=user.id))  # Change to true url afterwards
 
 
 ############## VUE USERS ########################""
 
-@app.route('/home')
-def home():
+@app.route('/<int:user_id>/home', methods=["GET"])
+def home(user_id):
+    database.peupler_db()
+    user = database.db.session.get(database.User, user_id)
+    projets = database.projects_of_user(user)
     semaines = []
     mois = []
     apres = []
+    print('toto')
+    today = date.today()
+
+    print(projets)
+    #Ajout des échéances des projets
+    for p in projets:
+        if today <= p.date.date() <= today + timedelta(days=7):
+            semaines += [(p.date.date(), p)]
+        elif today <= p.date.date() <= today + timedelta(days=30) :
+            mois += [(p.date.date(), p)]
+        elif today <= p.date.date() > today + timedelta(days=30):
+            apres += [(p.date.date(), p)]
+
+    #Ajout des échéances des tâches
+    for t in database.tasks_of_user(user):
+        if today <= t.date.date() <= today + timedelta(days=7):
+            semaines += [(t.date.date(), t, database.project_of(t))]
+        elif today <= t.date.date() <= today + timedelta(days=30) :
+            mois += [(t.date.date(), t, database.project_of(t))]
+        elif today <= t.date.date() > today + timedelta(days=30) :
+            apres += [(t.date.date(), t, database.project_of(t))]
+
+    #Tri des listes par date décroissante
+    semaines.sort(key=lambda a: a[0])
+    mois.sort(key=lambda a: a[0])
+    apres.sort(key=lambda a: a[0])
+
 
     return flask.render_template("home.html.jinja2", semaines=semaines,
-                                 mois=mois, apres=apres)
-
+                                 mois=mois, apres=apres, user=user, projects=projets)
 
 
 if __name__ == '__main__':
@@ -124,7 +144,6 @@ if __name__ == '__main__':
 
 
 @app.route('/id/<int : user_id>/list')
-
 def list(user_id):
-    #user = Trello.onVerra!!!!!!!!
-    return flask.render_template("task_list_for_user.html.jinja2")#,user=user)
+    # user = Trello.onVerra!!!!!!!!
+    return flask.render_template("task_list_for_user.html.jinja2")  # ,user=user)

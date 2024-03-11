@@ -12,7 +12,7 @@
         <div class="profil">
             <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
             <div class="nom">
-                <p class="username"> TotoTheThirdAndMarvelous </p>
+                <p class="username"> {{ user.username }} </p>
                 <a href="/" class="deco">Deconnexion</a>
             </div>
         </div>
@@ -31,9 +31,10 @@
         <div class="projets">
 
         {% block projects %}
-            <button class="projet">IMTrello</button>
-            <button class="projet">IMTrello2</button>
-            <button class="projet">IMTrello3</button>
+            <p> {{ projects|lenght }}</p>
+            {% for projet in projects %}
+                <button class="projet" >{{ projet.name }}</button>
+            {% endfor %}
         {% endblock %}
 
         </div>
@@ -44,121 +45,60 @@
             <div class="semaine">
                 <p class="titre"> Pour cette semaine </p>
 
-                <p class="date">07/03/2024 :</p>
-                <div class="echeance">
-                    <span> Fin de tâches : Tâche1 </span>
-                    <p class="fin"><span> Dans "IMTrello2" </span>
-                        <span>Finis</span></p>
-                </div>
 
-                <p class="date">09/03/2024 :</p>
-                <div class="echeance">
-                    <span> Fin de tâches : Tâcheeeeeeeee </span>
-                    <p class="fin"><span> Dans "IMTrello" </span>
-                    <span>En cours</span></p>
-                </div>
-
-                <p class="date">10/03/2024 :</p>
-                <div class="echeance">
-                    <span> Fin du projet : IMTRello2 </span>
-                </div>
-
-
-
-
-            <!---
                 {%  for object in semaines %}
                     <p class="date"> {{ object[0] }}</p>
-                    {% if len(object)==3 %}
+                    {% if object|length==3 %}
                         <div class="echeance">
-                            <span>Fin de tâches : {{ object[1].get_name() }}</span>
-                            <p class="fin"><span> Dans " {{ object[2].get_name() }} "</span>
-                            <span> </span></p>
+                            <span>Fin de tâches : {{ object[1].name }}</span>
+                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
+                            <span> {{ object[1].status }} </span></p>
                         </div class="echeance">
                     {% endif %}
-                    {% if len(object)==2 %}
-                        <div class="echeance">Fin du projet : {{ object[1].get_name() }}</div>
+                    {% if object|length==2 %}
+                        <div class="echeance">Fin du projet : {{ object[1].name }}</div>
                     {% endif %}
                 {% endfor %}
-                --->
 
             </div>
 
             <div class="mois">
                 <p class="titre"> Pour ce mois </p>
 
-                <p class="date">17/03/2024 :</p>
-                <div class="echeance">
-                    <span> Fin de tâches : Courage! </span>
-                    <p class="fin"><span> Dans "IMTrello3" </span>
-                        <span>Finis</span></p>
-                </div>
-
-                <p class="date">18/03/2024 :</p>
-                <div class="echeance">
-                    <span> Fin de tâches : Plus qu'une </span>
-                    <p class="fin"><span> Dans "IMTrello3" </span>
-                        <span>En cours</span></p>
-                </div>
-
-                <p class="date">03/04/2024 :</p>
-                <div class="echeance">
-                    <span> Fin de tâches : C'est fini, enfin presque </span>
-                    <p class="fin"><span> Dans "IMTrello" </span>
-                        <span>En cours</span></p>
-                </div>
-
-                <!--
                 {%  for object in mois %}
                     <p class="date"> {{ object[0] }}</p>
-                    {% if len(object)==3 %}
+                    {% if object|length ==3 %}
                         <div class="echeance">
-                            <span>Fin de tâches : {{ object[1].get_name() }}</span>
-                            <p class="fin"><span> Dans " {{ object[2].get_name() }} "</span>
-                            <span> </span></p>
+                            <span>Fin de tâches : {{ object[1].name }}</span>
+                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
+                            <span> {{ object[1].status }} </span></p>
                         </div>
                     {% endif %}
-                    {% if len(object)==2 %}
-                        <div class="echeance">Fin du projet : {{ object[1].get_name() }}</div>
+                    {% if object|length ==2 %}
+                        <div class="echeance">Fin du projet : {{ object[1].name }}</div>
                     {% endif %}
                 {% endfor %}
 
-                -->
 
             </div>
 
             <div class="apres">
                 <p class="titre"> Après </p>
 
-                <p class="date">26/07/2024 :</p>
-                <div class="echeance">
-                    <span> Fin du projet : IMTRello </span>
-                </div>
 
-                <p class="date">01/03/2025 :</p>
-                <div class="echeance">
-                    <span> Fin du projet : IMTRello3 </span>
-                </div>
-
-
-
-
-
-                <!--
                 {%  for object in apres %}
                     <p class="date"> {{ object[0] }}</p>
-                    {% if len(object)==3 %}
+                    {% if object|length==3 %}
                         <div class="echeance">
-                            <span>Fin de tâches : {{ object[1].get_name() }}</span>
-                            <p class="fin"><span> Dans " {{ object[2].get_name() }} "</span>
-                            <span> </span></p>
+                            <span>Fin de tâches : {{ object[1].name }}</span>
+                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
+                            <span> {{ object[1].status }}</span></p>
                         </div>
                     {% endif %}
-                    {% if len(object)==2 %}
-                        <div class="echeance">Fin du projet : {{ object[1].get_name() }}</div>
+                    {% if object|length==2 %}
+                        <div class="echeance">Fin du projet : {{ object[1].name }}</div>
                     {% endif %}
                 {% endfor %}
-                -->
 
             </div>
 
