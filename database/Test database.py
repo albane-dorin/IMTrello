@@ -112,4 +112,11 @@ with app.test_request_context():
     print(mail)
     us = database.db.session.query(database.User).filter(database.User.mail == 'sos').first()
     print(us)
-    print(us.id)
+
+    loves = database.get_projects_tasks(2)
+    print('hola')
+    print(loves)
+    #or love in loves:
+    #    print('project : ', love.p_name, 'tâche:', love.t_name)
+
+    print(database.db.session.query(database.User,database.Task_Dvp ).join(database.Task_Dvp, database.User.id==database.Task_Dvp.id_dvp).all())

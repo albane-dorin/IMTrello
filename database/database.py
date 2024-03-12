@@ -117,12 +117,14 @@ def tasks_of_user(user):
         tasks.append(Task.query.get(idx))
     return tasks
 
+
 def get_projects_tasks(user_id):
     # Effectuer la jointure entre Project et Project_Task
     project_and_id_tasks = join(Project, Project_Task, Project.id.label('id_project') == Project_Task.id_project)
-    #return project_and_id_tasks
+    # return project_and_id_tasks
     # Effectuer la jointure entre Project_Task et Task
     query = (db.session.query(
+        Project_Task,
         Project.id.label('p_id'),
         Project.name.label('p_name'),
         Project.manager,
@@ -130,21 +132,18 @@ def get_projects_tasks(user_id):
         Task.name.label('t_name'),
         Task.date,
         Task.status,
-        Project_Task,
         User.username.label('m_name')
-    ).filter(
-        Project.id==Project_Task.id_project
-    ).filter(
-        Task.id==Project_Task.id_task
-    ).filter(
-        Project.manager==User.id
+    ).join(
+        Project, Project.id == Project_Task.id_project
+    ).join(
+        Task, Task.id == Project_Task.id_task
+    ).join(
+        User, Project.manager == User.id
     ).filter(
         Project.manager == user_id
     ).all())
-    
+    #result=query.subquery()
     return query
-
-
 
 #Fonctions de modifications
 
@@ -285,11 +284,13 @@ def peupler_db():
     tasks = [task11, task12, task13, task21]
 
     # Pour Project_Task
-    for project in projects:
-        for task in tasks:
-            # Ici, nous associons chaque tâche à chaque projet
-            project_task = Project_Task(id_project=project.id, id_task=task.id)
-            db.session.add(project_task)
+    for task in tasks[:2+1]:
+        # Ici, nous associons chaque tâche à chaque projet
+        project_task = Project_Task(id_project=projects[0].id, id_task=task.id)
+        db.session.add(project_task)
+    project_task = Project_Task(id_project=projects[1].id,id_task=task21.id)
+    db.session.add(project_task)
+
 
     # Pour Project_Dvp
     for project in projects:
