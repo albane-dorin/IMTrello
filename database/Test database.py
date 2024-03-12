@@ -120,3 +120,5 @@ with app.test_request_context():
     #    print('project : ', love.p_name, 'tâche:', love.t_name)
 
     print(database.db.session.query(database.User,database.Task_Dvp ).join(database.Task_Dvp, database.User.id==database.Task_Dvp.id_dvp).all())
+
+    print(projects[0].date)

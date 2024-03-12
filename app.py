@@ -27,7 +27,7 @@ def list(user_id):
         if user is not None:
             projects = database.projects_of_user(user)
             tasks = database.get_projects_tasks(user_id)
-            return flask.render_template("list.html.jinja2", tasks=tasks, projects=projects)
+            return flask.render_template("list.html.jinja2", tasks=tasks, projects=projects, user=user)
         else:
             # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
             return "Utilisateur non trouvé", 404  # Retourne une réponse 404 (Not Found)

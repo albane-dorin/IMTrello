@@ -27,7 +27,7 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text)
     description = db.Column(db.Text)
-    date = db.Column(db.DateTime)
+    date = db.Column(db.Date)
     manager = db.Column(db.Integer, ForeignKey('user.id'))
 
 class Column(db.Model):
@@ -40,7 +40,7 @@ class Task(db.Model):
     __tablename__ = 'task'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text)
-    date = db.Column(db.DateTime)
+    date = db.Column(db.Date)
     description = db.Column(db.Text)
     column = db.Column(db.Integer, db.ForeignKey('column.id'))
     status = db.Column(db.String)

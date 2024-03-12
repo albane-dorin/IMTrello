@@ -2,59 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre Application Trello</title>
-
+    <link rel="stylesheet" href="/static/css/list.css">
     <link rel="icon" href="data:;base64,=">
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="{{ url_for("static", filename="js/list.js") }}"></script>
-
-    <style>
-        html{
-            height: 100%;
-            display: flex;
-        }
-        body {
-            flex-grow: 1;
-            font-family: Arial, sans-serif;
-            margin: 0px;
-        }
-
-        .container {
-            height: 100%;
-            display: flex;
-
-        }
-
-        .menu {
-            flex: 1;
-            padding: 20px;
-            background-color: #132bbe;
-        }
-
-        .task-list {
-            flex: 3;
-            padding: 20px;
-            background-color: #ddb9ff;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-
 
 
 </head>
@@ -62,115 +17,140 @@
 
     <div class="container">
 
-        <!-- MENU DES FILTRES -->
-        <div class="menu">
-
-            <!-- Filtre des projets -->
-            <p>Nom de la tâche : <input type="text" id="filter-task-by-name" placeholder="Filter by name"> </p>
-
-
-            <!-- Filtre des projets -->
-            <form>
-              <fieldset>
-                  <legend>Vos projets:</legend>
-                  {% for project in projects %}
-                      <div>
-                        <input type="checkbox" id="projet_1">
-                        <label for="projet_1"> {{project.name}}</label>
-                      </div>
-                  {% endfor %}
-                </fieldset>
-            </form>
-
-            <!-- Filtre des status -->
-            <form>
-              <fieldset>
-                  <legend>Afficher les tâche dont les statuts sont :</legend>
-
-                  <div>
-                      <form action="">
-                        <input type="checkbox" id="waiting" onclick="filterWaiting()" checked>
-                        <label for="waiting">En attente</label>
-                      </form>
-                      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-                        <script>
-                            $(document).ready(function() {
-                                $("#waiting").change(function() {
-                                    if ($(this).is(":checked")) {
-                                        $("#taches tbody tr[data-status='Waiting']").show();
-                                    } else {
-                                        $("#taches tbody tr[data-status='Waiting']").hide();
-                                    }
-                                });
-                            });
-                        </script>
-
-
-                  </div>
-                  <div>
-                    <input type="checkbox" id="in_progress" checked>
-                    <label for="in_progress">En cours</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" id="completed" checked>
-                    <label for="completed">Completée</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" id="cancelled" checked>
-                    <label for="cancelled">Annulée</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" id="blocked" checked>
-                    <label for="blocked">En pause</label>
-                  </div>
-                </fieldset>
-            </form>
-
-
-            <!-- Autres filtres -->
-            <p>Plus de filtres</p>
-            <form>
-              <div>
-                    <input type="checkbox" id="chronology">
-                    <label for="chronology">Chronologiquement</label>
-                  </div>
-                  <div>
-                    <input type="checkbox" id="priority">
-                    <label for="priority">Par priorité</label>
-                  </div>
-            </form>
-
+        <div class="top">
+            <div class="profil">
+                <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
+                <div class="nom">
+                    <p class="username"> {{ user.username }} </p>
+                    <a href="/" class="deco">Déconnexion</a>
+                </div>
+            </div>
+            <div class="haut">
+                <div class="vues">
+                    <button class="vue">Vue par échéances</button>
+                    <button class="vue">Vue par projets</button>
+                    <button disabled class="vue">Vue par tâches</button>
+                </div>
+                <div class="plus"><button class="vue"> + </button></div>
+            </div>
         </div>
 
 
+        <div class="content">
+            <!-- MENU DES FILTRES -->
+            <div class="menu">
 
-        <div class="task-list">
-            <h2>Liste des Tâches</h2>
-        <table id="taches">
-            <thead>
-            <tr>
-                <th>Projet</th>
-                <th id="sort-name">Tâche</th>
-                <th>Statut</th>
-                <th>Date</th>
-                <th>Manager</th>
-            </tr>
-            </thead>
-            <tbody>
 
-            {% for task in tasks %}
-                <tr data-name-task = "{{ task.t_name }}">
-                    <td>{{ task.p_name }}</td>
-                    <td>{{ task.t_name }}</td>
-                    <td>{{ task.status }}</td>
-                    <td>{{ task.date }}</td>
-                    <td>{{ task.m_name }}</td>
-                </tr>
-            {% endfor %}
+                <div class="titre">Filtres</div>
+                <p></p>
+                <!-- Filtre des projets -->
+                <p class="filtre">Nom de la tâche : <input type="text" id="filter-task-by-name" placeholder="Filter by name"> </p>
 
-            </tbody>
 
-        </table>
+                <!-- Filtre des projets -->
+                <form>
+                  <fieldset>
+                      <legend class="filtre">Vos projets:</legend>
+                      {% for project in projects %}
+                          <div>
+                            <input type="checkbox" id="projet_1">
+                            <label for="projet_1" class="filtre_proposition"> {{project.name}}</label>
+                          </div>
+                      {% endfor %}
+                    </fieldset>
+                </form>
+
+                <!-- Filtre des status -->
+                <form>
+                  <fieldset>
+                      <legend class="filtre">Afficher les tâche dont les statuts sont :</legend>
+
+                      <div>
+                          <form action="">
+                            <input type="checkbox" id="waiting" onclick="filterWaiting()" checked>
+                            <label for="waiting" class="filtre_proposition">En attente</label>
+                          </form>
+                          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+                            <script>
+                                $(document).ready(function() {
+                                    $("#waiting").change(function() {
+                                        if ($(this).is(":checked")) {
+                                            $("#taches tbody tr[data-status='Waiting']").show();
+                                        } else {
+                                            $("#taches tbody tr[data-status='Waiting']").hide();
+                                        }
+                                    });
+                                });
+                            </script>
+
+
+                      </div>
+                      <div>
+                        <input type="checkbox" id="in_progress" checked>
+                        <label for="in_progress" class="filtre_proposition">En cours</label>
+                      </div>
+                      <div>
+                        <input type="checkbox" id="completed" checked>
+                        <label for="completed" class="filtre_proposition">Completée</label>
+                      </div>
+                      <div>
+                        <input type="checkbox" id="cancelled" checked>
+                        <label for="cancelled" class="filtre_proposition">Annulée</label>
+                      </div>
+                      <div>
+                        <input type="checkbox" id="blocked" checked>
+                        <label for="blocked" class="filtre_proposition">En pause</label>
+                      </div>
+                    </fieldset>
+                </form>
+
+
+                <!-- Autres filtres -->
+                <p class="filtre">Plus de filtres</p>
+                <form>
+                  <div>
+                        <input type="checkbox" id="chronology">
+                        <label for="chronology" class="filtre_proposition">Chronologiquement</label>
+                      </div>
+                      <div>
+                        <input type="checkbox" id="priority">
+                        <label for="priority" class="filtre_proposition">Par priorité</label>
+                      </div>
+                </form>
+
+            </div>
+
+
+
+            <div class="task-list">
+                <div class="titre">Liste des Tâches</div>
+                <p></p>
+                <table id="taches">
+                    <thead>
+                    <tr>
+                        <th>Projet</th>
+                        <th id="sort-name">Tâche</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                        <th>Manager</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for task in tasks %}
+                        <tr data-name-task = "{{ task.t_name }}">
+                            <td>{{ task.p_name }}</td>
+                            <td>{{ task.t_name }}</td>
+                            <td>{{ task.status }}</td>
+                            <td>{{ task.date }}</td>
+                            <td>{{ task.m_name }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
         </div>
     </div>
 
