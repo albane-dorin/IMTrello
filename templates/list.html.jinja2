@@ -145,7 +145,7 @@
             <tbody>
 
             {% for task in tasks %}
-                <tr data-name-task = "{{ task.t_name }}">
+                <tr data-name-task="{{ task.t_name }}" data-status="{{ task.status }}">
                     <td>{{ task.p_name }}</td>
                     <td>{{ task.t_name }}</td>
                     <td>{{ task.status }}</td>
