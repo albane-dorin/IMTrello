@@ -1,12 +1,22 @@
 {% extends "home.html.jinja2" %}
 
+<link rel="stylesheet" href="../static/css/home.css">
+
 {% block projects %}
-    {% for projet in user.project %}
-        {% if projet.id == {{ project_id }} %}
-            <button class="projet" disabled>{{ projet.name }}</button>
+    {% for projet in projects %}
+        {% if projet.id == project_id  %}
+            <a class="lienp" href="{{ url_for("home", user_id=user.id)}}">
+                <button class="projet" disabled>{{ projet.name }}</button>
+            </a>
         {% else %}
-            <button class="projet">{{ projet.name }}</button>
+                <a class="lienp" href="{{ url_for("home_project", user_id=user.id, project_id=projet.id)}}">
+                    <button class="projet" >{{ projet.name }}</button>
+                </a>
         {% endif %}
+
     {% endfor %}
 
+
 {% endblock %}
+
+
