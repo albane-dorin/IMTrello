@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, CheckConstraint
 from sqlalchemy import join
 
 
@@ -43,7 +43,11 @@ class Task(db.Model):
     date = db.Column(db.DateTime)
     description = db.Column(db.Text)
     column = db.Column(db.Integer, db.ForeignKey('column.id'))
-    status = db.Column(db.Integer)
+    status = db.Column(db.String)
+    # Définir une contrainte de vérification pour l'attribut
+    __table_args__ = (
+        CheckConstraint(status.in_(['Waiting', 'In progress', 'Completed','Cancelled', 'Blocked'])),
+    )
     #WAITING = 0
     #IN_PROGRESS = 1
     #COMPLETED = 2
@@ -263,7 +267,7 @@ def peupler_db():
     db.session.add(c22)
     db.session.commit()
 
-    task11 = Task(name="Task 1", description="Première tâche", date=datetime(2024, 3, 6), column=c11.id)
+    task11 = Task(name="Task 1", description="Première tâche", date=datetime(2024, 3, 6), column=c11.id, status = 'Waiting')
     task12 = Task(name="Task 2", description="Deuxième tâche", date=datetime(2024, 3, 6), column=c11.id)
     task13 = Task(name="Task 3", description="Troisième tâche", date=datetime(2024, 3, 6), column=c12.id)
     task21 = Task(name="Tâche 1", description="Faire des trucs", date=datetime(2024, 3, 6), column=c21.id)

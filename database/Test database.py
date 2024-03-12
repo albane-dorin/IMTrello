@@ -43,7 +43,7 @@ with app.test_request_context():
         print(c.id, c.name)
 
     #Test Ajout Tâche
-    database.new_task(user=users[1], project=projects[2], name='backend', year=2024, month=3, day=28, description='Houla', column=cs[0], status =2, dvps=users)
+    database.new_task(user=users[1], project=projects[2], name='backend', year=2024, month=3, day=28, description='Houla', column=cs[0], status ='Waiting', dvps=users)
     tasks = database.Task.query.all()
     for task in tasks:
         print(task.id, task.name)
@@ -99,3 +99,17 @@ with app.test_request_context():
     for love in loves:
        print('project : ', love.p_name, 'tâche:', love.t_name)
 
+    print(database.db.session.query(database.User.mail).all())
+    projects = database.projects_of_user(user)
+    for project in projects:
+        print('project : ', project.name)
+
+    tasks = database.db.session.query(database.Task).all()
+    for task in tasks:
+        print('task : ', task.status)
+
+    mail = user.mail
+    print(mail)
+    us = database.db.session.query(database.User).filter(database.User.mail == 'sos').first()
+    print(us)
+    print(us.id)

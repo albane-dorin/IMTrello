@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votre Application Trello</title>
+
+    <link rel="icon" href="data:;base64,=">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="{{ url_for("static", filename="js/list.js") }}"></script>
+
     <style>
         html{
             height: 100%;
@@ -70,13 +76,9 @@
                   {% for project in projects %}
                       <div>
                         <input type="checkbox" id="projet_1">
-                        <label for="projet_1">project.name</label>
+                        <label for="projet_1"> {{project.name}}</label>
                       </div>
                   {% endfor %}
-                  <div>
-                    <input type="checkbox" id="projet_2">
-                    <label for="projet_2">Projet 2</label>
-                  </div>
                 </fieldset>
             </form>
 
@@ -86,23 +88,39 @@
                   <legend>Afficher les tâche dont les statuts sont :</legend>
 
                   <div>
-                    <input type="checkbox" id="waiting">
-                    <label for="waiting">En attente</label>
+                      <form action="">
+                        <input type="checkbox" id="waiting" onclick="filterWaiting()" checked>
+                        <label for="waiting">En attente</label>
+                      </form>
+                      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+                        <script>
+                            $(document).ready(function() {
+                                $("#waiting").change(function() {
+                                    if ($(this).is(":checked")) {
+                                        $("#taches tbody tr[data-status='Waiting']").show();
+                                    } else {
+                                        $("#taches tbody tr[data-status='Waiting']").hide();
+                                    }
+                                });
+                            });
+                        </script>
+
+
                   </div>
                   <div>
-                    <input type="checkbox" id="in_progress">
+                    <input type="checkbox" id="in_progress" checked>
                     <label for="in_progress">En cours</label>
                   </div>
                   <div>
-                    <input type="checkbox" id="completed">
+                    <input type="checkbox" id="completed" checked>
                     <label for="completed">Completée</label>
                   </div>
                   <div>
-                    <input type="checkbox" id="cancelled">
+                    <input type="checkbox" id="cancelled" checked>
                     <label for="cancelled">Annulée</label>
                   </div>
                   <div>
-                    <input type="checkbox" id="blocked">
+                    <input type="checkbox" id="blocked" checked>
                     <label for="blocked">En pause</label>
                   </div>
                 </fieldset>
@@ -141,7 +159,7 @@
             <tbody>
 
             {% for task in tasks %}
-                <tr>
+                <tr data-name-task = "{{ task.t_name }}">
                     <td>{{ task.p_name }}</td>
                     <td>{{ task.t_name }}</td>
                     <td>{{ task.status }}</td>
