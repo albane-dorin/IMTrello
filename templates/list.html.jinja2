@@ -92,20 +92,6 @@
                         <input type="checkbox" id="waiting" onclick="filterWaiting()" checked>
                         <label for="waiting">En attente</label>
                       </form>
-                      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-                        <script>
-                            $(document).ready(function() {
-                                $("#waiting").change(function() {
-                                    if ($(this).is(":checked")) {
-                                        $("#taches tbody tr[data-status='Waiting']").show();
-                                    } else {
-                                        $("#taches tbody tr[data-status='Waiting']").hide();
-                                    }
-                                });
-                            });
-                        </script>
-
-
                   </div>
                   <div>
                     <input type="checkbox" id="in_progress" checked>
