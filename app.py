@@ -1,6 +1,6 @@
 import flask
 
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, flash, jsonify
 import database.database as database
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date, timedelta
@@ -14,6 +14,7 @@ with app.test_request_context(): # (2) bloc exécuté à l'initialisation de Fla
  database.init_database()
  app.app_context()
  database.peupler_db()
+
 
 
 ############# FONCTIONS FORMULAIRE #######################
@@ -67,6 +68,85 @@ def form_valide(form, i):  # 0 pour connexion, 1 pour inscription
 
     return result, errors
 
+def formulaire_new_project(user_id, form):
+    devs = form.get("developpeurs", "").split(' ')
+    enddate = form.get("date", "")
+
+    result = True
+    errors = []
+
+
+    if enddate < date.today().strftime("%Y-%m-%d") :
+        result = False
+        errors += ["Date invalide"]
+
+    if devs != ['']:
+        for dev in devs:
+            user = database.db.session.query(database.User).filter(database.User.mail == dev).first()
+            if user is None:
+                result = False
+                errors += ["Une des adresses emails est incorrecte"]
+                break
+
+            elif user.role == 1 :
+                result = False
+                errors += ["Une des personnes ajoutées n'est pas développeur"]
+                break
+    return result, errors
+
+
+############ FONCTION ECHEANCES #######################
+def echeances(user, projets):
+    semaines = []
+    mois = []
+    apres = []
+    today = date.today()
+
+    #Ajout des échéances des projets
+    if type(projets) == list:
+        for p in projets:
+            if today <= p.date.date() <= today + timedelta(days=7):
+                semaines += [(p.date.date(), p)]
+            elif today <= p.date.date() <= today + timedelta(days=30) :
+                mois += [(p.date.date(), p)]
+            elif today <= p.date.date() > today + timedelta(days=30):
+                apres += [(p.date.date(), p)]
+
+    else:
+        if today <= projets.date.date() <= today + timedelta(days=7):
+            semaines += [(projets.date.date(), projets)]
+        elif today <= projets.date.date() <= today + timedelta(days=30) :
+            mois += [(projets.date.date(), projets)]
+        elif today <= projets.date.date() > today + timedelta(days=30):
+            apres += [(projets.date.date(), projets)]
+
+
+    #Ajout des échéances des tâches
+    if type(projets) == list:
+        for t in database.tasks_of_user(user):
+            if today <= t.date.date() <= today + timedelta(days=7):
+                semaines += [(t.date.date(), t, database.project_of(t))]
+            elif today <= t.date.date() <= today + timedelta(days=30) :
+                mois += [(t.date.date(), t, database.project_of(t))]
+            elif today <= t.date.date() > today + timedelta(days=30) :
+                apres += [(t.date.date(), t, database.project_of(t))]
+
+    else:
+        for t in database.tasks_of_user(user):
+            if database.project_of(t).id == projets.id:
+                if today <= t.date.date() <= today + timedelta(days=7):
+                    semaines += [(t.date.date(), t, database.project_of(t))]
+                elif today <= t.date.date() <= today + timedelta(days=30) :
+                    mois += [(t.date.date(), t, database.project_of(t))]
+                elif today <= t.date.date() > today + timedelta(days=30) :
+                    apres += [(t.date.date(), t, database.project_of(t))]
+
+    #Tri des listes par date décroissante
+    semaines.sort(key=lambda a: a[0])
+    mois.sort(key=lambda a: a[0])
+    apres.sort(key=lambda a: a[0])
+    return semaines, mois, apres
+
 
 ############# VUE CONEXION/INSCRIPTION ############################
 
@@ -114,44 +194,62 @@ def list(user_id):
 
 ############## VUE USERS ########################""
 
-
-@app.route('/<int:user_id>/home', methods=["GET"])
+@app.route('/<int:user_id>/home', methods=["GET", "POST"])
 def home(user_id):
+
+
+    user = database.db.session.get(database.User, user_id)
+    projets = database.projects_of_user(user)
+    semaines, mois, apres = echeances(user, projets)
+
+    if flask.request.method == 'POST':
+        form = flask.request.form
+        date = form.get("date", "").split("-")
+        devs = form.get("developpeur", "").split(' ')
+        devs += [user]
+        print("date = ", date)
+
+        result, errors = formulaire_new_project(user_id, form)
+
+
+
+
+
+        flask.session['name'] = form.get("name", "")
+        flask.session['des'] = form.get("des", "")
+        flask.session['date'] = form.get("date", "")
+        flask.session['dev'] = form.get("dev", "")
+
+
+        if result :
+            database.new_project(form.get("name", ""), form.get("description", ""),
+                                 int(date[0]), int(date[1]), int(date[2]), user, [])
+            projets = database.projects_of_user(user)
+            semaines, mois, apres = echeances(user, projets)
+            return flask.render_template("home.html.jinja2", semaines=semaines,
+                                     mois=mois, apres=apres, user=user, projects=projets)
+        else:
+            # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
+            return flask.render_template('error.html.jinja2', semaines=semaines,
+                                     mois=mois, apres=apres, user=user, projects=projets, errors=errors)
+
+
+
+    else :
+
+        return flask.render_template("home.html.jinja2", semaines=semaines,
+                                     mois=mois, apres=apres, user=user, projects=projets)
+
+
+
+@app.route('/<int:user_id>/<int:project_id>/home_project')
+def home_project(user_id, project_id):
     database.peupler_db()
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
-    semaines = []
-    mois = []
-    apres = []
-    print('toto')
-    today = date.today()
-
-    print(projets)
-    #Ajout des échéances des projets
-    for p in projets:
-        if today <= p.date.date() <= today + timedelta(days=7):
-            semaines += [(p.date.date(), p)]
-        elif today <= p.date.date() <= today + timedelta(days=30) :
-            mois += [(p.date.date(), p)]
-        elif today <= p.date.date() > today + timedelta(days=30):
-            apres += [(p.date.date(), p)]
-
-    #Ajout des échéances des tâches
-    for t in database.tasks_of_user(user):
-        if today <= t.date.date() <= today + timedelta(days=7):
-            semaines += [(t.date.date(), t, database.project_of(t))]
-        elif today <= t.date.date() <= today + timedelta(days=30) :
-            mois += [(t.date.date(), t, database.project_of(t))]
-        elif today <= t.date.date() > today + timedelta(days=30) :
-            apres += [(t.date.date(), t, database.project_of(t))]
-
-    #Tri des listes par date décroissante
-    semaines.sort(key=lambda a: a[0])
-    mois.sort(key=lambda a: a[0])
-    apres.sort(key=lambda a: a[0])
-
-
-    return flask.render_template("home.html.jinja2", semaines=semaines,
+    projet = database.db.session.get(database.Project, project_id)
+    semaines, mois, apres = echeances(user, projet)
+    return flask.render_template("home_project.html.jinja2", project_id=project_id, semaines=semaines,
                                  mois=mois, apres=apres, user=user, projects=projets)
 
 
