@@ -28,6 +28,11 @@ body {
     border-bottom: solid #ffff;
 }
 
+.left{
+    border-right: solid #ffff;
+    padding: 20px;
+}
+
 .content {
     margin-top: 150px;
     position: fixed;
