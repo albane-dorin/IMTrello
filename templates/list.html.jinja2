@@ -17,6 +17,7 @@
 
     <div class="container">
 
+
         <div class="top">
             <div class="profil">
                 <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
@@ -37,14 +38,13 @@
 
 
         <div class="content">
-            <!-- MENU DES FILTRES -->
-            <div class="menu">
 
 
                 <div class="titre">Filtres</div>
                 <p></p>
                 <!-- Filtre des projets -->
                 <p class="filtre">Nom de la tâche : <input type="text" id="filter-task-by-name" placeholder="Filter by name"> </p>
+
 
 
                 <!-- Filtre des projets -->
@@ -139,7 +139,7 @@
                     <tbody>
 
                     {% for task in tasks %}
-                        <tr data-name-task = "{{ task.t_name }}">
+                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}">
                             <td>{{ task.p_name }}</td>
                             <td>{{ task.t_name }}</td>
                             <td>{{ task.status }}</td>

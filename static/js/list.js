@@ -17,16 +17,17 @@ function filterRowsByName(){
   }).hide();
 }
 
-/*
+
 function filterWaiting() {
     console.log("Dans la fonction");
     var checkBox = document.getElementById("waiting");
-    if (checkBox.checked==true) {
+    if (checkBox.checked===true) {
         console.log("La case à cocher est cochée. Faites quelque chose ici.");
-        $("#taches tbody tr").filter(function {return $(this).attr( "data-status" ) == 'Waiting'}).show()
+        $("#taches tbody tr[data-status='Waiting']").show();
     }
     else {
-        $("#taches tbody tr").filter(function {return $(this).attr( "data-status" ) == 'Waiting'}).hide()
+        console.log("La case à cocher n'est pas cochée. Faites quelque chose ici.");
+        $("#taches tbody tr[data-status='Waiting']").hide();
     }
 }
-*/
+
