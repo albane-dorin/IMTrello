@@ -5,6 +5,11 @@
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <script>
+          const user_id = {{ user.id }}
+      </script>
+
     <title>Home page</title>
 
   </head>
@@ -17,6 +22,7 @@
                 <a href="/" class="deco">Deconnexion</a>
             </div>
         </div>
+
         <div class="haut">
             <div class="vues">
                 <button disabled class="vue">Vue par échéances</button>
@@ -46,7 +52,7 @@
 
             <div id="form" class="newproject">
 
-                <form  id="form" action="{{ url_for("home", user_id=user.id) }}" method="post">
+                <form  id="formnp" action="{{ url_for("home", user_id=user.id) }}" method="post">
 
                     <div class="bandeaux"><h3>Nouveau Projet</h3>  <button date-close-button class="close"> X </button> </div>
 
@@ -138,6 +144,9 @@
 
         </div>
          {%  endblock %}
+
+    {% block plus %}
+    {% endblock %}
     </div>
 
   </body>
