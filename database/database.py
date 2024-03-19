@@ -321,3 +321,214 @@ def peupler_db():
     db.session.add(task_dvp)
 
     db.session.commit()
+
+def peupler():
+    clean()
+
+    #Utilisateurs
+    user1 = User(username="Ilian", password="ilian", mail="ilian.ben@gmail.com", role=2)
+    user2 = User(username="Maxime", password="maxime", mail="maxime.b@gmail.com", role=1)
+    user3 = User(username="Hugo", password="hugo", mail="hugo.b@gmail.com", role=3)
+    user4 = User(username="Fouad", password="fouad", mail="fouad.l@gmail.com", role=2)
+    user5 = User(username="Sophie", password="sophie", mail="sophie.p@gmail.com", role=3)
+    user6 = User(username="Thibaud", password="thibaud", mail="thibaud.q@gmail.com", role=2)
+    user7 = User(username="Xinlei", password="xinlei", mail="xinlei.z@gmail.com", role=2)
+    user8 = User(username="Albane", password="albane", mail="albane.d@gmail.com", role=3)
+    user9 = User(username="Estelle", password="estelle", mail="estelle.m@gmail.com", role=1)
+    user10 = User(username="Perla", password="perla", mail="perla.el@gmail.com", role=2)
+    db.session.add(user1)
+    db.session.add(user2)
+    db.session.add(user3)
+    db.session.add(user4)
+    db.session.add(user5)
+    db.session.add(user6)
+    db.session.add(user7)
+    db.session.add(user8)
+    db.session.add(user9)
+    db.session.add(user10)
+    db.session.commit()
+
+    #Projets
+    project1 = Project(name="LLM dans notre intranet", description="Il s'agit d’étudier la possibilité d’utiliser l’intelligence artificielle pour faciliter la recherche d’information sur l’intranet de l’école. L’utilisateur devrait pouvoir «venir sur l’intranet, exprimer sa problématique dans son langage et ensuite avoir une réponse simple».",
+                       date=datetime(2024, 4,8), manager=user2.id)
+    project2 = Project(name="IMTrello", description="Créer son propre Trello",
+                       date=datetime(2024, 4, 20), manager=user8.id)
+    project3 = Project(name="LinkUp", description="Un engagement associatif facile et personnalisable !", date=datetime(2024, 4, 18), manager=user5.id)
+    db.session.add(project1)
+    db.session.add(project2)
+    db.session.add(project3)
+    db.session.commit()
+
+    #Association des dvps aux projets
+    for user in [user1, user2, user3,user4,user5, user6, user7]:
+        project_dvp = Project_Dvp(id_project=project1.id, id_dvp=user.id)
+        db.session.add(project_dvp)
+    for user in [user5, user8, user9]:
+        project_dvp = Project_Dvp(id_project=project2.id, id_dvp=user.id)
+        db.session.add(project_dvp)
+    for user in [user2, user5, user8, user10 ]:
+        project_dvp = Project_Dvp(id_project=project3.id, id_dvp=user.id)
+        db.session.add(project_dvp)
+    db.session.commit()
+
+    #Colonnes
+    c11 = Column(name='Ressources', project=project1.id)
+    c12 = Column(name='En ce moment', project=project1.id)
+    c13 = Column(name='A venir', project=project1.id)
+    c14 = Column(name='Fait !!!', project=project1.id)
+    db.session.add(c11)
+    db.session.add(c12)
+    db.session.add(c13)
+    db.session.add(c14)
+    c21 = Column(name='Base de donnée', project=project2.id)
+    c22 = Column(name='Front-end', project=project2.id)
+    db.session.add(c21)
+    db.session.add(c22)
+    c31 = Column(name='Com.', project=project3.id)
+    c32 = Column(name='Figma', project=project3.id)
+    c33 = Column(name='Livrables', project=project3.id)
+    db.session.add(c31)
+    db.session.add(c32)
+    db.session.add(c33)
+    db.session.commit()
+
+    #Tâches
+    task11 = Task(name="Lancement de projet", description="But : cerner le sujet et plannification", date=datetime(2024, 3, 6), column=c14.id,
+                  status='Completée', priority='Importante')
+    task12 = Task(name="RB: principe des LLM", description="Recherche biblio : qu'est-ce que c'est ? Comment ça marche ?",
+                  date=datetime(2024, 4, 1), column=c12.id,
+                  status='En cours', priority='Importante')
+    task13 = Task(name="RB: LLM existants",
+                  description="Recherche biblio : qu'est-ce qui existe ? Compétences ?",
+                  date=datetime(2024, 4, 1), column=c12.id,
+                  status='En cours', priority='Forte')
+    task14 = Task(name="RB: Réentrainement",
+                  description="Recherche biblio : Comment faire ? Quels coûts ?",
+                  date=datetime(2024, 4, 1), column=c12.id,
+                  status='En cours', priority='Importante')
+    task15 = Task(name="RB: Coûts machine virtuelle",
+                  description="Recherche biblio : pour demande de budget",
+                  date=datetime(2024, 4, 1), column=c12.id,
+                  status='Completée', priority='Importante')
+    task16 = Task(name="RB: Mise en commun",
+                  description="Recherche biblio : Livrable !!!!",
+                  date=datetime(2024, 4, 2), column=c13.id,
+                  status='En attente', priority='Importante')
+    task17 = Task(name="Calendrier",
+                  description="lien vers calendrier",
+                  date=datetime(2024, 2, 1), column=c11.id,
+                  status='Completée', priority= 'Facultative')
+
+    task21 = Task(name="Utilisateur",
+                  description="Nom d'utilisateur, mdp, rôle, mail (et id)",
+                  date=datetime(2024, 4, 1), column=c21.id,
+                  status='En pause', priority='Forte')
+    task22 = Task(name="Projet",
+                  description="Nom, description, date, manager (et id)",
+                  date=datetime(2024, 4, 1), column=c21.id,
+                  status='En cours', priority='Forte')
+    task23 = Task(name="Vue liste",
+                  description="Liste des tâches + filtres",
+                  date=datetime(2024, 4, 5), column=c22.id,
+                  status='En attente', priority='Faible')
+    task24 = Task(name="Connexion",
+                  description="Récupérer id utilisateur + vérifier son existence sinon redirection inscription",
+                  date=datetime(2024, 4, 6), column=c22.id,
+                  status='En cours', priority='Forte')
+    task25 = Task(name="Vue coeur",
+                  description="Organiser les tâches dans un coeur",
+                  date=datetime(2024, 4, 7), column=c22.id,
+                  status='Annulée', priority='Faible')
+
+    task31 = Task(name="Interviews bénévoles + assos",
+                  description="Quels sont leurs pbs ?",
+                  date=datetime(2024, 4, 1), column=c31.id,
+                  status='En cours', priority='Forte')
+    task32 = Task(name="Test utilisateurs",
+                  description="Améliorations possibles ?",
+                  date=datetime(2024, 4, 15), column=c31.id,
+                  status='En attente', priority='Forte')
+    task33 = Task(name="Livrable 1",
+                  description="Résumé interviews et état de l'art",
+                  date=datetime(2024, 4, 2), column=c33.id,
+                  status='En cours', priority='Importante')
+    task34 = Task(name="Livrable 2",
+                  description="Résumé conception",
+                  date=datetime(2024, 4, 6), column=c33.id,
+                  status='En attente', priority='Importante')
+    task35 = Task(name="V1",
+                  description="Missions et Assos",
+                  date=datetime(2024, 4, 10), column=c32.id,
+                  status='En attente', priority='Forte')
+    task36 = Task(name="V2",
+                  description="Autres fonctionnalités : chat, prêt de matériel",
+                  date=datetime(2024, 4, 12), column=c32.id,
+                  status='En attente', priority='Faible')
+
+    tasks = [task11, task12, task13, task14, task15, task16, task17, task21, task22, task23, task24, task25, task31,
+             task32, task33, task34, task35, task36]
+    for task in tasks:
+        db.session.add(task)
+    db.session.commit()
+
+    #Association tâches à leur projet
+    for task in tasks[:7+1]:
+        project_task = Project_Task(id_project=project1.id, id_task=task.id)
+        db.session.add(project_task)
+    for task in tasks[8:11+1]:
+        project_task = Project_Task(id_project=project2.id, id_task=task.id)
+        db.session.add(project_task)
+    for task in tasks[12:]:
+        project_task = Project_Task(id_project=project3.id, id_task=task.id)
+        db.session.add(project_task)
+    db.session.commit()
+
+    #Association dvp à leurs tâches
+    for user in [user1, user2, user3,user4,user5, user6, user7]:
+        task_dvp = Task_Dvp(id_task=task11.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task12.id, id_dvp=user2.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task13.id, id_dvp=user4.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task14.id, id_dvp=user3.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task14.id, id_dvp=user5.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task15.id, id_dvp=user1.id)
+    db.session.add(task_dvp)
+    for user in [user1, user2, user3,user4,user5, user6, user7]:
+        task_dvp = Task_Dvp(id_task=task16.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+    for user in [user1, user2, user3,user4,user5, user6, user7]:
+        task_dvp = Task_Dvp(id_task=task17.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+
+    task_dvp = Task_Dvp(id_task=task21.id, id_dvp=user8.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task22.id, id_dvp=user5.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task23.id, id_dvp=user5.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task25.id, id_dvp=user9.id)
+    db.session.add(task_dvp)
+
+    for user in [user2, user5, user8, user10 ]:
+        task_dvp = Task_Dvp(id_task=task31.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+    for user in [user5, user8]:
+        task_dvp = Task_Dvp(id_task=task33.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+    for user in [user2, user5, user8, user10 ]:
+        task_dvp = Task_Dvp(id_task=task32.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+    for user in [user2, user10 ]:
+        task_dvp = Task_Dvp(id_task=task34.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+    for user in [user5, user8]:
+        task_dvp = Task_Dvp(id_task=task35.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+    for user in [user2, user5]:
+        task_dvp = Task_Dvp(id_task=task36.id, id_dvp=user.id)
+        db.session.add(task_dvp)
+    db.session.commit()

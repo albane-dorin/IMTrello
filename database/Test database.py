@@ -12,6 +12,27 @@ database.db.init_app(app)
 with app.test_request_context():
     database.init_database()
     app.app_context()
+    database.peupler()
+
+    users = database.User.query.all()
+    print(users)
+    for user in users:
+        print(user.id, user.username, user.password, user.mail)
+
+    cs= database.Column.query.all()
+    for c in cs:
+        print(c.id, c.name)
+
+    for task in database.Task.query.all():
+        print(task.id, task.name, task.status, task.description, task.date)
+
+    user = database.db.session.get(database.User, 5)
+    print(user.username)
+    for task in database.tasks_of_user(user):
+        print(task.name)
+
+
+
     database.peupler_db()
 
     #Test ajouter utilisateur
