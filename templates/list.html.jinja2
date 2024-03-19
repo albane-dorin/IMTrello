@@ -48,17 +48,17 @@
 
 
                 <!-- Filtre des projets -->
-                <form>
-                  <fieldset>
+                <fieldset>
                       <legend class="filtre">Vos projets:</legend>
                       {% for project in projects %}
                           <div>
-                            <input type="checkbox" id="projet_1">
-                            <label for="projet_1" class="filtre_proposition"> {{project.name}}</label>
+                            <form>
+                                <input type="checkbox" id="p_{{ project.id }}"  onclick="filterByProject({{ project.id }})" checked>
+                                <label for="projet_1" class="filtre_proposition"> {{project.name}}</label>
+                            </form>
                           </div>
                       {% endfor %}
-                    </fieldset>
-                </form>
+                </fieldset>
 
                 <p></p>
                 <!-- Filtre des status -->
@@ -71,36 +71,31 @@
                             <input type="checkbox" id="waiting" onclick="filterWaiting()" checked>
                             <label for="waiting" class="filtre_proposition">En attente</label>
                           </form>
-                          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-                            <script>
-                                $(document).ready(function() {
-                                    $("#waiting").change(function() {
-                                        if ($(this).is(":checked")) {
-                                            $("#taches tbody tr[data-status='Waiting']").show();
-                                        } else {
-                                            $("#taches tbody tr[data-status='Waiting']").hide();
-                                        }
-                                    });
-                                });
-                            </script>
-
 
                       </div>
                       <div>
-                        <input type="checkbox" id="in_progress" checked>
-                        <label for="in_progress" class="filtre_proposition">En cours</label>
+                          <form action="">
+                            <input type="checkbox" id="in_progress" onclick="filterInProgress()" checked>
+                            <label for="in_progress" class="filtre_proposition">En cours</label>
+                          </form>
                       </div>
                       <div>
-                        <input type="checkbox" id="completed" checked>
-                        <label for="completed" class="filtre_proposition">Completée</label>
+                          <form action="">
+                            <input type="checkbox" id="completed" onclick="filterCompleted()" checked>
+                            <label for="completed" class="filtre_proposition">Completée</label>
+                          </form>
                       </div>
                       <div>
-                        <input type="checkbox" id="cancelled" checked>
-                        <label for="cancelled" class="filtre_proposition">Annulée</label>
+                          <form action="">
+                            <input type="checkbox" id="cancelled" onclick="filterCancelled()" checked>
+                            <label for="cancelled" class="filtre_proposition">Annulée</label>
+                          </form>
                       </div>
                       <div>
-                        <input type="checkbox" id="blocked" checked>
-                        <label for="blocked" class="filtre_proposition">En pause</label>
+                          <form action="">
+                            <input type="checkbox" id="blocked" onclick="filterBlocked()" checked>
+                            <label for="blocked" class="filtre_proposition">En pause</label>
+                          </form>
                       </div>
                     </fieldset>
                 </form>
@@ -108,16 +103,19 @@
 
                 <!-- Autres filtres -->
                 <p class="filtre">Plus de filtres</p>
-                <form>
-                  <div>
-                        <input type="checkbox" id="chronology">
-                        <label for="chronology" class="filtre_proposition">Chronologiquement</label>
-                      </div>
-                      <div>
-                        <input type="checkbox" id="priority">
-                        <label for="priority" class="filtre_proposition">Par priorité</label>
-                      </div>
-                </form>
+                    <div>
+                        <form action="">
+                            <input type="checkbox" id="chronology" onclick="filterByTime()">
+                            <label for="chronology" class="filtre_proposition">Chronologiquement</label>
+                        </form>
+                    </div>
+                    <div>
+                        <form action="">
+                            <input type="checkbox" id="priority" onclick="filterByPrio()">
+                            <label for="priority" class="filtre_proposition">Par priorité</label>
+                        </form>
+                    </div>
+
             </div>
 
 
@@ -132,6 +130,7 @@
                         <th>Projet</th>
                         <th id="sort-name">Tâche</th>
                         <th>Statut</th>
+                        <th>Priorité</th>
                         <th>Date</th>
                         <th>Manager</th>
                     </tr>
@@ -139,10 +138,11 @@
                     <tbody>
 
                     {% for task in tasks %}
-                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}">
+                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}" data-date="{{ task.date }}" data-project="{{ task.p_id }}" data-prio="{{ task.t_prio }}">
                             <td>{{ task.p_name }}</td>
                             <td>{{ task.t_name }}</td>
                             <td>{{ task.status }}</td>
+                            <td>{{ task.t_prio }}</td>
                             <td>{{ task.date }}</td>
                             <td>{{ task.m_name }}</td>
                         </tr>

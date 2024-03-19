@@ -53,6 +53,10 @@ class Task(db.Model):
     #COMPLETED = 2
     #CANCELLED = 3
     #BLOCKED = 4
+    priority = db.Column(db.String)
+    __table_args__ = (
+        CheckConstraint(priority.in_(['Facultative', 'Faible', 'Moyenne', 'Forte', 'Importante'])),
+    )
 
 class Comment(db.Model):
     __tablename__ = 'comment'
@@ -132,6 +136,7 @@ def get_projects_tasks(user_id):
         Task.name.label('t_name'),
         Task.date,
         Task.status,
+        Task.priority.label('t_prio'),
         User.username.label('m_name')
     ).join(
         Project, Project.id == Project_Task.id_project
@@ -176,9 +181,9 @@ def new_column(name, project, user):
         return
 
 #Ajout tâche
-def new_task(user, project, name, year, month, day, description, column, status, dvps):
+def new_task(user, project, name, year, month, day, description, column, status, priority, dvps):
     if is_manager(user, project):
-        task = Task(name=name, date=datetime(year, month, day), description=description, column=column.id, status=status)
+        task = Task(name=name, date=datetime(year, month, day), description=description, column=column.id, status=status, priority=priority)
         db.session.add(task)
         db.session.commit()
         project_task = Project_Task(id_project=project.id, id_task=task.id)
@@ -266,10 +271,10 @@ def peupler_db():
     db.session.add(c22)
     db.session.commit()
 
-    task11 = Task(name="Task 1", description="Première tâche", date=datetime(2024, 3, 6), column=c11.id, status = 'Waiting')
-    task12 = Task(name="Task 2", description="Deuxième tâche", date=datetime(2024, 3, 6), column=c11.id)
-    task13 = Task(name="Task 3", description="Troisième tâche", date=datetime(2024, 3, 6), column=c12.id)
-    task21 = Task(name="Tâche 1", description="Faire des trucs", date=datetime(2024, 3, 6), column=c21.id)
+    task11 = Task(name="Task 1", description="Première tâche", date=datetime(2024, 3, 6), column=c11.id, status = 'Waiting', priority='Facultative')
+    task12 = Task(name="Task 2", description="Deuxième tâche", date=datetime(2023, 3, 6), column=c11.id, status = 'Cancelled', priority='Moyenne')
+    task13 = Task(name="Task 3", description="Troisième tâche", date=datetime(2024, 4, 6), column=c12.id, status = 'Blocked', priority='Faible')
+    task21 = Task(name="Tâche 1", description="Faire des trucs", date=datetime(2024, 3, 7), column=c21.id, status = 'In progress', priority='Forte')
     db.session.add(task11)
     db.session.add(task12)
     db.session.add(task13)
