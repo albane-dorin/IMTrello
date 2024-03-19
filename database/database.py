@@ -46,7 +46,7 @@ class Task(db.Model):
     status = db.Column(db.String)
     # Définir une contrainte de vérification pour l'attribut
     __table_args__ = (
-        CheckConstraint(status.in_(['Waiting', 'In progress', 'Completed','Cancelled', 'Blocked'])),
+        CheckConstraint(status.in_(['En attente', 'En cours', 'Completée','Annulée', 'En pause'])),
     )
     #WAITING = 0
     #IN_PROGRESS = 1
@@ -271,10 +271,10 @@ def peupler_db():
     db.session.add(c22)
     db.session.commit()
 
-    task11 = Task(name="Task 1", description="Première tâche", date=datetime(2024, 3, 6), column=c11.id, status = 'Waiting', priority='Facultative')
-    task12 = Task(name="Task 2", description="Deuxième tâche", date=datetime(2023, 3, 6), column=c11.id, status = 'Cancelled', priority='Moyenne')
-    task13 = Task(name="Task 3", description="Troisième tâche", date=datetime(2024, 4, 6), column=c12.id, status = 'Blocked', priority='Faible')
-    task21 = Task(name="Tâche 1", description="Faire des trucs", date=datetime(2024, 3, 7), column=c21.id, status = 'In progress', priority='Forte')
+    task11 = Task(name="Task 1", description="Première tâche", date=datetime(2024, 3, 6), column=c11.id, status = 'En attente', priority='Facultative')
+    task12 = Task(name="Task 2", description="Deuxième tâche", date=datetime(2023, 3, 6), column=c11.id, status = 'Annulée', priority='Moyenne')
+    task13 = Task(name="Task 3", description="Troisième tâche", date=datetime(2024, 4, 6), column=c12.id, status = 'En pause', priority='Faible')
+    task21 = Task(name="Tâche 1", description="Faire des trucs", date=datetime(2024, 3, 7), column=c21.id, status = 'En cours', priority='Forte')
     db.session.add(task11)
     db.session.add(task12)
     db.session.add(task13)

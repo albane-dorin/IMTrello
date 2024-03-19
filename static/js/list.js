@@ -57,10 +57,10 @@ function filterRowsByName(){
 function filterWaiting() {
     var checkBox = document.getElementById("waiting");
     if (checkBox.checked===true) {
-        $("#taches tbody tr[data-status='Waiting']").show();
+        $("#taches tbody tr[data-status='En attente']").show();
     }
     else {
-        $("#taches tbody tr[data-status='Waiting']").hide();
+        $("#taches tbody tr[data-status='En attente']").hide();
     }
     updateRows()
 }
@@ -68,40 +68,40 @@ function filterWaiting() {
 function filterCompleted() {
     var checkBox = document.getElementById("completed");
     if (checkBox.checked===true) {
-        $("#taches tbody tr[data-status='Completed']").show();
+        $("#taches tbody tr[data-status='Completée']").show();
     }
     else {
-        $("#taches tbody tr[data-status='Completed']").hide();
+        $("#taches tbody tr[data-status='Completée']").hide();
     }
 }
 
 function filterInProgress() {
     var checkBox = document.getElementById("in_progress");
     if (checkBox.checked===true) {
-        $("#taches tbody tr[data-status='In progress']").show();
+        $("#taches tbody tr[data-status='En cours']").show();
     }
     else {
-        $("#taches tbody tr[data-status='In progress']").hide();
+        $("#taches tbody tr[data-status='En cours']").hide();
     }
 }
 
 function filterCancelled() {
     var checkBox = document.getElementById("cancelled");
     if (checkBox.checked===true) {
-        $("#taches tbody tr[data-status='Cancelled']").show();
+        $("#taches tbody tr[data-status='Annulée']").show();
     }
     else {
-        $("#taches tbody tr[data-status='Cancelled']").hide();
+        $("#taches tbody tr[data-status='Annulée']").hide();
     }
 }
 
 function filterBlocked() {
     var checkBox = document.getElementById("blocked");
     if (checkBox.checked===true) {
-        $("#taches tbody tr[data-status='Blocked']").show();
+        $("#taches tbody tr[data-status='En pause']").show();
     }
     else {
-        $("#taches tbody tr[data-status='Blocked']").hide();
+        $("#taches tbody tr[data-status='En pause']").hide();
     }
 }
 
