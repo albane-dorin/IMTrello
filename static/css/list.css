@@ -154,11 +154,11 @@ thead {
 }
 
 thead th:nth-child(1) {
-  width: 20%;
+  width: 15%;
 }
 
 thead th:nth-child(2) {
-  width: 40%;
+  width: 35%;
 }
 
 thead th:nth-child(3) {
@@ -170,7 +170,11 @@ thead th:nth-child(4) {
 }
 
 thead th:nth-child(5) {
-  width: 20%;
+  width: 10%;
+}
+
+thead th:nth-child(5) {
+  width: 10%;
 }
 
 tbody tr:nth-child(odd) {
