@@ -14,7 +14,9 @@ with app.test_request_context():  # (2) bloc exécuté à l'initialisation de Fl
     database.init_database()
 
 
-############# FONCTIONS FORMULAIRE #######################
+                                                  ############# FONCTIONS FORMULAIRE #######################
+
+
 def form_valide(form, i):  # 0 pour connexion, 1 pour inscription
     result = True
     errors = []
@@ -92,7 +94,10 @@ def formulaire_new_project(user_id, form):
     return result, errors
 
 
-############ FONCTION ECHEANCES #######################
+                                         ############ FONCTION ECHEANCES #######################
+
+
+
 def echeances(user, projets):
     semaines = []
     mois = []
@@ -145,7 +150,10 @@ def echeances(user, projets):
     return semaines, mois, apres
 
 
-############# VUE CONEXION/INSCRIPTION ############################
+
+                                    ###################### VUE CONEXION/INSCRIPTION ############################
+
+
 
 @app.route('/', methods=["GET", "POST"])
 def connexion():
@@ -177,7 +185,13 @@ def inscription():
         return redirect(url_for('home', user_id=user.id))  # Change to true url afterwards
 
 
-############## VUE USERS ########################""
+
+
+                                              ########################## VUE USERS ########################
+
+
+
+## VUES HOME ##
 
 @app.route('/<int:user_id>/home', methods=["GET", "POST"])
 def home(user_id):
@@ -195,10 +209,6 @@ def home(user_id):
         print("date = ", date)
 
         result, errors = formulaire_new_project(user_id, form)
-
-
-
-
 
         flask.session['name'] = form.get("name", "")
         flask.session['des'] = form.get("des", "")
@@ -227,15 +237,55 @@ def home(user_id):
 
 
 
-@app.route('/<int:user_id>/<int:project_id>/home_project')
+@app.route('/<int:user_id>/<int:project_id>/home_project', methods=["GET", "POST"])
 def home_project(user_id, project_id):
     database.peupler_db()
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
     semaines, mois, apres = echeances(user, projet)
-    return flask.render_template("home_project.html.jinja2", project_id=project_id, semaines=semaines,
-                                 mois=mois, apres=apres, user=user, projects=projets)
+
+    if flask.request.method == 'POST':
+        form = flask.request.form
+        date = form.get("date", "").split("-")
+        devs = form.get("developpeur", "").split(' ')
+        devs += [user]
+        print("date = ", date)
+
+        result, errors = formulaire_new_project(user_id, form)
+
+        flask.session['name'] = form.get("name", "")
+        flask.session['des'] = form.get("des", "")
+        flask.session['date'] = form.get("date", "")
+        flask.session['dev'] = form.get("dev", "")
+
+
+        if result :
+            database.new_project(form.get("name", ""), form.get("description", ""),
+                                 int(date[0]), int(date[1]), int(date[2]), user, [])
+            projets = database.projects_of_user(user)
+            semaines, mois, apres = echeances(user, projet)
+            return flask.render_template("home_project.html.jinja2", semaines=semaines,
+                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
+        else:
+            # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
+            return flask.render_template('error.html.jinja2', semaines=semaines,
+                                     mois=mois, apres=apres, user=user, projects=projets, errors=errors)
+
+
+
+    else :
+
+        return flask.render_template("home_project.html.jinja2", semaines=semaines,
+                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
+
+## VUE COLONNES ##
+@app.route('/<int:user_id>/colonne')
+def colonne(user_id):
+    user = database.db.session.get(database.User, user_id)
+    projets = database.projects_of_user(user)
+
+    return flask.render_template("colonne.html.jinja2",  user=user, projects=projets)
 
 
 if __name__ == '__main__':

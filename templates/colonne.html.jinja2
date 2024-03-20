@@ -1,0 +1,39 @@
+{% extends 'home.html.jinja2' %}
+
+{% block link %}
+    <script src="{{ url_for('static', filename='js/colonne.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
+      <script>
+          const user_id = {{ user.id }}
+      </script>
+
+    <title>Vue de projet</title>
+{% endblock %}
+
+{% block onglet %}
+<div class="haut">
+    <div class="vues">
+        <a class="lienv" href="{{ url_for("home", user_id=user.id) }}"><button class="vue">Vue par échéances</button> </a>
+        <button disabled class="vue">Vue par projets</button>
+        <button class="vue">Vue par tâches</button>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block projects %}
+    {% for projet in projects %}
+        <a class="lienp" href="{{ url_for("home_project", user_id=user.id, project_id=projet.id)}}">
+            <button class="projet" >{{ projet.name }}</button>
+        </a>
+    {% endfor %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="vide">
+            <p> Veuillez sélectionner un projet</p>
+        </div>
+    </div>
+{% endblock %}
