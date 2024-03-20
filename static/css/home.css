@@ -99,6 +99,13 @@ img{
     align-items: center;
     border-radius: 0px ;
 }
+
+
+.lienv{
+    height: fit-content;
+    width: fit-content;
+}
+
 .vue{
     height: fit-content;
     font-size: 1.5vw;
