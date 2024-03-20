@@ -2,11 +2,18 @@
 $(onLoad)
 
 function onLoad() {
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés de 0 à 11, alors ajoutez 1 et remplissez avec des zéros si nécessaire
+    var day = String(today.getDate()).padStart(2, '0');
+    var today = year+"-"+month+"-"+day;
+    $("#taches tbody tr").show();
+    $("#taches tbody tr").filter(function () {
+    var date = $(this).attr("data-date");
+    return date < today;})
+        .hide();
     // Barre de recherche par nom de tâche
     $("#filter-task-by-name").on("input", filterRowsByName)
-
-    //Cocher statut des tâches
-    //$("#waiting").on("change", filterWaiting())
 }
 
 function reapplyAlternanceCouleurs() {
@@ -184,4 +191,23 @@ function filterPrio(){
     lignes.forEach(function(ligne) {
         tbody.appendChild(ligne);
     });
+}
+
+function printAll() {
+    var checkBox = document.getElementById("blocked");
+    if (checkBox.checked===true) {
+        $("#taches tbody tr").show();
+    }
+    else {
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés de 0 à 11, alors ajoutez 1 et remplissez avec des zéros si nécessaire
+        var day = String(today.getDate()).padStart(2, '0');
+        var today = year+"-"+month+"-"+day;
+        $("#taches tbody tr").show();
+        $("#taches tbody tr").filter(function () {
+            var date = $(this).attr("data-date");
+            return date < today;})
+        .hide();
+    }
 }
