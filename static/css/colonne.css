@@ -230,6 +230,7 @@ input[type="submit"]{
     height: 20%;
     display: flex;
     justify-content: center;
+    margin-top: 2vw;
 }
 
 .vide{
