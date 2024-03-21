@@ -31,6 +31,8 @@ button:enabled{
     flex-grow: 1;
 }
 
+/* PARTIE HAUTE GAUCHE (Profil utilisateur) */
+
 .profil{
     width: 15vw;
     display: flex;
@@ -39,7 +41,7 @@ button:enabled{
 }
 
 img{
-    max-width: 50%;
+    max-width: 100%;
     width: auto;
     height: auto;
     align-self: center;
@@ -47,14 +49,14 @@ img{
 .image{
     flex-grow: 0;
     flex-shrink: 0;
+    padding: 0 25%;
 }
 
 .nom{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: start;
-    margin-left: 15px;
+    align-items: center;
 }
 .username{
     display: flex;
@@ -68,8 +70,17 @@ img{
     width: fit-content;
     height: fit-content;
     padding: 0vw 0.5vw;
+    margin-top: 0;
     margin-bottom: 8px;
 }
+
+.deco{
+    color: #ff3737;
+    font-size: x-small;
+}
+
+/* PARTIE SUPERIEURE (Différentes vues) */
+
 .haut{
     display: flex;
     justify-content: space-around;
@@ -96,10 +107,9 @@ img{
     border-radius: 30px;
 }
 
-.deco{
-    color: #ff3737;
-    font-size: x-small;
-}
+
+/* PARTIE GAUCHE (Liste de projets) */
+
 
 .projets{
     display: flex;
@@ -110,14 +120,109 @@ img{
     padding-top: 1vw;
 }
 
-.projet{
+.lienp{
     height: fit-content;
     width: 80%;
+}
+
+.projet{
+    width: 100%;
+    height: fit-content;
     font-size: 1.5vw;
     margin-top: 1.5vw;
     padding: 0.5vw 2vw;
     border-radius: 30px;
 }
+
+/* POP-UP Affichage */
+.newproject{
+position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition : 200ms ease-in-out;
+    border-radius: 30px;
+    background-color: #e7b2ff;
+    opacity: .9;
+    z-index: 10;
+    width: 70%;
+}
+.newproject.active{
+    transform: translate(-50%, -50%) scale(1);
+}
+#overlay{
+    position: fixed;
+    opacity: 0;
+    transition : 200ms ease-in-out;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.6);
+    pointer-events: none;
+}
+
+#overlay.active{
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Formulaire */
+#form{
+    height: fit-content;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    height: 95%;
+    width: 90%;
+    font-size: 1.3vw;
+    padding: 1.5% 4%;
+}
+
+.bandeaux{
+    display: flex;
+    justify-content: space-between;
+}
+
+.close{
+    background-color: rgba(0,0,0,0);
+    border: 0;
+    font-size: 2vw;
+}
+
+h3{
+    margin: 0;
+    font-weight: normal;
+}
+
+#des{
+    min-height: 4vw;
+    height: fit-content;
+}
+
+label{
+    display: inline-block;
+    text-align: left;
+    margin-top: 1.5%;
+}
+
+input[type="text"] textarea{
+    display: inline-block;
+    width: 80%;
+}
+
+input[type="submit"]{
+    font-size: 1.5vw;
+}
+
+.precision{
+    font-size: 1vw;
+    align-self: center;
+
+}
+/* CORPS DE LA PAGE (Affichage des échéances)*/
 
 .message{
     font-size: 1.5vw;

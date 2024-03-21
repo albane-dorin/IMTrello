@@ -267,16 +267,18 @@ def clean():
 def peupler_db():
     clean()
 
-    user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>", role=1)
+    user1 = User(username="Lovely", password="coeur", mail="lovely@gmail", role=3)
     user2 = User(username="Two", password="<PASSWORD>", mail="<EMAIL>", role=2)
     db.session.add(user2)
     db.session.add(user1)
     db.session.commit()
 
-    project1 = Project(name="Project 1", description="Mon premier projet", date=datetime(2024, 3, 6), manager=user1.id)
-    project2 = Project(name="Project 2", description="Mon deuxième projet", date=datetime(2024, 3, 6), manager=user1.id)
+    project1 = Project(name="Project 1", description="Mon premier projet", date=datetime(2024, 3, 13), manager=user1.id)
+    project2 = Project(name="Project 2", description="Mon deuxième projet", date=datetime(2024, 4, 6), manager=user1.id)
+    project3 = Project(name="Website", description="Design du page d'acceuil pour afficher les informations de l'entreprise en temps réel", date=datetime(2024, 6, 6), manager=user1.id)
     db.session.add(project1)
     db.session.add(project2)
+    db.session.add(project3)
     db.session.commit()
 
     c11 = Column(name='En cours', project=project1.id)
@@ -293,18 +295,24 @@ def peupler_db():
     task12 = Task(name="Task 2", description="Deuxième tâche", date=datetime(2023, 3, 6), column=c11.id, status = 'Annulée', priority='Moyenne')
     task13 = Task(name="Task 3", description="Troisième tâche", date=datetime(2024, 4, 6), column=c12.id, status = 'En pause', priority='Faible')
     task21 = Task(name="Tâche 1", description="Faire des trucs", date=datetime(2024, 3, 7), column=c21.id, status = 'En cours', priority='Forte')
+
     db.session.add(task11)
     db.session.add(task12)
     db.session.add(task13)
     db.session.add(task21)
+    db.session.add(task31)
+    db.session.add(task32)
+    db.session.add(task33)
+    db.session.add(task34)
+    db.session.add(task35)
     db.session.commit()
 
     # Ajoutez les projets et les utilisateurs à des listes pour une utilisation ultérieure
     users = [user1, user2]
-    projects = [project1, project2]
+    projects = [project1, project2,project3]
 
     # Ajoutez les tâches aux colonnes
-    tasks = [task11, task12, task13, task21]
+    tasks = [task11, task12, task13, task21, task31, task32, task33, task34, task35]
 
     # Pour Project_Task
     for task in tasks[:2+1]:
@@ -336,6 +344,16 @@ def peupler_db():
     task_dvp = Task_Dvp(id_task=task21.id, id_dvp=user1.id)
     db.session.add(task_dvp)
     task_dvp = Task_Dvp(id_task=task21.id, id_dvp=user2.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task31.id, id_dvp=user1.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task32.id, id_dvp=user1.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task33.id, id_dvp=user1.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task34.id, id_dvp=user1.id)
+    db.session.add(task_dvp)
+    task_dvp = Task_Dvp(id_task=task35.id, id_dvp=user1.id)
     db.session.add(task_dvp)
 
     db.session.commit()
