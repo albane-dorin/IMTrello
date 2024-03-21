@@ -150,6 +150,24 @@ def get_projects_tasks(user_id):
     #result=query.subquery()
     return query
 
+def get_dvps_of_project(project_id):
+    project_dvps = Project_Dvp.query.filter_by(id_project=project_id).all()
+    list = []
+    for project_dvp in project_dvps:
+        id = project_dvp.id_dvp
+        dvp = db.session.get(User, id)
+        list.append(dvp)
+    return(list)
+
+def get_dvps_of_task(task_id):
+    task_dvps = Task_Dvp.query.filter_by(id_task=task_id).all()
+    list=[]
+    for task_dvp in task_dvps:
+        id = task_dvp.id_dvp
+        dvp = db.session.get(User, id)
+        list.append(dvp)
+    return(list)
+
 #Fonctions de modifications
 
 #Ajout d'utilisateur
