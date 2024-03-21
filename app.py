@@ -9,12 +9,12 @@ from datetime import date, timedelta
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 database.db.init_app(app) # (1) flask prend en compte la base de donnee
 with app.test_request_context(): # (2) bloc exécuté à l'initialisation de Flask
  database.init_database()
  app.app_context()
  database.peupler_db()
-
 
 
                                                   ############# FONCTIONS FORMULAIRE #######################
@@ -108,43 +108,44 @@ def echeances(user, projets):
     today = date.today()
 
     #Ajout des échéances des projets
-    if type(projets) == list:
+    if isinstance(projets, type([])):
         for p in projets:
-            if today <= p.date.date() <= today + timedelta(days=7):
-                semaines += [(p.date.date(), p)]
-            elif today <= p.date.date() <= today + timedelta(days=30) :
-                mois += [(p.date.date(), p)]
-            elif today <= p.date.date() > today + timedelta(days=30):
-                apres += [(p.date.date(), p)]
+            print(p.date)
+            if today <= p.date <= today + timedelta(days=7):
+                semaines += [(p.date, p)]
+            elif today <= p.date <= today + timedelta(days=30) :
+                mois += [(p.date, p)]
+            elif today <= p.date > today + timedelta(days=30):
+                apres += [(p.date, p)]
 
     else:
-        if today <= projets.date.date() <= today + timedelta(days=7):
-            semaines += [(projets.date.date(), projets)]
-        elif today <= projets.date.date() <= today + timedelta(days=30) :
-            mois += [(projets.date.date(), projets)]
-        elif today <= projets.date.date() > today + timedelta(days=30):
-            apres += [(projets.date.date(), projets)]
+        if today <= projets.date <= today + timedelta(days=7):
+            semaines += [(projets.date, projets)]
+        elif today <= projets.date <= today + timedelta(days=30) :
+            mois += [(projets.date, projets)]
+        elif today <= projets.date > today + timedelta(days=30):
+            apres += [(projets.date, projets)]
 
 
     #Ajout des échéances des tâches
-    if type(projets) == list:
+    if isinstance(projets, type([])):
         for t in database.tasks_of_user(user):
-            if today <= t.date.date() <= today + timedelta(days=7):
-                semaines += [(t.date.date(), t, database.project_of(t))]
-            elif today <= t.date.date() <= today + timedelta(days=30) :
-                mois += [(t.date.date(), t, database.project_of(t))]
-            elif today <= t.date.date() > today + timedelta(days=30) :
-                apres += [(t.date.date(), t, database.project_of(t))]
+            if today <= t.date <= today + timedelta(days=7):
+                semaines += [(t.date, t, database.project_of(t))]
+            elif today <= t.date <= today + timedelta(days=30) :
+                mois += [(t.date, t, database.project_of(t))]
+            elif today <= t.date > today + timedelta(days=30) :
+                apres += [(t.date, t, database.project_of(t))]
 
     else:
         for t in database.tasks_of_user(user):
             if database.project_of(t).id == projets.id:
-                if today <= t.date.date() <= today + timedelta(days=7):
-                    semaines += [(t.date.date(), t, database.project_of(t))]
-                elif today <= t.date.date() <= today + timedelta(days=30) :
-                    mois += [(t.date.date(), t, database.project_of(t))]
-                elif today <= t.date.date() > today + timedelta(days=30) :
-                    apres += [(t.date.date(), t, database.project_of(t))]
+                if today <= t.date <= today + timedelta(days=7):
+                    semaines += [(t.date, t, database.project_of(t))]
+                elif today <= t.date <= today + timedelta(days=30) :
+                    mois += [(t.date, t, database.project_of(t))]
+                elif today <= t.date > today + timedelta(days=30) :
+                    apres += [(t.date, t, database.project_of(t))]
 
     #Tri des listes par date décroissante
     semaines.sort(key=lambda a: a[0])

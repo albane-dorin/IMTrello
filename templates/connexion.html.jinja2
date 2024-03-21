@@ -21,6 +21,7 @@
                 </div>
 
                 {% block form %}
+
                 <form class="formulaire" action="{{ url_for("connexion") }}" method="post">
 
                     <label for="email">Email :</label>
@@ -32,6 +33,7 @@
                     <p><input type="submit"></p>
 
                 </form>
+
                 {% endblock %}
 
                 {% if error %}
@@ -40,7 +42,6 @@
 
                 {% endif %}
             </div>
-
         {% endblock %}
     </div>
 
