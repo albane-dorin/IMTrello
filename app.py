@@ -110,6 +110,7 @@ def echeances(user, projets):
     #Ajout des échéances des projets
     if isinstance(projets, type([])):
         for p in projets:
+            print(p.date)
             if today <= p.date <= today + timedelta(days=7):
                 semaines += [(p.date, p)]
             elif today <= p.date <= today + timedelta(days=30) :
