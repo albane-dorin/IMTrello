@@ -9,25 +9,30 @@
   </head>
   <body>
     <div class="all">
-        <div class="window">
-            <div class="button">
-                {% block button %}
-                    <button disabled>Connexion</button>
-                    <button> Inscription</button>
-                {% endblock %}
+        {% block window %}
+            <div class="window">
+                <div class="button">
+                    {% block button %}
+                        <button disabled>Connexion</button>
+                        <a href="{{ url_for("inscription") }}">
+                            <button> Inscription</button>
+                        </a>
+                    {% endblock %}
+                </div>
+
+
+                <form class="formulaire">
+                    {% block form %}
+                        <label>Email :</label> <input type="email" placeholder="ex: name.surname@thing.com" value="" required>
+                        <label>Mot de passe :</label> <input type="text" value="" required>
+                    {% endblock %}
+
+                    <p><input type="submit"></p>
+
+                </form>
             </div>
 
-
-            <form class="formulaire">
-                {% block form %}
-                    <p>Email : <input type="text" placeholder="ex: name.surname@thing.com" value="" required> </p>
-                    <p>Mot de passe : <input type="text" value="" required> </p>
-                {% endblock %}
-
-                <p><input type="submit"></p>
-
-            </form>
-        </div>
+        {% endblock %}
     </div>
 
   </body>
