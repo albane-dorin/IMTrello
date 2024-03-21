@@ -5,6 +5,7 @@
 {% block projects %}
     {% for projet in projects %}
         {% if projet.id == project_id  %}
+
             <a class="lienp" href="{{ url_for("home", user_id=user.id)}}">
                 <button class="projet" disabled>{{ projet.name }}</button>
             </a>

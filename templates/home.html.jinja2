@@ -2,15 +2,15 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8">
-    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+      {% block link%}
+        <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+          <script>
+              const user_id = {{ user.id }}
+          </script>
 
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-      <script>
-          const user_id = {{ user.id }}
-      </script>
-
-    <title>Home page</title>
+        <title>Home page</title>
+      {% endblock %}
 
   </head>
   <body>
@@ -23,14 +23,16 @@
             </div>
         </div>
 
+        {% block onglet %}
         <div class="haut">
             <div class="vues">
                 <button disabled class="vue">Vue par échéances</button>
-                <button class="vue">Vue par projets</button>
+                <a class="lienv" href="{{ url_for("colonne", user_id=user.id) }}"> <button class="vue">Vue par projets</button> </a>
                 <button class="vue">Vue par tâches</button>
             </div>
 
         </div>
+        {% endblock %}
     </div>
 
     <div class="in">
@@ -79,7 +81,7 @@
         </div>
     <div class="" id="overlay"></div>
 
-        {%  block mess %}
+        {%  block content %}
 
         <div class="message">
             <div class="semaine">
