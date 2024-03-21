@@ -12,6 +12,7 @@ database.db.init_app(app)
 with app.test_request_context():
     database.init_database()
     app.app_context()
+
     database.peupler()
 
     users = database.User.query.all()
@@ -31,7 +32,30 @@ with app.test_request_context():
     for task in database.tasks_of_user(user):
         print(task.name)
 
+    print('Récupérer tâches dune colonne')
+    tasks = database.Task.query.filter_by(column=2).all()
+    for task in tasks:
+        print(task)
 
+    print('Récupérer dvps dun projet')
+    project_dvps = database.Project_Dvp.query.filter_by(id_project=1).all()
+    list=[]
+    for project_dvp in project_dvps:
+        id = project_dvp.id_dvp
+        dvp = database.db.session.get(database.User, id)
+        list.append(dvp)
+    print(list)
+    print(database.get_dvps_of_project(1))
+
+    print('Récupérer dvps dune tâche')
+    print(database.get_dvps_of_task(1))
+    print(database.get_dvps_of_task(4))
+
+    print('Avoir les colonnes dun projet')
+    columns = database.Column.query.filter_by(project=1).all()
+    print(columns)
+    for column in columns:
+        print(column.name)
 
     database.peupler_db()
 
@@ -143,3 +167,4 @@ with app.test_request_context():
     print(database.db.session.query(database.User,database.Task_Dvp ).join(database.Task_Dvp, database.User.id==database.Task_Dvp.id_dvp).all())
 
     print(projects[0].date)
+
