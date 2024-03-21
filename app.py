@@ -304,6 +304,16 @@ def colonne(user_id):
 
     return flask.render_template("colonne.html.jinja2",  user=user, projects=projets)
 
+@app.route('/<int:user_id>/<int:project_id>/colonne_project', methods=["GET", "POST"])
+def colonne_project(user_id, project_id):
+    user = database.db.session.get(database.User, user_id)
+    projets = database.projects_of_user(user)
+    projet = database.db.session.get(database.Project, project_id)
+    return flask.render_template("colonne_project.html.jinja2",  user=user, projects=projets, projet=projet)
+
+
+
+
 
 if __name__ == '__main__':
     app.run()

@@ -23,7 +23,7 @@
 
 {% block projects %}
     {% for projet in projects %}
-        <a class="lienp" href="{{ url_for("home_project", user_id=user.id, project_id=projet.id)}}">
+        <a class="lienp" href="{{ url_for("colonne_project", user_id=user.id, project_id=projet.id)}}">
             <button class="projet" >{{ projet.name }}</button>
         </a>
     {% endfor %}

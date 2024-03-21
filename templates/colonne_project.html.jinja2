@@ -1,0 +1,51 @@
+{% extends 'colonne.html.jinja2' %}
+
+ {% block link%}
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
+      <script>
+          const user_id = {{ user.id }}
+      </script>
+
+    <title>{{ projet.name }}</title>
+  {% endblock %}
+
+{% block projects %}
+    {% for p in projects %}
+        {% if projet.id == p.id  %}
+
+            <a class="lienp" href="{{ url_for("colonne", user_id=user.id)}}">
+                <button class="projet" disabled>{{ p.name }}</button>
+            </a>
+        {% else %}
+                <a class="lienp" href="{{ url_for("colonne_project", user_id=user.id, project_id=p.id)}}">
+                    <button class="projet" >{{ p.name }}</button>
+                </a>
+        {% endif %}
+
+    {% endfor %}
+
+{% endblock %}
+
+
+
+{%  block content %}
+
+    <div>
+    <h3> {{ projet.name }}</h3>
+
+    <button class="colonne"> Développeurs </button>
+
+    {% if user.role==1 or user.role==3 %}
+            <button data-modal-target="#supprprojet"> Supprimer le projet </button>
+    {% endif %}
+
+
+    {% if user.role==1 or user.role==3 %}
+        <div class="colonne">
+            <button data-modal-target="#formc" class=""> + </button>
+        </div>
+    {% endif %}
+    </div>
+
+{% endblock %}
