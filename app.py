@@ -108,43 +108,43 @@ def echeances(user, projets):
     today = date.today()
 
     #Ajout des échéances des projets
-    if type(projets) == list:
+    if isinstance(projets, type([])):
         for p in projets:
-            if today <= p.date.date() <= today + timedelta(days=7):
-                semaines += [(p.date.date(), p)]
-            elif today <= p.date.date() <= today + timedelta(days=30) :
-                mois += [(p.date.date(), p)]
-            elif today <= p.date.date() > today + timedelta(days=30):
-                apres += [(p.date.date(), p)]
+            if today <= p.date <= today + timedelta(days=7):
+                semaines += [(p.date, p)]
+            elif today <= p.date <= today + timedelta(days=30) :
+                mois += [(p.date, p)]
+            elif today <= p.date > today + timedelta(days=30):
+                apres += [(p.date, p)]
 
     else:
-        if today <= projets.date.date() <= today + timedelta(days=7):
-            semaines += [(projets.date.date(), projets)]
-        elif today <= projets.date.date() <= today + timedelta(days=30) :
-            mois += [(projets.date.date(), projets)]
-        elif today <= projets.date.date() > today + timedelta(days=30):
-            apres += [(projets.date.date(), projets)]
+        if today <= projets.date <= today + timedelta(days=7):
+            semaines += [(projets.date, projets)]
+        elif today <= projets.date <= today + timedelta(days=30) :
+            mois += [(projets.date, projets)]
+        elif today <= projets.date > today + timedelta(days=30):
+            apres += [(projets.date, projets)]
 
 
     #Ajout des échéances des tâches
-    if type(projets) == list:
+    if isinstance(projets, type([])):
         for t in database.tasks_of_user(user):
-            if today <= t.date.date() <= today + timedelta(days=7):
-                semaines += [(t.date.date(), t, database.project_of(t))]
-            elif today <= t.date.date() <= today + timedelta(days=30) :
-                mois += [(t.date.date(), t, database.project_of(t))]
-            elif today <= t.date.date() > today + timedelta(days=30) :
-                apres += [(t.date.date(), t, database.project_of(t))]
+            if today <= t.date <= today + timedelta(days=7):
+                semaines += [(t.date, t, database.project_of(t))]
+            elif today <= t.date <= today + timedelta(days=30) :
+                mois += [(t.date, t, database.project_of(t))]
+            elif today <= t.date > today + timedelta(days=30) :
+                apres += [(t.date, t, database.project_of(t))]
 
     else:
         for t in database.tasks_of_user(user):
             if database.project_of(t).id == projets.id:
-                if today <= t.date.date() <= today + timedelta(days=7):
-                    semaines += [(t.date.date(), t, database.project_of(t))]
-                elif today <= t.date.date() <= today + timedelta(days=30) :
-                    mois += [(t.date.date(), t, database.project_of(t))]
-                elif today <= t.date.date() > today + timedelta(days=30) :
-                    apres += [(t.date.date(), t, database.project_of(t))]
+                if today <= t.date <= today + timedelta(days=7):
+                    semaines += [(t.date, t, database.project_of(t))]
+                elif today <= t.date <= today + timedelta(days=30) :
+                    mois += [(t.date, t, database.project_of(t))]
+                elif today <= t.date > today + timedelta(days=30) :
+                    apres += [(t.date, t, database.project_of(t))]
 
     #Tri des listes par date décroissante
     semaines.sort(key=lambda a: a[0])
@@ -202,106 +202,6 @@ def list(user_id):
             return "Utilisateur non trouvé", 404  # Retourne une réponse 404 (Not Found)
 
 
-
-                                              ########################## VUE USERS ########################
-
-
-
-## VUES HOME ##
-
-@app.route('/<int:user_id>/home', methods=["GET", "POST"])
-def home(user_id):
-
-
-    user = database.db.session.get(database.User, user_id)
-    projets = database.projects_of_user(user)
-    semaines, mois, apres = echeances(user, projets)
-
-    if flask.request.method == 'POST':
-        form = flask.request.form
-        date = form.get("date", "").split("-")
-        devs = form.get("developpeur", "").split(' ')
-        devs += [user]
-        print("date = ", date)
-
-        result, errors = formulaire_new_project(user_id, form)
-
-        flask.session['name'] = form.get("name", "")
-        flask.session['des'] = form.get("des", "")
-        flask.session['date'] = form.get("date", "")
-        flask.session['dev'] = form.get("dev", "")
-
-
-        if result :
-            database.new_project(form.get("name", ""), form.get("description", ""),
-                                 int(date[0]), int(date[1]), int(date[2]), user, [])
-            projets = database.projects_of_user(user)
-            semaines, mois, apres = echeances(user, projets)
-            return flask.render_template("home.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets)
-        else:
-            # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-            return flask.render_template('error.html.jinja2', semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, errors=errors)
-
-
-
-    else :
-
-        return flask.render_template("home.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets)
-
-
-
-@app.route('/<int:user_id>/<int:project_id>/home_project', methods=["GET", "POST"])
-def home_project(user_id, project_id):
-    database.peupler_db()
-    user = database.db.session.get(database.User, user_id)
-    projets = database.projects_of_user(user)
-    projet = database.db.session.get(database.Project, project_id)
-    semaines, mois, apres = echeances(user, projet)
-
-    if flask.request.method == 'POST':
-        form = flask.request.form
-        date = form.get("date", "").split("-")
-        devs = form.get("developpeur", "").split(' ')
-        devs += [user]
-        print("date = ", date)
-
-        result, errors = formulaire_new_project(user_id, form)
-
-        flask.session['name'] = form.get("name", "")
-        flask.session['des'] = form.get("des", "")
-        flask.session['date'] = form.get("date", "")
-        flask.session['dev'] = form.get("dev", "")
-
-
-        if result :
-            database.new_project(form.get("name", ""), form.get("description", ""),
-                                 int(date[0]), int(date[1]), int(date[2]), user, [])
-            projets = database.projects_of_user(user)
-            semaines, mois, apres = echeances(user, projet)
-            return flask.render_template("home_project.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
-        else:
-            # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-            return flask.render_template('error.html.jinja2', semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, errors=errors)
-
-
-
-    else :
-
-        return flask.render_template("home_project.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
-
-## VUE COLONNES ##
-@app.route('/<int:user_id>/colonne')
-def colonne(user_id):
-    user = database.db.session.get(database.User, user_id)
-    projets = database.projects_of_user(user)
-
-    return flask.render_template("colonne.html.jinja2",  user=user, projects=projets)
 
                                               ########################## VUE USERS ########################
 
