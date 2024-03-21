@@ -5,6 +5,7 @@
       {% block link%}
         <script src="{{ url_for('static', filename='js/home.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/Notifs.css') }}">
           <script>
               const user_id = {{ user.id }}
           </script>
@@ -150,6 +151,31 @@
     {% block plus %}
     {% endblock %}
     </div>
+
+    {% block Notif %}
+        <div id="lateral-panel">
+            <input id="lateral-panel-input" type="checkbox">
+            <div id="lateral-panel-bloc">
+                <label id="lateral-panel-label" for="lateral-panel-input"> <div class="bell"><img src="/static/img/bell.png"></div> </label>
+                <div id="lateral-panel-content">
+                    <!-- ici le code HTML du panneau-->
+                    <div class="titre">
+                            Notifications
+                    </div>
+
+                    <div class="notif">
+                        <button class="supprimer-notif" onclick="supprimerCarte(this)"> x </button>
+                        <div class="notif-content">
+                            <p align="center"> Une nouvelle aventure s'annonce: vous avez rejoint le projet "IMTrello". <p/>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    {% endblock %}
 
   </body>
 </html>
