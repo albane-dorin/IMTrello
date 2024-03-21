@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../static/css/home.css">
+
+    <title>Home page</title>
+
+  </head>
+  <body>
+    <div class="top">
+        <div class="profil">
+            <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
+            <div class="nom">
+                <p class="username"> Toto </p>
+                <a href="/" class="deco">Deconnexion</a>
+            </div>
+        </div>
+        <div class="haut">
+            <div class="vues">
+                <button disabled class="vue">Vue par échéances</button>
+                <button class="vue">Vue par projets</button>
+                <button class="vue">Vue par tâches</button>
+                </div>
+            <div class="vues"><button class="vue"> + </button></div>
+
+        </div>
+    </div>
+
+    <div class="in">
+        <div class="projets">
+
+        {% block projects %}
+            <button class="projet">IMTrello</button>
+            <button class="projet">IMTrello2</button>
+            <button class="projet">IMTrello3</button>
+        {% endblock %}
+
+        </div>
+
+        {%  block mess %}
+
+        <div class="message">
+            <div class="semaine">
+                <p> Pour cette semaine </p>
+
+
+            <!---
+                {%  for object in semaines %}
+                    <p> {{ object[0] }}</p>
+                    {% if len(object)==3 %}
+                        <div>
+                            <span>Fin de tâches : {{ object[1].get_name() }}</span>
+                            <span> Dans " {{ object[2].get_name() }} "</span>
+                            <span> </span>
+                        </div>
+                    {% endif %}
+                    {% if len(object)==2 %}
+                        <div>Fin du projet : {{ object[1].get_name() }}</div>
+                    {% endif %}
+                {% endfor %}
+                --->
+
+            </div>
+
+            <div class="mois">
+                <p> Pour ce mois </p>
+
+                <!--
+                {%  for object in mois %}
+                    <p> {{ object[0] }}</p>
+                    {% if len(object)==3 %}
+                        <div>
+                            <span>Fin de tâches : {{ object[1].get_name() }}</span>
+                            <span> Dans " {{ object[2].get_name() }} "</span>
+                            <span> </span>
+                        </div>
+                    {% endif %}
+                    {% if len(object)==2 %}
+                        <div>Fin du projet : {{ object[1].get_name() }}</div>
+                    {% endif %}
+                {% endfor %}
+
+                -->
+
+            </div>
+
+            <div class="apres">
+                <p> Après </p>
+
+                <!--
+                {%  for object in apres %}
+                    <p> {{ object[0] }}</p>
+                    {% if len(object)==3 %}
+                        <div>
+                            <span>Fin de tâches : {{ object[1].get_name() }}</span>
+                            <span> Dans " {{ object[2].get_name() }} "</span>
+                            <span> </span>
+                        </div>
+                    {% endif %}
+                    {% if len(object)==2 %}
+                        <div>Fin du projet : {{ object[1].get_name() }}</div>
+                    {% endif %}
+                {% endfor %}
+                -->
+
+            </div>
+
+        </div>
+         {%  endblock %}
+    </div>
+
+  </body>
+</html>

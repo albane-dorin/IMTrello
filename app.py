@@ -1,6 +1,7 @@
 import flask
 from flask import Flask
 import database.database as database
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -20,6 +21,7 @@ def connexion():
 def inscription():
     return flask.render_template("inscription.html.jinja2")
 
+
 @app.route('/id/<int:user_id>/list')
 def list(user_id):
     with app.app_context():
@@ -31,6 +33,17 @@ def list(user_id):
         else:
             # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
             return "Utilisateur non trouvé", 404  # Retourne une réponse 404 (Not Found)
+
+
+@app.route('/home')
+def home():
+
+    semaines = []
+    mois = []
+    apres = []
+
+    return flask.render_template("home.html.jinja2", semaines=semaines,
+                                 mois=mois, apres=apres)
 
 if __name__ == '__main__':
     app.run()
