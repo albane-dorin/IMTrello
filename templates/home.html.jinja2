@@ -159,16 +159,18 @@
                 <label id="lateral-panel-label" for="lateral-panel-input"> <div class="bell"><img src="/static/img/bell.png"></div> </label>
                 <div id="lateral-panel-content">
                     <!-- ici le code HTML du panneau-->
-                    <div class="titre">
-                            Notifications
+                    <div class="titre-notif">
+                            <p align="center"> Notifications </p>
                     </div>
 
-                    <div class="notif">
-                        <button class="supprimer-notif" onclick="supprimerCarte(this)"> x </button>
-                        <div class="notif-content">
-                            <p align="center"> Une nouvelle aventure s'annonce: vous avez rejoint le projet "IMTrello". <p/>
+                    {% for notif in notifs %}
+                        <div class="notif">
+                            <button class="supprimer-notif" id="n_{{ notif.id }}"> O </button>
+                            <div class="notif-content">
+                                <p align="center"> {{ notif.content }} <p/>
+                            </div>
                         </div>
-                    </div>
+                    {% endfor %}
 
 
 

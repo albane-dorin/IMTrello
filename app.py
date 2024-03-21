@@ -200,6 +200,10 @@ def home(user_id):
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     semaines, mois, apres = echeances(user, projets)
+    print(user)
+    notifs = database.Notif.query.filter_by(user=user.id).all()
+    print(notifs)
+
 
     if flask.request.method == 'POST':
         form = flask.request.form
@@ -222,7 +226,7 @@ def home(user_id):
             projets = database.projects_of_user(user)
             semaines, mois, apres = echeances(user, projets)
             return flask.render_template("home.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets)
+                                     mois=mois, apres=apres, user=user, projects=projets, notifs=notifs)
         else:
             # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
             return flask.render_template('error.html.jinja2', semaines=semaines,
@@ -233,7 +237,7 @@ def home(user_id):
     else :
 
         return flask.render_template("home.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets)
+                                     mois=mois, apres=apres, user=user, projects=projets, notifs=notifs)
 
 
 

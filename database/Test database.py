@@ -88,3 +88,8 @@ with app.test_request_context():
     print(list)
     list = database.tasks_of_user(user=users[0])
     print(list)
+
+    print('Notifs')
+    ns = database.Notif.query.all()
+    for n in ns :
+        print(n, n.id, n.user, n.content, n.link_task, n.link_project)
