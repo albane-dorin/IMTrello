@@ -241,6 +241,16 @@ def home(user_id):
 
 
 
+@app.post('/<int:user_id>/<int:last_page>/<int:notif_id>/delete/')
+def delete(user_id, notif_id, last_page):
+    notif = database.Notif.query.get_or_404(notif_id)
+    database.db.session.delete(notif)
+    database.db.session.commit()
+    if last_page==1 :
+        return redirect(url_for('home', user_id=user_id ))
+    if last_page==2 :
+        return redirect(url_for('colonne', user_id=user_id ))
+
 @app.route('/<int:user_id>/<int:project_id>/home_project', methods=["GET", "POST"])
 def home_project(user_id, project_id):
     database.peupler_db()
@@ -288,8 +298,10 @@ def home_project(user_id, project_id):
 def colonne(user_id):
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
+    notifs = database.Notif.query.filter_by(user=user.id).all()
+    print(notifs)
 
-    return flask.render_template("colonne.html.jinja2",  user=user, projects=projets)
+    return flask.render_template("colonne.html.jinja2",  user=user, projects=projets, notifs=notifs)
 
 
 if __name__ == '__main__':
