@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
     openModalButtons.forEach(button => {
         button.addEventListener("click", () => {
             const form = document.querySelector(button.dataset.modalTarget)
+            console.log(form)
             openForm(form)
 
         })
@@ -17,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     closeModalButtons.forEach(button => {
         button.addEventListener("click", () => {
-            const form = button.closest('.newproject');
-            document.getElementById('formnp').reset();
+            const form = button.closest('.new');
+            console.log(form)
             closeForm(form);
         })
     })
@@ -40,4 +41,6 @@ document.addEventListener("DOMContentLoaded", function() {
         overlay.classList.remove('active')
 
     }
+
+
 });

@@ -52,7 +52,7 @@
                 <button data-modal-target="#form" class="projet"> + </button>
             </a>
 
-            <div id="form" class="newproject">
+            <div id="form" class="new">
 
                 <form  id="formnp" action="{{ url_for("home", user_id=user.id) }}" method="post">
 
@@ -72,7 +72,7 @@
 
 
 
-                    <p ><input type="submit"></p>
+                    <p ><input name="project" type="submit"></p>
 
                 </form>
             </div>

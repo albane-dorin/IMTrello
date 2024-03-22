@@ -11,6 +11,7 @@ body{
     display: flex;
     flex-direction: column;
     height: 100%;
+    max-height: 98%;
 }
 
 p{
@@ -28,8 +29,7 @@ button:enabled{
 
 .in{
     display: flex;
-    flex-grow: 1;
-}
+    height: calc(100vh - 200px);}
 
 /* PARTIE HAUTE GAUCHE (Profil utilisateur) */
 
@@ -142,7 +142,7 @@ img{
 }
 
 /* POP-UP Affichage */
-.newproject{
+.new{
 position: fixed;
     top: 50%;
     left: 50%;
@@ -153,7 +153,7 @@ position: fixed;
     z-index: 10;
     width: 70%;
 }
-.newproject.active{
+.new.active{
     transform: translate(-50%, -50%) scale(1);
 }
 #overlay{
@@ -234,6 +234,9 @@ input[type="submit"]{
     font-size: 1.5vw;
     flex-grow: 1;
     padding-right: 2vw;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
 }
 
 .titre{
