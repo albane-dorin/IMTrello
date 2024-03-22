@@ -25,7 +25,39 @@
                 </a>
         {% endif %}
 
+
     {% endfor %}
+     {% if user.role==1 or user.role==3 %}
+        <a class="lienp">
+            <button data-modal-target="#form" class="projet"> + </button>
+        </a>
+
+        <div id="form" class="new">
+
+            <form  id="formnp" action="{{ url_for("home_project", user_id=user.id, project_id=project_id) }}" method="post">
+
+                <div class="bandeaux"><h3>Nouveau Projet</h3>  <button date-close-button class="close"> X </button> </div>
+
+                <label for="name">Nom du projet :</label>
+                   <input type="text" id="name" name="name" value="" required>
+                <label for="des">Description du projet :</label>
+                <textarea type="text" id="des" name="description" value="" required></textarea>
+                <label for="date">Date de fin prévisionnel :
+                    <input type="date" id="date" name="date" value="" required>
+                </label>
+
+                <label for="dev">Ajouter des développeurs :</label>
+                    <input type="text" id="dev" name="developpeurs" value="" multiple>
+                <div class="precision"> Entrer les adresses emails des développeurs en les séparant simplement avec un espace</div>
+
+
+
+                <p ><input name="project" type="submit"></p>
+
+            </form>
+        </div>
+    {% endif %}
+
 
 
 {% endblock %}

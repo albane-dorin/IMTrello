@@ -1,0 +1,18 @@
+{% extends "colonne.html.jinja2" %}
+
+{% block plus %}
+
+    Colonne
+
+    <div class="erreur">
+            <h3 class="ertitre">Erreurs : </h3>
+        <ul>
+        {% for error in errors %}
+            <li class="er">{{ error }}</li>
+        {% endfor %}
+        </ul>
+
+        <p class="erindication"> Revenez en arrière pour réessayer</p>
+    </div>
+    <div id="overlayerreur"></div>
+{% endblock %}

@@ -143,7 +143,6 @@ def echeances(user, projets):
     #Ajout des échéances des projets
     if isinstance(projets, type([])):
         for p in projets:
-            print(p.date)
             if today <= p.date <= today + timedelta(days=7):
                 semaines += [(p.date, p)]
             elif today <= p.date <= today + timedelta(days=30) :
@@ -334,12 +333,41 @@ def home_project(user_id, project_id):
                                      mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
 
 ## VUE COLONNES ##
-@app.route('/<int:user_id>/colonne')
+@app.route('/<int:user_id>/colonne', methods=["GET", "POST"])
 def colonne(user_id):
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
 
-    return flask.render_template("colonne.html.jinja2",  user=user, projects=projets)
+    if flask.request.method == 'POST':
+
+        form = flask.request.form
+        if "project" in form:
+            date = form.get("date", "").split("-")
+            devs = form.get("developpeur", "").split(' ')
+            developpeur = [user]
+            if devs != ['']:
+                for d in devs:
+                    developpeur += [database.db.session.query(database.User).filter(database.User.mail == dev).first()]
+
+            result, errors = formulaire_new_project(form)
+
+            flask.session['name'] = form.get("name", "")
+            flask.session['des'] = form.get("des", "")
+            flask.session['date'] = form.get("date", "")
+            flask.session['dev'] = form.get("dev", "")
+
+            if result:
+                database.new_project(form.get("name", ""), form.get("description", ""),
+                                     int(date[0]), int(date[1]), int(date[2]), user, developpeur)
+                projets = database.projects_of_user(user)
+                return flask.render_template("colonne.html.jinja2", user=user, projects=projets)
+            else:
+                print('hello')
+                # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
+                return flask.render_template('erreurcol.html.jinja2', user=user, projects=projets, errors=errors)
+
+    else:
+        return flask.render_template("colonne.html.jinja2",  user=user, projects=projets)
 
 @app.route('/<int:user_id>/<int:project_id>/colonne_project', methods=["GET", "POST"])
 def colonne_project(user_id, project_id):
@@ -362,13 +390,10 @@ def colonne_project(user_id, project_id):
 
         if flask.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             data = flask.request.get_data().decode("utf-8").split('&')
-            print(data)
             tid = data[0]
             cid = data[1]
             task = database.db.session.get(database.Task, tid[-1])
-            print(task.column)
             task.column = cid[-1]
-            print(task.column)
             database.db.session.commit()
             return data
 
@@ -382,7 +407,6 @@ def colonne_project(user_id, project_id):
                 if devs != ['']:
                     for d in devs:
                         developpeur += [database.db.session.query(database.User).filter(database.User.mail == dev).first()]
-                print("date = ", date)
 
                 result, errors = formulaire_new_project(form)
 
@@ -398,8 +422,9 @@ def colonne_project(user_id, project_id):
                     return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches)
                 else:
+                    print('hello')
                     # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-                    return flask.render_template('error.html.jinja2', user=user, projects=projets,
+                    return flask.render_template('erreurcolp.html.jinja2', user=user, projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches, errors=errors)
 
             elif "task" in form:
@@ -434,7 +459,7 @@ def colonne_project(user_id, project_id):
                     flask.session['status'] = form.get("status", "")
                     flask.session['prio'] = form.get("prio", "")
                     # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-                    return flask.render_template('error.html.jinja2', user=user, projects=projets,
+                    return flask.render_template('erreurcolp.html.jinja2', user=user, projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches, errors=errors)
 
             elif "column" in form:
@@ -451,7 +476,6 @@ def colonne_project(user_id, project_id):
 
 
     else:
-        print(taches)
         return flask.render_template("colonne_project.html.jinja2",  user=user, projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches)
 
