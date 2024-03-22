@@ -413,14 +413,6 @@ def colonne_project(user_id, project_id):
 
                 result, errors = formulaire_new_task(form, project_id)
 
-                #permet de sauvegarder les données en cas d'erreur ou de refresh de page
-                flask.session['name'] = form.get("name", "")
-                flask.session['des'] = form.get("des", "")
-                flask.session['date'] = form.get("date", "")
-                flask.session['dev'] = form.get("dev", "")
-                flask.session['status'] = form.get("status", "")
-                flask.session['prio'] = form.get("prio", "")
-
 
                 if result:
                     database.new_task(user, projet, form.get("name", ""), int(date[0]), int(date[1]), int(date[2]),
@@ -434,6 +426,13 @@ def colonne_project(user_id, project_id):
                     return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches)
                 else:
+                    # permet de sauvegarder les données en cas d'erreur ou de refresh de page
+                    flask.session['name'] = form.get("name", "")
+                    flask.session['des'] = form.get("des", "")
+                    flask.session['date'] = form.get("date", "")
+                    flask.session['dev'] = form.get("dev", "")
+                    flask.session['status'] = form.get("status", "")
+                    flask.session['prio'] = form.get("prio", "")
                     # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
                     return flask.render_template('error.html.jinja2', user=user, projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches, errors=errors)

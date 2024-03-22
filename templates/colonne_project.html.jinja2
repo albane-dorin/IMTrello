@@ -79,7 +79,7 @@
                 <div class="colonne">
                     <h2>{{ col.name }}</h2>
 
-                    <div id="col{{ col.id }}" ondrop="drop(event, this, {{ col.id }})" ondragover="allowDrop(event)">
+                    <div class="taches" onclick="window.location.href='{{ url_for('inscription') }}'" id="col{{ col.id }}" ondrop="drop(event, this, {{ col.id }})" ondragover="allowDrop(event)">
                     {% for t in taches[loop.index0] %}
                         {%  if t.status == "Annulée" %}
                             <div class="tache annule" id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
@@ -136,7 +136,7 @@
                                         <option value="">--Please choose an option--</option>
                                         <option value="En attente"> En attente</option>
                                         <option value="En cours"> En cours</option>
-                                        <option value="Complétée"> Complétée</option>
+                                        <option value="Completée"> Completée</option>
                                         <option value="En pause"> En pause</option>
                                         <option value="Annulée"> Annulée</option>
                                     </select>

@@ -41,7 +41,7 @@ button:enabled{
 
 .in{
     display: flex;
-    flex-grow: 1;
+    height: calc(100vh - 200px);
 }
 
 /* PARTIE HAUTE GAUCHE (Profil utilisateur) */
@@ -293,8 +293,7 @@ input[type="submit"]{
     height: 100%;
     width: 100%;
     overflow: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
+
     align-items: stretch;
 }
 
@@ -306,8 +305,10 @@ input[type="submit"]{
     min-width: 350px;
     padding: 10px;
     overflow-y: auto;
-
+    scrollbar-width: thin;
+    scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
 }
+
 
 .c-ajout{
     background-color: rgba(231, 178, 255, .4);
@@ -323,6 +324,10 @@ input[type="submit"]{
     width: 100%;
     height: 100%;
     border: 0px;
+}
+
+.taches{
+    min-height: 10%;
 }
 
 .tache{
@@ -399,3 +404,6 @@ input[type="submit"]{
     border-radius: 5px;
     font-weight: bold;
 }
+
+
+
