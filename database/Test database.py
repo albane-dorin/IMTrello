@@ -88,7 +88,7 @@ with app.test_request_context():
         print(c.id, c.name)
 
     #Test Ajout Tâche
-    database.new_task(user=users[1], project=projects[2], name='backend', year=2024, month=3, day=28, description='Houla', column=cs[0], status ='Waiting', dvps=users)
+    database.new_task(user=users[1], project=projects[2], name='backend', year=2024, month=3, day=28, description='Houla', column=cs[0], status ='En attente', priority='Faible', dvps=users)
     tasks = database.Task.query.all()
     for task in tasks:
         print(task.id, task.name)
@@ -168,3 +168,46 @@ with app.test_request_context():
 
     print(projects[0].date)
 
+    print('Delete project')
+    print('Projects',database.db.session.query(database.Project).all())
+    print('Dvps du projet 1:')
+    tds=database.db.session.query(database.Project_Dvp).filter_by(id_project=1).all()
+    for td in tds: print(td.id_dvp)
+    print('Tâches du projet 1')
+    tps=database.db.session.query(database.Project_Task).filter_by(id_project=1).all()
+    for tp in tps: print(tp.id_task)
+    print('Colones du projet 1', database.db.session.query(database.Column).filter_by(project=1).all())
+    database.delete_project(1, database.db.session.get(database.User, 2))
+
+    print('Delete project')
+    print('Projects', database.db.session.query(database.Project).all())
+    print('Dvps du projet 1:')
+    tds = database.db.session.query(database.Project_Dvp).filter_by(id_project=1).all()
+    for td in tds: print(td.id_dvp)
+    print('Tâches du projet 1')
+    tps = database.db.session.query(database.Project_Task).filter_by(id_project=1).all()
+    for tp in tps: print(tp.id_task)
+    print('Colones du projet 1', database.db.session.query(database.Column).filter_by(project=1).all())
+
+    tasks = database.db.session.query(database.Task).all()
+    for task in tasks: print(task.id)
+    p=database.project_of(tasks[0])
+    user=database.db.session.get(database.User, p.manager)
+    database.delete_task(tasks[0],user,p)
+    tasks = database.db.session.query(database.Task).all()
+    for task in tasks: print(task.id)
+
+    projects=database.db.session.query(database.Project).all()
+    print(database.get_dvps_of_project(projects[0].id))
+    print(projects[0].manager)
+    user=database.db.session.get(database.User, 2)
+    dvp = database.db.session.get(database.User, 1)
+    database.delete_dvp_of_project(user, projects[0], dvp)
+    print(database.get_dvps_of_project(projects[0].id))
+
+    tasks=database.db.session.query(database.Task).all()
+    print(tasks)
+    print(database.get_dvps_of_task(tasks[0].id))
+    print(database.project_of(tasks[0]).manager)
+    database.delete_dvp_of_task(user,tasks[0],database.db.session.get(database.User, 3))
+    print(database.get_dvps_of_task(tasks[0].id))
