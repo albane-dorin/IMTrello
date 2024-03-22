@@ -1,59 +1,91 @@
 body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
 
+.container {
+    display: flex;
+    height: 100%;
+}
 
-        .container {
-            display: flex;
-            height: 100%;
-        }
+.containerStatusDate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .container2 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.containerUD {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Prend toute la hauteur de la fenêtre */
+}
 
-        .status {
-            color : var(--status-color);
-            font-weight : bold;
-        }
+.containerPartieScroll {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /*height: 100vh; /* Prend toute la hauteur de la fenêtre */
+    overflow-y: auto;
+}
 
-        .bold {
-            font-weight: bold;
-        }
+.description{
+    /* flex : 1; */
+}
 
-        .commentaire {
-            border-radius: 15px; /* Rayon du border-radius pour créer la forme "squircle" */
-            background-color: #e7b2ff; /* Couleur de fond */
-            box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2); /* Petite ombre pour les contours */
-            padding: 20px; /* Espacement interne */
-            margin: 10px;
-        }
+.status {
+    color : var(--status-color);
+    font-weight : bold;
+}
 
-        .left {
-            flex: 3;
-            background-color: lightgray;
-            padding: 20px;
-        }
+.bold {
+    font-weight: bold;
+}
 
-        .left h1 {
-            font-weight: bold;
-            display: block;
-        }
+.commentairebox {
+    /* flex : 1;
+    overflow: auto; */
+}
 
-        .left h1:after, .right h1:after {
-            content: '';
-            display: block;
-            border-top: 2px solid black;
-            width: 100%;
-            margin-top: 5px;
-        }
+.commentaire {
+    border-radius: 15px; /* Rayon du border-radius pour créer la forme "squircle" */
+    background-color: #e7b2ff; /* Couleur de fond */
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2); /* Petite ombre pour les contours */
+    padding: 20px; /* Espacement interne */
+    margin: 10px;
+}
 
-        .right {
-            flex: 1;
-            background-color: lightblue;
-            padding: 20px;
-        }
+.partieFixe {
+    /*top: 20px; /* Adjust the top position as needed */
+    left: 20px; /* Adjust the left position as needed */
+    z-index: 1; /* Ensure the title stays above the scrollable content */
+    width: calc(100% - 40px);
+}
+
+.left {
+    flex: 3;
+    background-color: lightgray;
+    padding: 20px;
+    overflow: auto;
+}
+
+.left h1 {
+    font-weight: bold;
+    display: block;
+}
+
+.left h1:after, .right h1:after {
+    content: '';
+    display: block;
+    border-top: 2px solid black;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.right {
+    flex: 1;
+    background-color: lightblue;
+    padding: 20px;
+    line-height: 1.5;
+    overflow-y: auto;
 }

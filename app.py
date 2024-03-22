@@ -25,9 +25,9 @@ def view_popUp():
         'titreTache' : "Task Title",
         'status' : 'En cours',
         'endDate': "06/04/2024",
-        'developers' : ["A", "B", "C"],
-        'description' : "Task Description",
-        'commentaires' : ["Task Commentaire1", "Task Commentaire2", "Task Commentaire3", "Task Commentaire4"]
+        'developers' : ["A", "B", "C"]*8,
+        'description' : "Task Description<br>feezfui<br>dfai<br>dcao<br>dyufia<br>dyiuz"*4,
+        'commentaires' : ["Task Commentaire1", "Task Commentaire2", "Task Commentaire3", "Task Commentaire4"]*2
     }
     return render_template('popUpTask.html.jinja2', dataTask=dataTask)
 
