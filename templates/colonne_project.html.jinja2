@@ -37,6 +37,17 @@
     <title>{{ projet.name }}</title>
   {% endblock %}
 
+{% block onglet %}
+<div class="haut">
+    <div class="vues">
+        <a class="lienv" href="{{ url_for("home_project", user_id=user.id, project_id=projet.id) }}"><button class="vue">Vue par échéances</button> </a>
+        <button disabled class="vue">Vue par projets</button>
+        <button class="vue">Vue par tâches</button>
+    </div>
+
+</div>
+{% endblock %}
+
 {% block projects %}
     {% for p in projects %}
         {% if projet.id == p.id  %}
