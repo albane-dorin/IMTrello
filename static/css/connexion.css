@@ -97,6 +97,7 @@ input[type=radio] {
     }
 
 .error{
-    font-size: 2vw;
+    font-size: 1.5vw;
     color: #c50000;
+    text-align: center;
 }
