@@ -188,6 +188,35 @@ def new_project(name, description, year, month, day, manager, users : list[User]
         db.session.add(project_dvp)
     db.session.commit()
 
+def delete_project(project_id, user):
+    print(is_manager(user, db.session.get(Project, project_id)))
+    if is_manager(user, db.session.get(Project, project_id)):
+        project = db.session.get(Project, project_id)
+        #Développer
+        dvp_ps = db.session.query(Project_Dvp).filter_by(id_project=project.id)
+        for dvp_p in dvp_ps :
+            db.session.delete(dvp_p)
+        #Tâches
+        task_ps=db.session.query(Project_Task).filter_by(id_project=project.id)
+        for task_p in task_ps:
+            id_task = task_p.id_task
+            task_dvps = db.session.query(Task_Dvp).filter_by(id_task=id_task).all()
+            for task_dvp in task_dvps:
+                db.session.delete(task_dvp)
+            db.session.delete(task_p)
+            comments = db.session.query(Comment).filter_by(task=id_task).all()
+            for comment in comments:
+                db.session.delete(comment)
+            task= db.session.get(Task, id_task)
+            db.session.delete(task)
+        #colonnes
+        cs=db.session.query(Column).filter_by(project=project.id).all()
+        for column in cs:
+            db.session.delete(column)
+        #projet
+        db.session.delete(project)
+        db.session.commit()
+
 #Ajout de colonne
 def new_column(name, project, user):
     if is_manager(user, project):
@@ -214,6 +243,21 @@ def new_task(user, project, name, year, month, day, description, column, status,
     else:
         return
 
+def delete_task(task, user, project):
+    if is_manager(user, project):
+        t_dvps=db.session.query(Task_Dvp).filter_by(id_task=task.id).all()
+        for t_dvp in t_dvps:
+            db.session.delete(t_dvp)
+        t_ps = db.session.query(Project_Task).filter_by(id_task=task.id).all()
+        for t_p in t_ps:
+            db.session.delete(t_p)
+        comments = db.session.query(Comment).filter_by(task=task.id).all()
+        for comment in comments:
+            db.session.delete(comment)
+        db.session.delete(task)
+        db.session.commit()
+
+
 #Ajout comment
 def new_comment(author, task, content):
     comment = Comment(author=author.id, content=content, task=task.id)
@@ -228,18 +272,37 @@ def add_dvp_to_project(user, project, dvp):
         db.session.add(dvp_project)
         db.session.commit()
 
-def add_dvp_to_task(user, task, dvp):
-    id = id_project_of(task)
-    dvp_in_project = Project_Dvp.query.filter_by(id_project=id).all()
-    dvps = []
-    for d in dvp_in_project:
-        dvps.append(d.id_dvp)
-    for i in range(0, len(dvps)):
-        if dvp.id==dvps[i]:
-            td = Task_Dvp(id_task=task.id, id_dvp=dvp.id)
-            db.session.add(td)
-            db.session.commit()
+def delete_dvp_of_project(user, project, dvp):
+    if is_manager(user, project):
+        #Supprime dvp de project
+        dvps_projects = db.session.query(Project_Dvp).filter_by(id_project=project.id).filter_by(id_dvp=dvp.id).all()
+        for dvp_p in dvps_projects:
+            db.session.delete(dvp_p)
+        #Supprime dvp de ses différentes tâches
+        dvps_tasks = db.session.query(Task_Dvp).filter_by(id_dvp=dvp.id).all()
+        for dvp_t in dvps_tasks:
+            db.session.delete(dvp_t)
+        db.session.commit()
 
+def add_dvp_to_task(user, task, dvp):
+    if is_manager(user, project_of(task)):
+        id = id_project_of(task)
+        dvp_in_project = Project_Dvp.query.filter_by(id_project=id).all()
+        dvps = []
+        for d in dvp_in_project:
+            dvps.append(d.id_dvp)
+        for i in range(0, len(dvps)):
+            if dvp.id==dvps[i]:
+                td = Task_Dvp(id_task=task.id, id_dvp=dvp.id)
+                db.session.add(td)
+                db.session.commit()
+
+def delete_dvp_of_task(user, task, dvp):
+    if is_manager(user, project_of(task)):
+        task_dvps=db.session.query(Task_Dvp).filter_by(id_task=task.id).filter_by(id_dvp=dvp.id).all()
+        for t in task_dvps:
+            db.session.delete(t)
+    db.session.commit()
 
 
 
