@@ -11,9 +11,18 @@ body{
     display: flex;
     flex-direction: column;
     height: 100%;
+    max-height: 98%;
 }
 
 p{
+    margin: 0px;
+}
+
+h1{
+    margin: 0px;
+}
+
+h2{
     margin: 0px;
 }
 
@@ -139,7 +148,7 @@ img{
 }
 
 /* POP-UP Affichage */
-.newproject{
+.new{
 position: fixed;
     top: 50%;
     left: 50%;
@@ -150,7 +159,7 @@ position: fixed;
     z-index: 10;
     width: 70%;
 }
-.newproject.active{
+.new.active{
     transform: translate(-50%, -50%) scale(1);
 }
 #overlay{
@@ -231,23 +240,162 @@ input[type="submit"]{
 
 .content{
     width: 100%;
-    height: 20%;
+    height: 100%;
     display: flex;
-    justify-content: center;
-    margin-top: 2vw;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    overflow-y: auto;
 }
 
 .vide{
-    height: 100%;
+    height: 20%;
     width: 50%;
     background-color: rgba(231, 178, 255, 0.3);
     border-radius: 30px;
     display: flex;
     justify-content: center;
+    margin-top: 2vw;
     padding-top: 2vw;
 }
 
 .vide > p {
     font-size: 1.5vw;
+    font-weight: bold;
+}
+
+.contentTop{
+    display: flex;
+    width: 95%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titre{
+    color: #ddb9ff;
+
+}
+
+.boutons{
+    display: flex;
+    align-items: center;
+}
+
+.suppr{
+    border: 0px;
+    background-color: transparent;
+    color: #d71626;
+    width: 50%;
+}
+
+.cols{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
+    align-items: stretch;
+}
+
+.colonne{
+    background-color: rgba(231, 178, 255, .4);
+    margin: 1vw;
+    border-radius: 30px;
+    width: 350px;
+    min-width: 350px;
+    padding: 10px;
+    overflow-y: auto;
+
+}
+
+.c-ajout{
+    background-color: rgba(231, 178, 255, .4);
+    margin: 1vw;
+    border-radius: 30px;
+    width: 200px;
+    min-width: 200px;
+
+}
+
+.c-bajout{
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    border: 0px;
+}
+
+.tache{
+    background-color: rgb(231, 178, 255);
+    height: 20%;
+    border-radius: 8px;
+    margin-top: 10%;
+    border: 1px;
+    border-style: solid;
+    border-color: rgba(67, 9, 96, 0.65);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-left: 5px;
+    padding-right: 15px;
+    font-size: 1vw;
+}
+.tacheint{
+    display: flex;
+    justify-content: space-between;
+}
+
+.annule{
+    opacity: .5;
+}
+
+.t-ajout{
+    background-color: rgba(231, 178, 255, 1);
+    margin-top: 10%;
+    height: 5%;
+    width: 80%;
+    margin-left: 10%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px;
+    border-style: solid;
+    border-color: rgba(67, 9, 96, 0.65);
+
+}
+
+.Facultative{
+    padding: 1px 5px;
+    background-color: lightsteelblue;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.Faible{
+    padding: 1px 5px;
+    background-color: lightpink;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.Moyenne{
+    padding: 1px 5px;
+    background-color: lightsalmon;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.Forte{
+    padding: 1px 5px;
+    background-color: orangered;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.Importante{
+    padding: 1px 5px;
+    background-color: red;
+    border-radius: 5px;
     font-weight: bold;
 }

@@ -4,7 +4,25 @@
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
       <script>
-          const user_id = {{ user.id }}
+        const user_id = {{ user.id }}
+
+        function allowDrop(ev) {
+          ev.preventDefault();
+        }
+
+
+        function drop(ev, el) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            el.appendChild(document.getElementById(data));
+            const id = el.id
+
+        }
+
+        function drag(ev){
+            ev.dataTransfer.setData("text", ev.target.id)
+            console.log(ev.target.id)
+        }
       </script>
 
     <title>{{ projet.name }}</title>
@@ -31,21 +49,139 @@
 
 {%  block content %}
 
-    <div>
-    <h3> {{ projet.name }}</h3>
+    <div class="content">
+        <div class="contentTop">
+            <h1 class="titre"> {{ projet.name }}</h1>
 
-    <button class="colonne"> Développeurs </button>
+            <div class="boutons">
 
-    {% if user.role==1 or user.role==3 %}
-            <button data-modal-target="#supprprojet"> Supprimer le projet </button>
-    {% endif %}
+                <button class=""> Développeurs </button>
 
-
-    {% if user.role==1 or user.role==3 %}
-        <div class="colonne">
-            <button data-modal-target="#formc" class=""> + </button>
+                {% if user.role==1 or user.role==3 %}
+                        <button data-modal-target="#supprprojet" class="suppr"> Supprimer le projet </button>
+                {% endif %}
+            </div>
         </div>
-    {% endif %}
+
+
+        <div class="cols">
+
+            {% for col in colonnes %}
+                <div class="colonne">
+                    <h2>{{ col.name }}</h2>
+
+                    <div id="col{{ col.id }}" ondrop="drop(event, this, {{ col.id }})" ondragover="allowDrop(event)">
+                    {% for t in taches[loop.index0] %}
+                        {%  if t.status == "Annulée" %}
+                            <div class="tache annule" id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
+                            <div class="tacheint"><h3> {{ t.name }}</h3>
+                            <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
+                            <span> A faire avant le {{ t.date }}</span>
+                            <span> Etat : {{ t.status }}</span>
+                        </div>
+
+                        {% else %}
+                            <div class="tache" id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
+                                <div class="tacheint"><h3> {{ t.name }}</h3>
+                                <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
+                                <span> A faire avant le {{ t.date }}</span>
+                                <span> Etat : {{ t.status }}</span>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                    </div>
+
+                    {% if user.role==1 or user.role==3 %}
+                        <button data-modal-target="#formnt{{ col.id }}" class="t-ajout">
+                            +
+                        </button>
+
+                        <div id="formnt{{ col.id }}" class="new">
+
+                            <form  id="form" action="{{ url_for("colonne_project", user_id=user.id,  project_id=projet.id) }}" method="post">
+
+                                <div class="bandeaux"><h3>Nouvelle Tâche </h3>  <button date-close-button class="close"> X </button> </div>
+
+                                <label for="name">Nom de la tâche :</label>
+                                   <input type="text" id="name" name="name" value="" required>
+                                <label for="des">Description de la tâche :</label>
+                                <textarea type="text" id="des" name="description" value="" required></textarea>
+                                <label for="date">Date de fin pcolrévisionnel :
+                                    <input type="date" id="date" name="date" value="" required>
+                                </label>
+
+                                <div class="">
+                                    <label for="prio">Priorité :</label>
+                                    <select name="prio" id="prio" required>
+                                        <option value="">--Please choose an option--</option>
+                                        <option value="Facultative"> Facultative</option>
+                                        <option value="Faible"> Faible</option>
+                                        <option value="Moyenne"> Moyenne</option>
+                                        <option value="Forte"> Forte</option>
+                                        <option value="Importante"> Importante</option>
+                                    </select>
+
+                                    <label for="status">Status :</label>
+                                    <select name="status" id="status" required>
+                                        <option value="">--Please choose an option--</option>
+                                        <option value="En attente"> En attente</option>
+                                        <option value="En cours"> En cours</option>
+                                        <option value="Complétée"> Complétée</option>
+                                        <option value="En pause"> En pause</option>
+                                        <option value="Annulée"> Annulée</option>
+                                    </select>
+
+                                    <input type="hidden" value="{{ col.id }}" name="colonne">
+                                </div>
+
+
+
+                                <label for="dev">Ajouter des développeurs :</label>
+                                    <input type="text" id="dev" name="developpeurs" value="" multiple>
+                                <div class="precision"> Entrer les adresses emails des développeurs en les séparant simplement avec un espace</div>
+
+
+
+                                <p ><input name="task" type="submit"></p>
+
+                            </form>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+            {% if user.role==1 or user.role==3 %}
+                <div class="c-ajout">
+                    <button data-modal-target="#formnc" class="c-bajout"> + </button>
+                </div>
+
+                 <div id="formnc" class="new">
+
+                    <form  id="form" action="{{ url_for("colonne_project", user_id=user.id, project_id=projet.id) }}" method="post">
+
+                        <div class="bandeaux"><h3>Nouvelle colonne</h3>  <button date-close-button class="close"> X </button> </div>
+
+                        <label for="name">Nom de la colonne :</label>
+                           <input type="text" id="name" name="name" value="" required>
+
+                        <p ><input name="column" type="submit"></p>
+
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if user.role==1 or user.role==3 %}
+
+
+
+
+
+        {% endif %}
+
     </div>
 
 {% endblock %}
