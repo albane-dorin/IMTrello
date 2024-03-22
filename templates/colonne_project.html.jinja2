@@ -3,7 +3,8 @@
  {% block link%}
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
-      <script>
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+     <script>
         const user_id = {{ user.id }}
 
         function allowDrop(ev) {
@@ -15,8 +16,16 @@
             ev.preventDefault();
             const data = ev.dataTransfer.getData("text");
             el.appendChild(document.getElementById(data));
-            const id = el.id
-
+            $.ajax({
+                url: '{{ url_for("colonne_project", user_id=user.id, project_id=projet.id)}}',
+                type: 'POST',
+                data: { 'id': data, 'elid' : el.id },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                },
+                success: function(response) { },
+                error: function(error) { console.log(error); }
+            });
         }
 
         function drag(ev){

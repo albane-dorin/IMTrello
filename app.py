@@ -359,87 +359,103 @@ def colonne_project(user_id, project_id):
         i += 1
 
     if flask.request.method == 'POST':
-        form = flask.request.form
-        if "project" in form:
-            date = form.get("date", "").split("-")
-            devs = form.get("developpeur", "").split(' ')
-            developpeur = [user]
-            if devs != ['']:
-                for d in devs:
-                    developpeur += [database.db.session.query(database.User).filter(database.User.mail == dev).first()]
-            print("date = ", date)
 
-            result, errors = formulaire_new_project(form)
-
-            flask.session['name'] = form.get("name", "")
-            flask.session['des'] = form.get("des", "")
-            flask.session['date'] = form.get("date", "")
-            flask.session['dev'] = form.get("dev", "")
-
-            if result:
-                database.new_project(form.get("name", ""), form.get("description", ""),
-                                     int(date[0]), int(date[1]), int(date[2]), user, developpeur)
-                projets = database.projects_of_user(user)
-                return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                 projet=projet, colonnes=colonnes, taches=taches)
-            else:
-                # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-                return flask.render_template('error.html.jinja2', user=user, projects=projets,
-                                 projet=projet, colonnes=colonnes, taches=taches, errors=errors)
-
-        elif "task" in form:
-            date = form.get("date", "").split("-")
-            devs = form.get("developpeur", "").split(' ')
-            developpeur = []
-            if devs != ['']:
-                for d in devs:
-                    developpeur += [database.db.session.query(database.User).filter(database.User.mail == dev).first()]
-            column = database.db.session.get(database.Project, form.get("colonne", ""))
-
-            result, errors = formulaire_new_task(form, project_id)
-
-            #permet de sauvegarder les données en cas d'erreur ou de refresh de page
-            flask.session['name'] = form.get("name", "")
-            flask.session['des'] = form.get("des", "")
-            flask.session['date'] = form.get("date", "")
-            flask.session['dev'] = form.get("dev", "")
-            flask.session['status'] = form.get("status", "")
-            flask.session['prio'] = form.get("prio", "")
+        if flask.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            data = flask.request.get_data().decode("utf-8").split('&')
+            print(data)
+            tid = data[0]
+            cid = data[1]
+            task = database.db.session.get(database.Task, tid[-1])
+            print(task.column)
+            task.column = cid[-1]
+            print(task.column)
+            database.db.session.commit()
+            return data
 
 
-            if result:
-                database.new_task(user, projet, form.get("name", ""), int(date[0]), int(date[1]), int(date[2]),
-                                  form.get("description", ""), column, form.get("status", ""), form.get("prio", ""),
-                                  developpeur)
+        else :
+            form = flask.request.form
+            if "project" in form:
+                date = form.get("date", "").split("-")
+                devs = form.get("developpeur", "").split(' ')
+                developpeur = [user]
+                if devs != ['']:
+                    for d in devs:
+                        developpeur += [database.db.session.query(database.User).filter(database.User.mail == dev).first()]
+                print("date = ", date)
+
+                result, errors = formulaire_new_project(form)
+
+                flask.session['name'] = form.get("name", "")
+                flask.session['des'] = form.get("des", "")
+                flask.session['date'] = form.get("date", "")
+                flask.session['dev'] = form.get("dev", "")
+
+                if result:
+                    database.new_project(form.get("name", ""), form.get("description", ""),
+                                         int(date[0]), int(date[1]), int(date[2]), user, developpeur)
+                    projets = database.projects_of_user(user)
+                    return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches)
+                else:
+                    # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
+                    return flask.render_template('error.html.jinja2', user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches, errors=errors)
+
+            elif "task" in form:
+                date = form.get("date", "").split("-")
+                devs = form.get("developpeur", "").split(' ')
+                developpeur = []
+                if devs != ['']:
+                    for d in devs:
+                        developpeur += [database.db.session.query(database.User).filter(database.User.mail == dev).first()]
+                column = database.db.session.get(database.Project, form.get("colonne", ""))
+
+                result, errors = formulaire_new_task(form, project_id)
+
+                #permet de sauvegarder les données en cas d'erreur ou de refresh de page
+                flask.session['name'] = form.get("name", "")
+                flask.session['des'] = form.get("des", "")
+                flask.session['date'] = form.get("date", "")
+                flask.session['dev'] = form.get("dev", "")
+                flask.session['status'] = form.get("status", "")
+                flask.session['prio'] = form.get("prio", "")
+
+
+                if result:
+                    database.new_task(user, projet, form.get("name", ""), int(date[0]), int(date[1]), int(date[2]),
+                                      form.get("description", ""), column, form.get("status", ""), form.get("prio", ""),
+                                      developpeur)
+                    taches = [0] * len(colonnes)
+                    i = 0
+                    for col in colonnes:
+                        taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
+                        i += 1
+                    return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches)
+                else:
+                    # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
+                    return flask.render_template('error.html.jinja2', user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches, errors=errors)
+
+            elif "column" in form:
+                database.new_column(form.get("name", ""), projet, user)
+                colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
                 taches = [0] * len(colonnes)
                 i = 0
                 for col in colonnes:
                     taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
                     i += 1
+
                 return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                 projet=projet, colonnes=colonnes, taches=taches)
-            else:
-                # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-                return flask.render_template('error.html.jinja2', user=user, projects=projets,
-                                 projet=projet, colonnes=colonnes, taches=taches, errors=errors)
-
-        elif "column" in form:
-            database.new_column(form.get("name", ""), projet, user)
-            colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
-            taches = [0] * len(colonnes)
-            i = 0
-            for col in colonnes:
-                taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
-                i += 1
-
-            return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                 projet=projet, colonnes=colonnes, taches=taches)
+                                             projet=projet, colonnes=colonnes, taches=taches)
 
 
     else:
+        print(taches)
         return flask.render_template("colonne_project.html.jinja2",  user=user, projects=projets,
-                                 projet=projet, colonnes=colonnes, taches=taches)
-   
+                                     projet=projet, colonnes=colonnes, taches=taches)
+
 
 
 if __name__ == '__main__':
