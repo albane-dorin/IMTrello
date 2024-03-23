@@ -7,34 +7,45 @@
 {% block plus %}
     <div class="container">
         <div class="left">
-        <div class="containerUD">
-            <div class="partieFixe">
-                <h1>{{ tache.name }}</h1>
-                    <div class="containerStatusDate">
-                    <div class="{{ tache.priority }}">{{ tache.priority }}</div>
-                    <div>{{ tache.date }}</div>
+            <div class="lefttop">
+                <div class="containerUD">
+                    <div class="partieFixe">
+                        <h1>{{ tache.name }}</h1>
+                            <div class="containerStatusDate">
+                            <div class="{{ tache.priority }}">{{ tache.priority }}</div>
+                            <div>{{ tache.date }}</div>
+                            </div>
+                            <span class="section">
+                                Status : </span>
+                                <span> {{ tache.status }} </span>
+
                     </div>
-                    <span class="section">
-                        Status : </span>
-                        <span> {{ tache.status }} </span>
+                    <div class="containerPartieScroll">
+                        <p>
+                            <div class="description section">
+                                <span class="bold">Description :<br></span> {{ tache.description }}
+                            </div>
+                        </p>
+                        <div class ="commentairebox section">
+                            <div class="bold"> Commentaires : </div>
+                            {% for com in commentaires %}
+                                <div class="commentaire">
+                                    <div class="text">{{ com[0].content }}</div>
+                                    <p class="author"> Par {{ com[1].username }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="leftdown">
+                <form class="formcom" action="{{ url_for("popUp", user_id=user.id,  project_id=projet.id, task_id=tache.id) }}" method="post">
+                    <label for="comment">Ajouter un commentaire :</label>
+                        <textarea id="comment" name="comment" required></textarea>
+                    <p><input name="formcomment" id="formcomment" type="submit"></p>
+                </form>
 
             </div>
-            <div class="containerPartieScroll">
-            <p>
-                <div class="description section">
-                    <span class="bold">Description :<br></span> {{ tache.description }}
-                </div>
-            </p>
-            <div class ="commentairebox section">
-                <div class="bold"> Commentaires : </div>
-                {% for com in commentaires %}
-                    <div class="commentaire">
-                        {{ com }}
-                    </div>
-                {% endfor %}
-            </div>
-            </div>
-        </div>
         </div>
         <div class="right">
             <div class="topdevs">
@@ -45,7 +56,7 @@
             <span class="bold">Développeurs :</span>
         <ul>
             {% for dev in developers %}
-            <li>{{dev}}</li>
+            <li>{{dev.username}}</li>
             {% endfor %}
         </ul>
         </div>

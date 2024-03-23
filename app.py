@@ -493,22 +493,28 @@ def popUp(user_id, project_id, task_id):
         i += 1
 
     tache = database.db.session.get(database.Task, task_id)
-    commentaires = database.db.session.query(database.Comment).filter_by(task=task_id).all()
+    com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
+    commentaires = []
+    for c in com:
+        commentaires += [(c, database.db.session.get(database.User, c.author))]
     devs = database.get_dvps_of_task(task_id)
+    print(commentaires)
 
+    if flask.request.method=="POST":
+        form = flask.request.form
+        if "formcomment" in form:
+            database.new_comment(user, tache, form["comment"])
+            com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
+            commentaires = []
+            for c in com:
+                commentaires += [(c, database.db.session.get(database.User, c.author))]
+            print(commentaires)
+            return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
+                                    commentaires=commentaires, developers=devs)
 
-    dataTask = {
-        'taskColor' : "red",
-        'priorite': 'absolue',
-        'prioriteColor' : "red",
-        'titreTache' : "Task Title",
-        'status' : 'En cours',
-        'endDate': "06/04/2024",
-        'developers' : ["A", "B", "C"]*8,
-        'description' : "Task Description<br>feezfui<br>dfai<br>dcao<br>dyufia<br>dyiuz"*4,
-        'commentaires' : ["Task Commentaire1", "Task Commentaire2", "Task Commentaire3", "Task Commentaire4"]*2
-    }
-    return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
+    else :
+        return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
                                     commentaires=commentaires, developers=devs)
 

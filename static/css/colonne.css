@@ -491,17 +491,11 @@ input[type="submit"]{
     flex: 1;
     display: flex;
     flex-direction: column;
-        overflow-y: auto;
     height: fit-content;
-    scrollbar-width: thin;
 }
 
-.description{
-    /* flex : 1; */
-}
 
 .status {
-    color : var(--status-color);
     font-weight : bold;
 }
 
@@ -514,22 +508,32 @@ input[type="submit"]{
 }
 
 .commentairebox {
-    /* flex : 1;
-    overflow: auto; */
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
 }
 
 .commentaire {
     border-radius: 15px; /* Rayon du border-radius pour créer la forme "squircle" */
     background-color: #e7b2ff; /* Couleur de fond */
     box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2); /* Petite ombre pour les contours */
-    padding: 20px; /* Espacement interne */
+    font-size: 1vw;
     margin: 10px;
+    padding: 5px;
+    height: fit-content;
 }
+
+.commentaire > .author{
+    font-size: .7vw;
+    text-align: end;
+}
+
+
 
 .partieFixe {
     /*top: 20px; /* Adjust the top position as needed */
     left: 20px; /* Adjust the left position as needed */
-    z-index: 1; /* Ensure the title stays above the scrollable content */
+    z-index: 30; /* Ensure the title stays above the scrollable content */
     width: calc(100% - 40px);
     line-height: 150%;
 }
@@ -537,9 +541,10 @@ input[type="submit"]{
 .left {
     flex: 3;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     overflow: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #a581c7 transparent;
 }
 
 .left h1 {
@@ -563,6 +568,7 @@ input[type="submit"]{
     background-color: rgba(149, 0, 189, 0.5);
     border-bottom-right-radius: 30px;
     border-top-right-radius: 30px;
+
 }
 
 .topdevs{
@@ -570,4 +576,28 @@ input[type="submit"]{
     justify-content: end;
 }
 
+.formcom{
+    padding: 0px;
+    width: 100%;
+}
 
+#formcomment{
+    font-size: 1vw;
+}
+
+.formcom > p{
+    display: flex;
+    align-self: end;
+}
+
+form{
+    white-space: pre-line;
+}
+.lefttop{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: #a581c7 transparent;
+}
