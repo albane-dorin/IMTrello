@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Application Trello</title>
+    <link rel="stylesheet" href="/static/css/list.css">
+    <link rel="icon" href="data:;base64,=">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="{{ url_for("static", filename="js/list.js") }}"></script>
+
+
+</head>
+<body>
+
+    <div class="container">
+
+
+        <div class="top">
+            <div class="profil">
+                <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
+                <div class="nom">
+                    <p class="username"> {{ user.username }} </p>
+                    <a href="/" class="deco">Déconnexion</a>
+                </div>
+            </div>
+            <div class="haut">
+                <div class="vues">
+                    <button class="vue">Vue par échéances</button>
+                    <button class="vue">Vue par projets</button>
+                    <button disabled class="vue">Vue par tâches</button>
+                </div>
+                <div class="plus"><button class="vue"> + </button></div>
+            </div>
+        </div>
+
+
+        <div class="content">
+            <div class="left">
+
+                <div class="titre">Filtres</div>
+                <p></p>
+                <!-- Filtre des projets -->
+                <p class="filtre">Nom de la tâche : <input type="text" id="filter-task-by-name" placeholder="Filter by name"> </p>
+
+
+
+                <!-- Filtre des projets -->
+                <fieldset>
+                      <legend class="filtre">Vos projets:</legend>
+                      {% for project in projects %}
+                          <div>
+                            <form>
+                                <input type="checkbox" id="p_{{ project.id }}"  onclick="filterByProject({{ project.id }})" checked>
+                                <label for="projet_1" class="filtre_proposition"> {{project.name}}</label>
+                            </form>
+                          </div>
+                      {% endfor %}
+                </fieldset>
+
+                <p></p>
+                <!-- Filtre des status -->
+                <form>
+                  <fieldset>
+                      <legend class="filtre">Afficher les tâche dont les statuts sont :</legend>
+
+                      <div>
+                          <form action="">
+                            <input type="checkbox" id="waiting" onclick="filterWaiting()" checked>
+                            <label for="waiting" class="filtre_proposition">En attente</label>
+                          </form>
+
+                      </div>
+                      <div>
+                          <form action="">
+                            <input type="checkbox" id="in_progress" onclick="filterInProgress()" checked>
+                            <label for="in_progress" class="filtre_proposition">En cours</label>
+                          </form>
+                      </div>
+                      <div>
+                          <form action="">
+                            <input type="checkbox" id="completed" onclick="filterCompleted()" checked>
+                            <label for="completed" class="filtre_proposition">Completée</label>
+                          </form>
+                      </div>
+                      <div>
+                          <form action="">
+                            <input type="checkbox" id="cancelled" onclick="filterCancelled()" checked>
+                            <label for="cancelled" class="filtre_proposition">Annulée</label>
+                          </form>
+                      </div>
+                      <div>
+                          <form action="">
+                            <input type="checkbox" id="blocked" onclick="filterBlocked()" checked>
+                            <label for="blocked" class="filtre_proposition">En pause</label>
+                          </form>
+                      </div>
+                    </fieldset>
+                </form>
+
+
+                <!-- Autres filtres -->
+                <p class="filtre">Plus de filtres</p>
+                    <div>
+                        <form action="">
+                            <input type="checkbox" id="chronology" onclick="filterByTime()" autocomplete="off">
+                            <label for="chronology" class="filtre_proposition">Chronologiquement</label>
+                        </form>
+                    </div>
+                    <div>
+                        <form action="">
+                            <input type="checkbox" id="priority" onclick="filterByPrio()" autocomplete="off">
+                            <label for="priority" class="filtre_proposition">Par priorité</label>
+                        </form>
+                    </div>
+                    <div>
+                        <form action="">
+                            <input type="checkbox" id="all" onclick="printAll()" autocomplete="off">
+                            <label for="all" class="filtre_proposition">Afficher aussi anciennes tâches</label>
+                        </form>
+                    </div>
+
+
+            </div>
+
+
+
+
+            <div class="task-list">
+                <div class="titre">Liste des Tâches</div>
+                <p></p>
+                <table id="taches">
+                    <thead>
+                    <tr>
+                        <th>Projet</th>
+                        <th id="sort-name">Tâche</th>
+                        <th>Statut</th>
+                        <th>Priorité</th>
+                        <th>Date</th>
+                        <th>Manager</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for task in tasks %}
+                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}" data-date="{{ task.date }}" data-project="{{ task.p_id }}" data-prio="{{ task.t_prio }}">
+                            <td>{{ task.p_name }}</td>
+                            <td>{{ task.t_name }}</td>
+                            <td>{{ task.status }}</td>
+                            <td>{{ task.t_prio }}</td>
+                            <td>{{ task.date }}</td>
+                            <td>{{ task.m_name }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
