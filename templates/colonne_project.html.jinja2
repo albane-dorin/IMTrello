@@ -1,0 +1,237 @@
+{% extends 'colonne.html.jinja2' %}
+
+ {% block link%}
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+     <script>
+        const user_id = {{ user.id }}
+
+        function allowDrop(ev) {
+          ev.preventDefault();
+        }
+
+
+        function drop(ev, el) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            el.appendChild(document.getElementById(data));
+            $.ajax({
+                url: '{{ url_for("colonne_project", user_id=user.id, project_id=projet.id)}}',
+                type: 'POST',
+                data: { 'id': data, 'elid' : el.id },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                },
+                success: function(response) { },
+                error: function(error) { console.log(error); }
+            });
+        }
+
+        function drag(ev){
+            ev.dataTransfer.setData("text", ev.target.id)
+            console.log(ev.target.id)
+        }
+      </script>
+
+    <title>{{ projet.name }}</title>
+  {% endblock %}
+
+{% block onglet %}
+<div class="haut">
+    <div class="vues">
+        <a class="lienv" href="{{ url_for("home_project", user_id=user.id, project_id=projet.id) }}"><button class="vue">Vue par échéances</button> </a>
+        <button disabled class="vue">Vue par projets</button>
+        <button class="vue">Vue par tâches</button>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block projects %}
+    {% for p in projects %}
+        {% if projet.id == p.id  %}
+
+            <a class="lienp" href="{{ url_for("colonne", user_id=user.id)}}">
+                <button class="projet" disabled>{{ p.name }}</button>
+            </a>
+        {% else %}
+                <a class="lienp" href="{{ url_for("colonne_project", user_id=user.id, project_id=p.id)}}">
+                    <button class="projet" >{{ p.name }}</button>
+                </a>
+        {% endif %}
+
+    {% endfor %}
+
+    {% if user.role==1 or user.role==3 %}
+            <a class="lienp">
+                <button data-modal-target="#form" class="projet"> + </button>
+            </a>
+
+            <div id="form" class="new">
+
+                <form  id="formnp" action="{{ url_for("colonne_project", user_id=user.id, project_id=projet.id) }}" method="post">
+
+                    <div class="bandeaux"><h3>Nouveau Projet</h3>  <button date-close-button class="close"> X </button> </div>
+
+                    <label for="name">Nom du projet :</label>
+                       <input type="text" id="name" name="name" value="" required>
+                    <label for="des">Description du projet :</label>
+                    <textarea type="text" id="des" name="description" value="" required></textarea>
+                    <label for="date">Date de fin prévisionnel :
+                        <input type="date" id="date" name="date" value="" required>
+                    </label>
+
+                    <label for="dev">Ajouter des développeurs :</label>
+                        <input type="text" id="dev" name="developpeurs" value="" multiple>
+                    <div class="precision"> Entrer les adresses emails des développeurs en les séparant simplement avec un espace</div>
+
+
+
+                    <p ><input name="project" type="submit"></p>
+
+                </form>
+            </div>
+        {% endif %}
+{% endblock %}
+
+
+
+{%  block content %}
+
+    <div class="content">
+        <div class="contentTop">
+            <h1 class="titre"> {{ projet.name }}</h1>
+
+            <div class="boutons">
+
+                <button class="dev"> Développeurs </button>
+
+                {% if user.role==1 or user.role==3 %}
+                        <button data-modal-target="#supprprojet" class="suppr"> Supprimer le projet </button>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="cols">
+
+            {% for col in colonnes %}
+                <div class="colonne">
+                    <h2>{{ col.name }}</h2>
+
+                    <div class="taches" onclick="window.location.href='{{ url_for('inscription') }}'" id="col{{ col.id }}" ondrop="drop(event, this, {{ col.id }})" ondragover="allowDrop(event)">
+                    {% for t in taches[loop.index0] %}
+                        {%  if t.status == "Annulée" %}
+                            <div class="tache annule" id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
+                            <div class="tacheint"><h3> {{ t.name }}</h3>
+                            <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
+                            <span> A faire avant le {{ t.date }}</span>
+                            <span> Etat : {{ t.status }}</span>
+                        </div>
+
+                        {% else %}
+                            <div class="tache" id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
+                                <div class="tacheint"><h3> {{ t.name }}</h3>
+                                <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
+                                <span> A faire avant le {{ t.date }}</span>
+                                <span> Etat : {{ t.status }}</span>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                    </div>
+
+                    {% if user.role==1 or user.role==3 %}
+                        <button data-modal-target="#formnt{{ col.id }}" class="t-ajout">
+                            +
+                        </button>
+
+                        <div id="formnt{{ col.id }}" class="new">
+
+                            <form  id="form" action="{{ url_for("colonne_project", user_id=user.id,  project_id=projet.id) }}" method="post">
+
+                                <div class="bandeaux"><h3>Nouvelle Tâche </h3>  <button date-close-button class="close"> X </button> </div>
+
+                                <label for="name">Nom de la tâche :</label>
+                                   <input type="text" id="name" name="name" value="" required>
+                                <label for="des">Description de la tâche :</label>
+                                <textarea type="text" id="des" name="description" value="" required></textarea>
+                                <label for="date">Date de fin pcolrévisionnel :
+                                    <input type="date" id="date" name="date" value="" required>
+                                </label>
+
+                                <div class="">
+                                    <label for="prio">Priorité :</label>
+                                    <select name="prio" id="prio" required>
+                                        <option value="">--Please choose an option--</option>
+                                        <option value="Facultative"> Facultative</option>
+                                        <option value="Faible"> Faible</option>
+                                        <option value="Moyenne"> Moyenne</option>
+                                        <option value="Forte"> Forte</option>
+                                        <option value="Importante"> Importante</option>
+                                    </select>
+
+                                    <label for="status">Status :</label>
+                                    <select name="status" id="status" required>
+                                        <option value="">--Please choose an option--</option>
+                                        <option value="En attente"> En attente</option>
+                                        <option value="En cours"> En cours</option>
+                                        <option value="Completée"> Completée</option>
+                                        <option value="En pause"> En pause</option>
+                                        <option value="Annulée"> Annulée</option>
+                                    </select>
+
+                                    <input type="hidden" value="{{ col.id }}" name="colonne">
+                                </div>
+
+
+
+                                <label for="dev">Ajouter des développeurs :</label>
+                                    <input type="text" id="dev" name="developpeurs" value="" multiple>
+                                <div class="precision"> Entrer les adresses emails des développeurs en les séparant simplement avec un espace</div>
+
+
+
+                                <p ><input name="task" type="submit"></p>
+
+                            </form>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+            {% if user.role==1 or user.role==3 %}
+                <div class="c-ajout">
+                    <button data-modal-target="#formnc" class="c-bajout"> + </button>
+                </div>
+
+                 <div id="formnc" class="new">
+
+                    <form  id="form" action="{{ url_for("colonne_project", user_id=user.id, project_id=projet.id) }}" method="post">
+
+                        <div class="bandeaux"><h3>Nouvelle colonne</h3>  <button date-close-button class="close"> X </button> </div>
+
+                        <label for="name">Nom de la colonne :</label>
+                           <input type="text" id="name" name="name" value="" required>
+
+                        <p ><input name="column" type="submit"></p>
+
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if user.role==1 or user.role==3 %}
+
+
+
+
+
+        {% endif %}
+
+    </div>
+
+{% endblock %}

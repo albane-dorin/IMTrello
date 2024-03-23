@@ -1,14 +1,32 @@
 {% extends "connexion.html.jinja2" %}
 
- {% block button %}
-                <button>Connexion</button>
-                <button disabled> Inscription</button>
-            {% endblock %}
+
+{% block button %}
+    <a href="/"><button>Connexion</button></a>
+    <button disabled> Inscription</button>
+{% endblock %}
+
 
 {% block form %}
-    <p>Email : <input type="text" placeholder="ex: name.surname@thing.com" value="" required> </p>
-    <p> Username: <input type="text" value="" required> </p>
-    <p>Password : <input type="text" value="" required> </p>
-    <p>Repeat password : <input type="text" value="" required></p>
 
+    <form class="formulaire" action="{{ url_for("inscription") }}" method="post">
+
+        <label for="email">Email :</label>
+            <input type="email" id="email" name="email" placeholder="ex: name.surname@thing.com" value="" required>
+        <label for="name"> Nom d'utilisateur (max. 20 caractères) :</label>
+            <input type="text" id="name" name="username" value="" required>
+        <label for="p">Mot de passe :</label>
+            <input type="password" id="p" name="password" value="" required>
+        <label for="p2">Répétez le mot de passe :
+            </label> <input type="password" id="p2" name="p2" value="" required>
+        <div class="choix">Choisissez votre rôle :
+            <p class="radio"><input type="radio" name="role" value="2" required> Développeur </p>
+            <p class="radio"><input type="radio" name="role" value="1"> Manager </p>
+            <p class="radio"><input type="radio" name="role" value="3"> Manager et Développeur </p>
+        </div>
+
+        <p><input type="submit"></p>
+
+    </form>
 {% endblock %}
+

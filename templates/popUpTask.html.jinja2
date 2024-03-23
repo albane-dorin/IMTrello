@@ -12,14 +12,14 @@
         <div class="left">
         <div class="containerUD">
             <div class="partieFixe">
-                <h1>Titre</h1>
+                <h1>{{ tache.name }}</h1>
                     <div class="containerStatusDate">
-                    <div class="status" style="--status-color: {{dataTask.taskColor}}">{{ dataTask.status }}</div>
+                    <div class="status" style="--status-color: {{dataTask.taskColor}}">{{ tache.status }}</div>
                     <div>{{ dataTask.endDate }}</div>
                     </div>
                     <div class="priorite" >
                         Priorité :
-                        <span class ="priorite" style ="--priorite-color: {{dataTask.prioriteColor}}">
+                        <span class ={{ tache.priority }}">
                             {{ dataTask.priorite }}
                         </span>
                     </div>
@@ -31,9 +31,9 @@
                 </div>
             </p>
             <div class = commentairebox>
-                {% for commentaire in dataTask.commentaires %}
+                {% for com in commentaires %}
                     <div class="commentaire">
-                        {{ commentaire }}
+                        {{ com }}
                     </div>
                 {% endfor %}
             </div>
@@ -43,8 +43,8 @@
         <div class="right">
             <span class="bold">Développeurs :</span>
         <ul>
-            {% for developer in dataTask.developers %}
-            <li>{{developer}}</li>
+            {% for dev in developers %}
+            <li>{{dev}}</li>
             {% endfor %}
         </ul>
         </div>

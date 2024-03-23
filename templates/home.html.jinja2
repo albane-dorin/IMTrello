@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+      {% block link%}
+        <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+          <script>
+              const user_id = {{ user.id }}
+          </script>
+
+        <title>Home page</title>
+      {% endblock %}
+
+  </head>
+  <body>
+    <div class="top">
+        <div class="profil">
+            <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
+            <div class="nom">
+                <p class="username"> {{ user.username }} </p>
+                <a href="/" class="deco">Deconnexion</a>
+            </div>
+        </div>
+
+        {% block onglet %}
+        <div class="haut">
+            <div class="vues">
+                <button disabled class="vue">Vue par échéances</button>
+                <a class="lienv" href="{{ url_for("colonne", user_id=user.id) }}"> <button class="vue">Vue par projets</button> </a>
+                <button class="vue">Vue par tâches</button>
+            </div>
+
+        </div>
+        {% endblock %}
+    </div>
+
+    <div class="in">
+        <div class="projets">
+
+        {% block projects %}
+            {% for projet in projects %}
+                <a class="lienp" href="{{ url_for("home_project", user_id=user.id, project_id=projet.id)}}">
+                    <button class="projet" >{{ projet.name }}</button>
+                </a>
+            {% endfor %}
+
+
+        {% if user.role==1 or user.role==3 %}
+            <a class="lienp">
+                <button data-modal-target="#form" class="projet"> + </button>
+            </a>
+
+            <div id="form" class="new">
+
+                <form  id="formnp" action="{{ url_for("home", user_id=user.id) }}" method="post">
+
+                    <div class="bandeaux"><h3>Nouveau Projet</h3>  <button date-close-button class="close"> X </button> </div>
+
+                    <label for="name">Nom du projet :</label>
+                       <input type="text" id="name" name="name" value="" required>
+                    <label for="des">Description du projet :</label>
+                    <textarea type="text" id="des" name="description" value="" required></textarea>
+                    <label for="date">Date de fin prévisionnel :
+                        <input type="date" id="date" name="date" value="" required>
+                    </label>
+
+                    <label for="dev">Ajouter des développeurs :</label>
+                        <input type="text" id="dev" name="developpeurs" value="" multiple>
+                    <div class="precision"> Entrer les adresses emails des développeurs en les séparant simplement avec un espace</div>
+
+
+
+                    <p ><input name="project" type="submit"></p>
+
+                </form>
+            </div>
+        {% endif %}
+
+        {% endblock %}
+
+        </div>
+    <div class="" id="overlay"></div>
+
+        {%  block content %}
+
+        <div class="message">
+            <div class="semaine">
+                <p class="titre"> Pour cette semaine </p>
+
+
+                {%  for object in semaines %}
+                    <p class="date"> {{ object[0] }}</p>
+                    {% if object|length==3 %}
+                        <div class="echeance">
+                            <span>Fin de tâches : {{ object[1].name }}</span>
+                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
+                            <span> {{ object[1].status }} </span></p>
+                        </div>
+                    {% endif %}
+                    {% if object|length==2 %}
+                        <div class="echeance">Fin du projet : {{ object[1].name }}</div>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div class="mois">
+                <p class="titre"> Pour ce mois </p>
+
+                {%  for object in mois %}
+                    <p class="date"> {{ object[0] }}</p>
+                    {% if object|length ==3 %}
+                        <div class="echeance">
+                            <span>Fin de tâches : {{ object[1].name }}</span>
+                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
+                            <span> {{ object[1].status }} </span></p>
+                        </div>
+                    {% endif %}
+                    {% if object|length ==2 %}
+                        <div class="echeance">Fin du projet : {{ object[1].name }}</div>
+                    {% endif %}
+                {% endfor %}
+
+
+            </div>
+
+            <div class="apres">
+                <p class="titre"> Après </p>
+
+
+                {%  for object in apres %}
+                    <p class="date"> {{ object[0] }}</p>
+                    {% if object|length==3 %}
+                        <div class="echeance">
+                            <span>Fin de tâches : {{ object[1].name }}</span>
+                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
+                            <span> {{ object[1].status }}</span></p>
+                        </div>
+                    {% endif %}
+                    {% if object|length==2 %}
+                        <div class="echeance">Fin du projet : {{ object[1].name }}</div>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+        </div>
+         {%  endblock %}
+
+    {% block plus %}
+    {% endblock %}
+    </div>
+
+  </body>
+</html>
