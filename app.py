@@ -498,7 +498,6 @@ def popUp(user_id, project_id, task_id):
     for c in com:
         commentaires += [(c, database.db.session.get(database.User, c.author))]
     devs = database.get_dvps_of_task(task_id)
-    print(commentaires)
 
     if flask.request.method=="POST":
         form = flask.request.form
@@ -512,6 +511,40 @@ def popUp(user_id, project_id, task_id):
             return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
                                     commentaires=commentaires, developers=devs)
+
+        elif "formdev" in form:
+            result = True
+            errors = ""
+
+            dev = database.db.session.query(database.User).filter(database.User.mail == form["dev"]).first()
+            if dev is None:
+                result = False
+                errors = ["L'adresse email ne correspond à aucun utilisateur"]
+
+            elif user.role == 1:
+                result = False
+                errors = ["Cette personne n'est pas développeur"]
+
+            elif user not in database.get_dvps_of_project(project_id):
+                result = False
+                errors = ["Cette personne n'est pas développeur sur le projet"]
+
+            elif user in database.get_dvps_of_task(task_id):
+                result = False
+                errors = ["Cette personne est déjà assignée à cette tâche"]
+
+
+            if result:
+                database.add_dvp_to_task(user, tache, dev)
+                devs = database.get_dvps_of_task(task_id)
+                return flask.render_template('popUpTask.html.jinja2', user=user, projects=projets,
+                                             projet=projet, colonnes=colonnes, taches=taches, tache=tache,
+                                             commentaires=commentaires, developers=devs)
+
+            else:
+                return flask.render_template('popUpTask.html.jinja2', user=user, projects=projets,
+                                             projet=projet, colonnes=colonnes, taches=taches, tache=tache,
+                                             commentaires=commentaires, developers=devs, errordev=errors)
 
     else :
         return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,

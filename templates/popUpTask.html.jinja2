@@ -54,11 +54,23 @@
                 </a>
             </div>
             <span class="bold">Développeurs :</span>
-        <ul>
-            {% for dev in developers %}
-            <li>{{dev.username}}</li>
-            {% endfor %}
-        </ul>
+            {% if user.role==1 or user.role==3 %}
+                <form class="formdev" action="{{ url_for("popUp", user_id=user.id,  project_id=projet.id, task_id=tache.id) }}" method="post">
+                    <label for="dev">Ajouter un developpeur :</label>
+                        <input id="dev" type="email" name="dev" required>
+                    <p><input name="formdev" id="formdev" type="submit"></p>
+                </form>
+
+                {% if errordev %}
+                    <p class="errordev"> Erreur : {{ errordev[0] }} </p>
+                {% endif %}
+            {% endif %}
+
+            <ul>
+                {% for dev in developers %}
+                <li>{{dev.username}}</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 <div id="overlayerreur"></div>

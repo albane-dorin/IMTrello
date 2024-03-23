@@ -330,7 +330,7 @@ def clean():
 def peupler_db():
     clean()
 
-    user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>", role=1)
+    user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>", role=2)
     user2 = User(username="lovely", password="coeur", mail="lovely@gmail", role=3)
     db.session.add(user2)
     db.session.add(user1)

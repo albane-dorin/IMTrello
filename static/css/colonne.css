@@ -585,7 +585,8 @@ input[type="submit"]{
     font-size: 1vw;
 }
 
-.formcom > p{
+.formcom > p,
+.formdev > p{
     display: flex;
     align-self: end;
 }
@@ -600,4 +601,20 @@ form{
 
     scrollbar-width: thin;
     scrollbar-color: #a581c7 transparent;
+}
+
+.formdev{
+    height: fit-content ;
+}
+
+
+
+#formdev{
+    font-size: .7vw;
+}
+
+.errordev{
+    font-size: .7vw;
+    color: darkred;
+    text-align: center;
 }
