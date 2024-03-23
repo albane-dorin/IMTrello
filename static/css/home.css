@@ -271,6 +271,36 @@ input[type="submit"]{
     justify-content: space-between;
 }
 
+.Facultative{
+    padding: 1px 5px;
+    background-color: lightsteelblue;
+    border-radius: 5px;
+}
+
+.Faible{
+    padding: 1px 5px;
+    background-color: lightpink;
+    border-radius: 5px;
+}
+
+.Moyenne{
+    padding: 1px 5px;
+    background-color: lightsalmon;
+    border-radius: 5px;
+}
+
+.Forte{
+    padding: 1px 5px;
+    background-color: orangered;
+    border-radius: 5px;
+}
+
+.Importante{
+    padding: 1px 5px;
+    background-color: red;
+    border-radius: 5px;
+}
+
 .erreur{
     position: fixed;
     top: 50%;
