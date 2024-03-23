@@ -1,0 +1,42 @@
+{% extends "colonne_project.html.jinja2" %}
+
+{% block plus %}
+    <div class="dev_project">
+        <div class="devs">
+            <span class="bold">Développeurs :</span>
+            <a href="{{ url_for('colonne_project', user_id=user.id, project_id=projet.id) }}">
+                <button class="close">X</button>
+            </a>
+        </div>
+
+        <div class="list_dev">
+            {% for dev in developpeurs %}
+                <p class="item_dev">
+                    {{dev.username}}, {{ user.mail }}
+                    {% if user.id==projet.manager %}
+                        {% if dev.id!=user.id %}
+                            <a href="{{ url_for("supprdev_de_projet", user_id=user.id,  project_id=projet.id, dev_id=dev.id) }}">
+                                <button class="delete close"> - </button>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </p>
+
+
+            {% endfor %}
+        </div>
+
+        {% if user.id==projet.manager %}
+            <form class="formdev" action="{{ url_for("developpeurs", user_id=user.id,  project_id=projet.id) }}" method="post">
+                <label for="dev">Ajouter un developpeur :</label>
+                    <input id="dev" type="email" name="dev" required>
+                <p><input name="formdev" id="formdev" type="submit"></p>
+            </form>
+
+            {% if errordev %}
+                <p class="errordevp"> Erreur : {{ errordev[0] }} </p>
+            {% endif %}
+        {% endif %}
+    </div>
+
+{% endblock %}

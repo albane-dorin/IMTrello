@@ -479,6 +479,55 @@ def colonne_project(user_id, project_id):
 
 
 
+@app.route('/<int:user_id>/<int:project_id>/developpeurs', methods=["GET", "POST"])
+def developpeurs(user_id, project_id):
+    user = database.db.session.get(database.User, user_id)
+    projets = database.projects_of_user(user)
+    projet = database.db.session.get(database.Project, project_id)
+
+    colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
+    taches = [0] * len(colonnes)
+    developpeurs = database.get_dvps_of_project(project_id)
+    i = 0
+    for col in colonnes:
+        taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
+        i += 1
+
+    if flask.request.method=="POST":
+        form=flask.request.form
+        result = True
+        errors = ""
+
+        dev = database.db.session.query(database.User).filter(database.User.mail == form["dev"]).first()
+        if dev is None:
+            result = False
+            errors = ["L'adresse email ne correspond à aucun utilisateur"]
+
+        elif user.role == 1:
+            result = False
+            errors = ["Cette personne n'est pas développeur"]
+
+        elif user not in database.get_dvps_of_project(project_id):
+            result = False
+            errors = ["Cette personne n'est pas développeur sur le projet"]
+
+        elif user in developpeurs:
+            result = False
+            errors = ["Cette personne est déjà sur ce projet"]
+
+        if result:
+            database.add_dvp_to_project(user, projet, dev)
+            devs = database.get_dvps_of_project(projet)
+            return flask.render_template('developpeurs.html.jinja2', user=user, projects=projets,
+                                         projet=projet, colonnes=colonnes, taches=taches, developpeurs=devs)
+        else:
+            return flask.render_template('developpeurs.html.jinja2', user=user, projects=projets,
+                                         projet=projet, colonnes=colonnes, taches=taches, developpeurs=developpeurs, errordev=errors)
+    else :
+        return flask.render_template("developpeurs.html.jinja2", user=user, projects=projets,
+                                 projet=projet, colonnes=colonnes, taches=taches, developpeurs=developpeurs)
+
+
 @app.route('/<int:user_id>/<int:project_id>/<int:task_id>/popUp', methods=["GET", "POST"])
 def popUp(user_id, project_id, task_id):
     user = database.db.session.get(database.User, user_id)
@@ -562,9 +611,7 @@ def supprdev_de_tache(user_id,project_id,task_id, dev_id):
     dev = database.db.session.get(database.User, dev_id)
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
-    devs = database.get_dvps_of_task(task_id)
 
-    print(devs)
 
     colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
     taches = [0] * len(colonnes)
@@ -576,8 +623,6 @@ def supprdev_de_tache(user_id,project_id,task_id, dev_id):
 
     if flask.request.method == 'POST':
         database.delete_dvp_of_task(user, tache, dev)
-        devs = database.get_dvps_of_task(task_id)
-        print(devs)
         return "hello"
 
 
@@ -587,7 +632,7 @@ def supprdev_de_tache(user_id,project_id,task_id, dev_id):
 
 
 @app.route('/<int:user_id>/<int:project_id>/<int:dev_id>/supprdev', methods=["GET", "POST"])
-def supprdev_de_projet(user_id,project_id, dev_id):
+def supprdev_de_projet(user_id, project_id, dev_id):
     user = database.db.session.get(database.User, user_id)
     dev = database.db.session.get(database.User, dev_id)
     projets = database.projects_of_user(user)
@@ -602,15 +647,58 @@ def supprdev_de_projet(user_id,project_id, dev_id):
         i += 1
 
     if flask.request.method == 'POST':
-        database.db.session.commit()
-
+        database.delete_dvp_of_project(user, projet, dev)
         return "hello"
 
 
 
-    return flask.render_template('supprdev.html.jinja2', user=user, projects=projets,
+
+    return flask.render_template('supprdevp.html.jinja2', user=user, projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches, dev=dev)
 
+@app.route('/<int:user_id>/<int:project_id>/supprproj', methods=["GET", "POST"])
+def suppr_projet(user_id, project_id):
+    user = database.db.session.get(database.User, user_id)
+    projets = database.projects_of_user(user)
+    projet = database.db.session.get(database.Project, project_id)
+
+
+    colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
+    taches = [0] * len(colonnes)
+    i = 0
+    for col in colonnes:
+        taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
+        i += 1
+
+    if flask.request.method == 'POST':
+        database.delete_project(project_id, user)
+        return "hello"
+
+    return flask.render_template('supprproj.html.jinja2', user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches)
+
+
+@app.route('/<int:user_id>/<int:project_id>/<int:col_id>/suppr_col', methods=["GET", "POST"])
+def suppr_col(user_id, project_id, col_id):
+    user = database.db.session.get(database.User, user_id)
+    projets = database.projects_of_user(user)
+    projet = database.db.session.get(database.Project, project_id)
+    col = database.db.session.get(database.Column, col_id)
+
+
+    colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
+    taches = [0] * len(colonnes)
+    i = 0
+    for col in colonnes:
+        taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
+        i += 1
+
+    if flask.request.method == 'POST':
+        database.delete_column(col, projet, user)
+        return "hello"
+
+    return flask.render_template('supprcol.html.jinja2', user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches, col=col)
 
 
 if __name__ == '__main__':

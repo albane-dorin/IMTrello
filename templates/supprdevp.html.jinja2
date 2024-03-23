@@ -7,19 +7,7 @@
      <script>
         const user_id = {{ user.id }}
 
-        function suppr_de_tache() {
-            console.log('hi')
-            $.ajax({
-                url: '{{ url_for("supprdev_de_tache", user_id=user.id, project_id=projet.id, task_id=tache.id, dev_id=dev.id)}}',
-                type: 'POST',
-                success: function(response) {
-                    console.log(response)
-                    window.location.href="{{ url_for('popUp', user_id=user.id,  project_id=projet.id, task_id=tache.id) }}"
-                },
-                error: function(error) { console.log(error); }
-            });
 
-        }
 
         function suppr_de_projet(){
             $.ajax({
@@ -45,26 +33,15 @@
                 <p class="supprdevt">"{{ dev.username }}, {{ dev.mail }}"</p>
 
             <p class="supprdevt">
-            {% if t %}
-                de la tâche {{ tache.name }}
-
-            {% else %}
                 du projet {{ projet.name }}
-            {% endif %}
             </p>
         </div>
 
         <div class="button">
-             {% if t %}
-                 <a href="{{ url_for('popUp', user_id=user.id,  project_id=projet.id, task_id=tache.id) }}">
+            <a href="{{ url_for('developpeurs', user_id=user.id,  project_id=projet.id) }}">
                 <button>Annuler</button></a>
-                <button onclick="suppr_de_tache()">Supprimer</button>
+            <button onclick="suppr_de_projet()">Supprimer</button>
 
-            {% else %}
-                 <a href="{{ url_for('developpeurs', user_id=user.id,  project_id=projet.id) }}">
-                <button>Annuler</button></a>
-                <button onclick="suppr_de_projet()">Supprimer</button>
-            {% endif %}
 
         </div>
     </div>

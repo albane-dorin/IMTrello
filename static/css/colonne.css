@@ -317,6 +317,22 @@ input[type="submit"]{
     scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
 }
 
+.col_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.col_header > a{
+    width: 30%;
+}
+.suppr_col{
+    border: 0px;
+    background-color: transparent;
+    color: darkred;
+    width: 100%;
+}
 
 .c-ajout{
     background-color: rgba(231, 178, 255, .4);
@@ -629,14 +645,15 @@ form{
     color: darkred;
 }
 
-.supprdev{
+.supprdev, .dev_project{
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
     min-width: 30%;
     min-height: 30%;
-    background-color: #ddb9ff;
+    background-color: #e7b2ff;
+;
     z-index: 20;
     border-radius: 30px;
 
@@ -680,4 +697,34 @@ form{
 .supprdev > .button > button,
 .supprdev > .button > a {
     width: 40%;
+}
+
+.dev_project{
+    width: 50%;
+    max-height: 60%;
+}
+
+.list_dev{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+
+.item_dev{
+    background-color: #c385f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    margin: 5px 0px;
+    padding: 0px 15px;
+    width: 90%;
+    height: 2vw;
+}
+
+.errordevp{
+    font-size: 1.5vw;
+    color: darkred;
+    text-align: center;
+
 }

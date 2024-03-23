@@ -227,6 +227,8 @@ def new_column(name, project, user):
     else:
         return
 
+
+
 #Ajout tâche
 def new_task(user, project, name, year, month, day, description, column, status, priority, dvps):
     if is_manager(user, project):
@@ -255,6 +257,13 @@ def delete_task(task, user, project):
         for comment in comments:
             db.session.delete(comment)
         db.session.delete(task)
+        db.session.commit()
+
+def delete_column(column, project, user):
+    if is_manager(user, project):
+        for t in db.session.query(Task).filter_by(column=column.id).all():
+            delete_task(t, user, project)
+        db.session.delete(column)
         db.session.commit()
 
 

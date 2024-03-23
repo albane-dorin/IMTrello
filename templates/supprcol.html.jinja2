@@ -1,0 +1,47 @@
+{% extends "colonne_project.html.jinja2" %}
+
+{% block link%}
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+     <script>
+        const user_id = {{ user.id }}
+
+        function suppr_de_col() {
+            $.ajax({
+                url: '{{ url_for("suppr_col", user_id=user.id, project_id=projet.id, col_id=col.id)}}',
+                type: 'POST',
+                success: function(response) {
+                    window.location.href="{{ url_for('colonne_project', user_id=user.id, project_id=projet.id) }}"
+                },
+                error: function(error) { console.log(error); }
+            });
+
+        }
+
+      </script>
+
+    <title>{{ projet.name }}</title>
+  {% endblock %}
+
+{% block plus %}
+
+    <div class="supprdev">
+        <div class="text">
+            <p class="supprdevt"> Voulez allez supprimer la colonne :</p>
+                <p class="supprdevt" > "{{ col.name }}" et toutes les tâches lui appartenant </p>
+
+            <p> Êtes vous sûr.e de vouloir continuer ?</p>
+        </div>
+
+        <div class="button">
+                 <a href="{{ url_for('colonne_project', user_id=user.id,  project_id=projet.id) }}">
+                <button>Annuler</button></a>
+                <button onclick="suppr_de_col()">Supprimer</button>
+
+        </div>
+    </div>
+
+    <div id="overlayerreur"></div>
+
+{% endblock %}
