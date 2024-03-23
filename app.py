@@ -508,8 +508,9 @@ def popUp(user_id, project_id, task_id):
         'description' : "Task Description<br>feezfui<br>dfai<br>dcao<br>dyufia<br>dyiuz"*4,
         'commentaires' : ["Task Commentaire1", "Task Commentaire2", "Task Commentaire3", "Task Commentaire4"]*2
     }
-    return flask.render_template('popUpTask.html.jinja2', tache=tache, commentaires=commentaires,
-                                 developers=devs)
+    return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
+                                    commentaires=commentaires, developers=devs)
 
 
 

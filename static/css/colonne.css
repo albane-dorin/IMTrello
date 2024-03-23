@@ -458,3 +458,111 @@ input[type="submit"]{
 }
 
 
+.container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    width: 80%;
+    height: 70%;
+    background-color: #ddb9ff;
+    z-index: 20;
+    border-radius: 30px;
+    display: flex;
+
+}
+
+.containerStatusDate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0px;
+}
+
+
+.containerUD {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
+
+.containerPartieScroll {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+        overflow-y: auto;
+    height: fit-content;
+    scrollbar-width: thin;
+}
+
+.description{
+    /* flex : 1; */
+}
+
+.status {
+    color : var(--status-color);
+    font-weight : bold;
+}
+
+.section {
+    margin-top: 10px;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.commentairebox {
+    /* flex : 1;
+    overflow: auto; */
+}
+
+.commentaire {
+    border-radius: 15px; /* Rayon du border-radius pour créer la forme "squircle" */
+    background-color: #e7b2ff; /* Couleur de fond */
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2); /* Petite ombre pour les contours */
+    padding: 20px; /* Espacement interne */
+    margin: 10px;
+}
+
+.partieFixe {
+    /*top: 20px; /* Adjust the top position as needed */
+    left: 20px; /* Adjust the left position as needed */
+    z-index: 1; /* Ensure the title stays above the scrollable content */
+    width: calc(100% - 40px);
+    line-height: 150%;
+}
+
+.left {
+    flex: 3;
+    padding: 20px;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #a581c7 transparent;
+}
+
+.left h1 {
+    font-weight: bold;
+    display: block;
+}
+
+.left h1:after, .right h1:after {
+    content: '';
+    display: block;
+    border-top: 2px solid black;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.right {
+    flex: 1;
+    padding: 20px;
+    line-height: 1.5;
+    overflow-y: auto;
+    background-color: rgba(149, 0, 189, 0.5);
+    border-bottom-right-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+
+

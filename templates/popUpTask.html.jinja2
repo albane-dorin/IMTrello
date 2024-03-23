@@ -1,36 +1,32 @@
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/popUpTask.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "colonne_project.html.jinja2" %}
 
-    <title>Pop Up {{ tache.name }}</title>
+{% block link %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
 
-</head>
-<body>
+{% endblock %}
+{% block plus %}
     <div class="container">
         <div class="left">
         <div class="containerUD">
             <div class="partieFixe">
                 <h1>{{ tache.name }}</h1>
                     <div class="containerStatusDate">
-                    <div class="status">{{ tache.status }}</div>
+                    <div class="{{ tache.priority }}">{{ tache.priority }}</div>
                     <div>{{ tache.date }}</div>
                     </div>
-                    <div class="priorite">
-                        Priorité :
-                        <span class ="{{ tache.priority }}">
-                            {{ tache.priority }}
-                        </span>
-                    </div>
+                    <span class="section">
+                        Status : </span>
+                        <span> {{ tache.status }} </span>
+
             </div>
             <div class="containerPartieScroll">
             <p>
-                <div class="description">
+                <div class="description section">
                     <span class="bold">Description :<br></span> {{ tache.description }}
                 </div>
             </p>
-            <div class = commentairebox>
+            <div class ="commentairebox section">
+                <div class="bold"> Commentaires : </div>
                 {% for com in commentaires %}
                     <div class="commentaire">
                         {{ com }}
@@ -49,5 +45,5 @@
         </ul>
         </div>
     </div>
-</body>
-</html>
+<div id="overlayerreur"></div>
+{% endblock %}
