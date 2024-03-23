@@ -15,6 +15,10 @@ body, html {
     align-items: center;
 }
 
+.priorite {
+    color : var(--priorite-color);
+}
+
 .containerUD {
     display: flex;
     flex-direction: column;
@@ -60,6 +64,7 @@ body, html {
     left: 20px; /* Adjust the left position as needed */
     z-index: 1; /* Ensure the title stays above the scrollable content */
     width: calc(100% - 40px);
+    line-height: 150%;
 }
 
 .left {

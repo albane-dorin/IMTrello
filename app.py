@@ -16,12 +16,14 @@ def view_colonne():
         'developers' : ["A", "B", "C"]
 
     }
-    return render_template('vueColonne.html.jinja2', dataTask=dataTask)
+    return render_template('miniatureColonne.html.jinja2', dataTask=dataTask)
 
 @app.route('/popUpTask')
 def view_popUp():
     dataTask = {
         'taskColor' : "red",
+        'priorite': 'absolue',
+        'prioriteColor' : "red",
         'titreTache' : "Task Title",
         'status' : 'En cours',
         'endDate': "06/04/2024",

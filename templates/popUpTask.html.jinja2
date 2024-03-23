@@ -13,17 +13,21 @@
         <div class="containerUD">
             <div class="partieFixe">
                 <h1>Titre</h1>
-                <p>
                     <div class="containerStatusDate">
                     <div class="status" style="--status-color: {{dataTask.taskColor}}">{{ dataTask.status }}</div>
                     <div>{{ dataTask.endDate }}</div>
                     </div>
-                </p>
+                    <div class="priorite" >
+                        Priorité :
+                        <span class ="priorite" style ="--priorite-color: {{dataTask.prioriteColor}}">
+                            {{ dataTask.priorite }}
+                        </span>
+                    </div>
             </div>
             <div class="containerPartieScroll">
             <p>
                 <div class="description">
-                    <span class="bold">Description :</span> {{ dataTask.description }}
+                    <span class="bold">Description :<br></span> {{ dataTask.description }}
                 </div>
             </p>
             <div class = commentairebox>
