@@ -10,28 +10,43 @@
 <body>
     <div class="container">
         <div class="left">
-            <h1>Titre</h1>
-            <p>
-                <div class="container2">
-                <div class="status" style="--status-color: {{dataTask.taskColor}}">{{ dataTask.status }}</div>
-                <div>{{ dataTask.endDate }}</div>
-                </div>
-            </p>
+        <div class="containerUD">
+            <div class="partieFixe">
+                <h1>Titre</h1>
+                    <div class="containerStatusDate">
+                    <div class="status" style="--status-color: {{dataTask.taskColor}}">{{ dataTask.status }}</div>
+                    <div>{{ dataTask.endDate }}</div>
+                    </div>
+                    <div class="priorite" >
+                        Priorité :
+                        <span class ="priorite" style ="--priorite-color: {{dataTask.prioriteColor}}">
+                            {{ dataTask.priorite }}
+                        </span>
+                    </div>
+            </div>
+            <div class="containerPartieScroll">
             <p>
                 <div class="description">
-                    <span class="bold">Description :</span> {{ dataTask.description }}
+                    <span class="bold">Description :<br></span> {{ dataTask.description }}
                 </div>
             </p>
-            <p>
+            <div class = commentairebox>
                 {% for commentaire in dataTask.commentaires %}
                     <div class="commentaire">
                         {{ commentaire }}
                     </div>
                 {% endfor %}
-            </p>
             </div>
+            </div>
+        </div>
+        </div>
         <div class="right">
-            Contenu de droite
+            <span class="bold">Développeurs :</span>
+        <ul>
+            {% for developer in dataTask.developers %}
+            <li>{{developer}}</li>
+            {% endfor %}
+        </ul>
         </div>
     </div>
 </body>
