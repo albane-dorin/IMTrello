@@ -493,7 +493,7 @@ def popUp(user_id, project_id, task_id):
         i += 1
 
     tache = database.db.session.get(database.Task, task_id)
-    commentaires = database.db.session.query(database.Comment).filter_by(tache=task_id).all()
+    commentaires = database.db.session.query(database.Comment).filter_by(task=task_id).all()
     devs = database.get_dvps_of_task(task_id)
 
 
@@ -509,7 +509,7 @@ def popUp(user_id, project_id, task_id):
         'commentaires' : ["Task Commentaire1", "Task Commentaire2", "Task Commentaire3", "Task Commentaire4"]*2
     }
     return flask.render_template('popUpTask.html.jinja2', tache=tache, commentaires=commentaires,
-                                 developers = devs)
+                                 developers=devs)
 
 
 

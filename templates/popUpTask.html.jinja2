@@ -1,10 +1,10 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../static/css/popUpTask.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/popUpTask.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pop Up {{ dataTask.titreTache }}</title>
+    <title>Pop Up {{ tache.name }}</title>
 
 </head>
 <body>
@@ -14,20 +14,20 @@
             <div class="partieFixe">
                 <h1>{{ tache.name }}</h1>
                     <div class="containerStatusDate">
-                    <div class="status" style="--status-color: {{dataTask.taskColor}}">{{ tache.status }}</div>
-                    <div>{{ dataTask.endDate }}</div>
+                    <div class="status">{{ tache.status }}</div>
+                    <div>{{ tache.date }}</div>
                     </div>
-                    <div class="priorite" >
+                    <div class="priorite">
                         Priorité :
-                        <span class ={{ tache.priority }}">
-                            {{ dataTask.priorite }}
+                        <span class ="{{ tache.priority }}">
+                            {{ tache.priority }}
                         </span>
                     </div>
             </div>
             <div class="containerPartieScroll">
             <p>
                 <div class="description">
-                    <span class="bold">Description :<br></span> {{ dataTask.description }}
+                    <span class="bold">Description :<br></span> {{ tache.description }}
                 </div>
             </p>
             <div class = commentairebox>

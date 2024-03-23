@@ -120,10 +120,11 @@
                 <div class="colonne">
                     <h2>{{ col.name }}</h2>
 
-                    <div class="taches" onclick="window.location.href='{{ url_for('inscription') }}'" id="col{{ col.id }}" ondrop="drop(event, this, {{ col.id }})" ondragover="allowDrop(event)">
+                    <div class="taches"  id="col{{ col.id }}" ondrop="drop(event, this, {{ col.id }})" ondragover="allowDrop(event)">
                     {% for t in taches[loop.index0] %}
                         {%  if t.status == "Annulée" %}
-                            <div class="tache annule" id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
+                            <div class="tache annule" onclick="window.location.href='{{ url_for('popUp', user_id=user.id, project_id=projet.id, task_id=t.id) }}'"
+                                 id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
                             <div class="tacheint"><h3> {{ t.name }}</h3>
                             <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
                             <span> A faire avant le {{ t.date }}</span>
@@ -131,7 +132,8 @@
                         </div>
 
                         {% else %}
-                            <div class="tache" id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
+                            <div class="tache" onclick="window.location.href='{{ url_for('popUp', user_id=user.id, project_id=projet.id, task_id=t.id) }}'"
+                                 id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
                                 <div class="tacheint"><h3> {{ t.name }}</h3>
                                 <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
                                 <span> A faire avant le {{ t.date }}</span>
