@@ -352,6 +352,7 @@ input[type="submit"]{
     padding-left: 5px;
     padding-right: 15px;
     font-size: 1vw;
+    cursor: pointer;
 }
 .tacheint{
     display: flex;
@@ -564,5 +565,9 @@ input[type="submit"]{
     border-top-right-radius: 30px;
 }
 
+.topdevs{
+    display: flex;
+    justify-content: end;
+}
 
 

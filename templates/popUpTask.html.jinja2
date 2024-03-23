@@ -37,6 +37,11 @@
         </div>
         </div>
         <div class="right">
+            <div class="topdevs">
+                <a href="{{ url_for('colonne_project', user_id=user.id, project_id=projet.id) }}">
+                    <button class="close">X</button>
+                </a>
+            </div>
             <span class="bold">Développeurs :</span>
         <ul>
             {% for dev in developers %}
