@@ -618,3 +618,66 @@ form{
     color: darkred;
     text-align: center;
 }
+
+.devs{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+}
+.delete{
+    color: darkred;
+}
+
+.supprdev{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    min-width: 30%;
+    min-height: 30%;
+    background-color: #ddb9ff;
+    z-index: 20;
+    border-radius: 30px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    width: fit-content;
+    height: fit-content;
+}
+
+.supprdev > .text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.supprdev > .button{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+
+}
+.supprdevt{
+    margin: 5px 0px;
+}
+
+.supprdev > .button > button,
+.supprdev > .button > a > button{
+    margin: 0px 10px;
+    border: 0px;
+    border-radius: 5px;
+    font-size: 1.5vw;
+}
+
+.supprdev > .button > a > button{
+    width: 100%;
+}
+
+.supprdev > .button > button,
+.supprdev > .button > a {
+    width: 40%;
+}

@@ -54,7 +54,7 @@
                 </a>
             </div>
             <span class="bold">Développeurs :</span>
-            {% if user.role==1 or user.role==3 %}
+            {% if user.id==projet.manager %}
                 <form class="formdev" action="{{ url_for("popUp", user_id=user.id,  project_id=projet.id, task_id=tache.id) }}" method="post">
                     <label for="dev">Ajouter un developpeur :</label>
                         <input id="dev" type="email" name="dev" required>
@@ -68,7 +68,20 @@
 
             <ul>
                 {% for dev in developers %}
-                <li>{{dev.username}}</li>
+                <li>
+                    <p class="devs">
+                        {{dev.username}}
+                        {% if user.id==projet.manager %}
+                            {% if dev.id!=user.id %}
+                                <a href="{{ url_for("supprdev_de_tache", user_id=user.id,  project_id=projet.id, task_id=tache.id, dev_id=dev.id) }}">
+                                    <button class="delete close"> - </button>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                </li>
+
+
                 {% endfor %}
             </ul>
         </div>

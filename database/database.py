@@ -298,9 +298,12 @@ def add_dvp_to_task(user, task, dvp):
                 db.session.commit()
 
 def delete_dvp_of_task(user, task, dvp):
+    print("A")
     if is_manager(user, project_of(task)):
+        print('in')
         task_dvps=db.session.query(Task_Dvp).filter_by(id_task=task.id).filter_by(id_dvp=dvp.id).all()
         for t in task_dvps:
+            print('youhou')
             db.session.delete(t)
     db.session.commit()
 
@@ -330,13 +333,13 @@ def clean():
 def peupler_db():
     clean()
 
-    user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>", role=2)
+    user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>", role=1)
     user2 = User(username="lovely", password="coeur", mail="lovely@gmail", role=3)
-    db.session.add(user2)
     db.session.add(user1)
+    db.session.add(user2)
     db.session.commit()
 
-    project1 = Project(name="Project 1", description="Mon premier projet", date=datetime(2024, 3, 6), manager=user1.id)
+    project1 = Project(name="Project 1", description="Mon premier projet", date=datetime(2024, 3, 6), manager=user2.id)
     project2 = Project(name="Project 2", description="Mon deuxième projet", date=datetime(2024, 3, 6), manager=user1.id)
     db.session.add(project1)
     db.session.add(project2)

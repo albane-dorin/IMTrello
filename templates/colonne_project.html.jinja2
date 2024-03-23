@@ -107,8 +107,11 @@
 
                 <button class="dev"> Développeurs </button>
 
-                {% if user.role==1 or user.role==3 %}
-                        <button data-modal-target="#supprprojet" class="suppr"> Supprimer le projet </button>
+                {% if user.id==projet.manager %}
+                    <a>
+                        <button class="suppr"> Supprimer le projet </button>
+                    </a>
+
                 {% endif %}
             </div>
         </div>
@@ -144,7 +147,7 @@
                     {% endfor %}
                     </div>
 
-                    {% if user.role==1 or user.role==3 %}
+                    {% if user.id==projet.manager %}
                         <button data-modal-target="#formnt{{ col.id }}" class="t-ajout">
                             +
                         </button>
@@ -205,7 +208,7 @@
 
             {% endfor %}
 
-            {% if user.role==1 or user.role==3 %}
+            {% if user.id==projet.manager %}
                 <div class="c-ajout">
                     <button data-modal-target="#formnc" class="c-bajout"> + </button>
                 </div>
@@ -226,7 +229,7 @@
             {% endif %}
         </div>
 
-        {% if user.role==1 or user.role==3 %}
+        {% if user.id==projet.manager %}
 
 
 

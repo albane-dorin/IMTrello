@@ -485,6 +485,9 @@ def popUp(user_id, project_id, task_id):
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
 
+    print(projet.manager)
+    print(user.id)
+
     colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
     taches = [0] * len(colonnes)
     i = 0
@@ -546,10 +549,67 @@ def popUp(user_id, project_id, task_id):
                                              projet=projet, colonnes=colonnes, taches=taches, tache=tache,
                                              commentaires=commentaires, developers=devs, errordev=errors)
 
+
     else :
+        print(devs)
         return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
                                     commentaires=commentaires, developers=devs)
+
+@app.route('/<int:user_id>/<int:project_id>/<int:task_id>/<int:dev_id>/supprdev', methods=["GET", "POST"])
+def supprdev_de_tache(user_id,project_id,task_id, dev_id):
+    user = database.db.session.get(database.User, user_id)
+    dev = database.db.session.get(database.User, dev_id)
+    projets = database.projects_of_user(user)
+    projet = database.db.session.get(database.Project, project_id)
+    devs = database.get_dvps_of_task(task_id)
+
+    print(devs)
+
+    colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
+    taches = [0] * len(colonnes)
+    i = 0
+    for col in colonnes:
+        taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
+        i += 1
+    tache = database.db.session.get(database.Task, task_id)
+
+    if flask.request.method == 'POST':
+        database.delete_dvp_of_task(user, tache, dev)
+        devs = database.get_dvps_of_task(task_id)
+        print(devs)
+        return "hello"
+
+
+
+    return flask.render_template('supprdev.html.jinja2', user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches, tache=tache, dev=dev)
+
+
+@app.route('/<int:user_id>/<int:project_id>/<int:dev_id>/supprdev', methods=["GET", "POST"])
+def supprdev_de_projet(user_id,project_id, dev_id):
+    user = database.db.session.get(database.User, user_id)
+    dev = database.db.session.get(database.User, dev_id)
+    projets = database.projects_of_user(user)
+    projet = database.db.session.get(database.Project, project_id)
+
+
+    colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
+    taches = [0] * len(colonnes)
+    i = 0
+    for col in colonnes:
+        taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
+        i += 1
+
+    if flask.request.method == 'POST':
+        database.db.session.commit()
+
+        return "hello"
+
+
+
+    return flask.render_template('supprdev.html.jinja2', user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches, dev=dev)
 
 
 
