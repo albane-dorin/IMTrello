@@ -135,7 +135,7 @@
                     <tbody>
 
                     {% for task in tasks %}
-                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}" data-date="{{ task.date }}" data-project="{{ task.p_id }}" data-prio="{{ task.t_prio }}">
+                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}" data-date="{{ task.date }}" data-project="{{ task.p_id }}" data-prio="{{ task.t_prio }}" onclick="location.href='/{{ user.id }}/{{ task.p_id }}/{{ task.t_id }}/popUp';" style="cursor: pointer;">
                             <td>{{ task.p_name }}</td>
                             <td>{{ task.t_name }}</td>
                             <td>{{ task.status }}</td>
