@@ -84,6 +84,7 @@
   right: 0.5em;
   margin: 10px;
   display:flex;
+  z-index: 999;
 }
 
 .notif-content{

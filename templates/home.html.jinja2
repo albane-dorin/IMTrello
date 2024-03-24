@@ -181,7 +181,7 @@
                     </div>
 
                     {% for notif in notifs %}
-                        <div class="notif">
+                        <div class="notif" >
                             <div class="supprimer-notif">
                                 <form method="POST"
                                 action="{{ url_for('delete', notif_id=notif.id, user_id=user.id, last_page=1) }}">
@@ -189,9 +189,15 @@
                                     onclick="return confirm('Are you sure you want to delete this entry?')">
                             </form>
                             </div>
-                            <div class="notif-content">
-                                <p align="center"> {{ notif.content }} <p/>
-                            </div>
+                            {% if notif.link_project==None %}
+                                <div class="notif-content">
+                                    <p align="center"> {{ notif.content }} <p/>
+                                </div>
+                            {% else %}
+                                <div class="notif-content" onclick="location.href='/{{ user.id }}/{{ notif.link_project }}/colonne_project';" style="cursor: pointer;">
+                                    <p align="center"> {{ notif.content }} <p/>
+                                </div>
+                            {% endif %}
                         </div>
                     {% endfor %}
 
