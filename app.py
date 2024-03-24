@@ -595,6 +595,7 @@ def popUp(user_id, project_id, task_id):
             commentaires = []
             for c in com:
                 commentaires += [(c, database.db.session.get(database.User, c.author))]
+
             print(commentaires)
             return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
