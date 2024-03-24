@@ -155,7 +155,12 @@
                                 <div class="tacheint"><h3> {{ t.name }}
                                     {{ devs[outer_loop.index0][loop.index0][0] }}</h3>
                                 <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
-                                <span> A faire avant le {{ t.date }}</span>
+                                {% if urgents[outer_loop.index0][loop.index0]=='oui' %}
+                                    <span> A faire avant le <span class="urgent_col"> {{ t.date }} </span></span>
+                                {% else %}
+                                    <span> A faire avant le  {{ t.date }} </span>
+                                {% endif %}
+                                <span> {{ devs[outer_loop.index0][loop.index0]|length }} developpeurs assignés à cette tâches</span>
                                 <span> Etat : {{ t.status }}</span>
                             </div>
 
@@ -165,6 +170,7 @@
                                 <div class="tacheint"><h3> {{ t.name }}</h3>
                                 <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
                                 <span> A faire avant le {{ t.date }}</span>
+                                <span> {{ devs[outer_loop.index0][loop.index0]|length }} developpeurs assignés à cette tâches</span>
                                 <span> Etat : {{ t.status }}</span>
                             </div>
                                 {% endif %}

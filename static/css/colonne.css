@@ -302,6 +302,10 @@ input[type="submit"]{
     width: 100%;
     overflow: auto;
 
+    scrollbar-width: thin;
+    scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
+    scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
+
     align-items: stretch;
 }
 
@@ -530,8 +534,6 @@ input[type="submit"]{
 .section {
     margin-top: 10px;
     display: flex;
-    align-items: center;
-    width: fit-content;
 }
 
 .section > span{
@@ -693,6 +695,23 @@ form{
     margin-right: 10px;
 }
 
+.urgent{
+    background-color: rgba(255, 0, 0, 0.75);
+    border-radius: 5px;
+    padding: 0px 5px;
+}
+
+.nonurgent{
+    background-color: rgba(0, 128, 0, 0.75);
+    border-radius: 5px;
+    padding: 0px 5px;
+}
+
+.urgent_col{
+ background-color: rgba(255, 0, 0, 0.60);
+    border-radius: 5px;
+    padding: 0px 5px;}
+
 .supprdev, .dev_project{
     position: fixed;
     top: 50%;
@@ -746,6 +765,7 @@ form{
 .supprdev > .button > a {
     width: 40%;
 }
+
 
 .dev_project{
     width: 50%;

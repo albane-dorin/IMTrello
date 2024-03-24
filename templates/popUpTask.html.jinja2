@@ -4,6 +4,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
 
 
+    <title> {{ tache.name }}</title>
+
+
 {% endblock %}
 
 
@@ -44,7 +47,11 @@
                                     {% endif %}
                                 </div>
 
-                                <div>{{ tache.date }}</div>
+                                {% if urgent=='oui' %}
+                                    <div class="urgent">{{ tache.date }}</div>
+                                {% else %}
+                                    <div class="nonurgent">{{ tache.date }}</div>
+                                {% endif %}
                             </div>
                             <div class="section">
                                 <span> Statut : </span>

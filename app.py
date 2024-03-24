@@ -1,3 +1,5 @@
+import datetime
+
 import flask
 
 from flask import Flask, redirect, url_for, flash, jsonify
@@ -278,8 +280,8 @@ def home(user_id):
                                      mois=mois, apres=apres, user=user, projects=projets, notifs=notifs)
         else:
             # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-            return flask.render_template('error.html.jinja2', semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, errors=errors)
+            return flask.render_template('erreur_form_de_home.html.jinja2', semaines=semaines,
+                                         mois=mois, apres=apres, user=user, projects=projets, errors=errors)
 
 
 
@@ -333,8 +335,8 @@ def home_project(user_id, project_id):
                                      mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
         else:
             # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-            return flask.render_template('error.html.jinja2', semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, errors=errors)
+            return flask.render_template('erreur_form_de_home.html.jinja2', semaines=semaines,
+                                         mois=mois, apres=apres, user=user, projects=projets, errors=errors)
 
 
 
@@ -377,17 +379,13 @@ def colonne(user_id):
             else:
                 print('hello')
                 # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-                return flask.render_template('erreurcol.html.jinja2', user=user, projects=projets, errors=errors)
+                return flask.render_template('erreur_for_de_colonne.html.jinja2', user=user, projects=projets, errors=errors)
 
     else:
         return flask.render_template("colonne.html.jinja2",  user=user, projects=projets, notifs=notifs)
 
 @app.route('/<int:user_id>/<int:project_id>/colonne_project', methods=["GET", "POST"])
 def colonne_project(user_id, project_id):
-
-
-
-
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
@@ -400,14 +398,21 @@ def colonne_project(user_id, project_id):
         i += 1
 
     devs_taches = [0] * len(colonnes)
+    urgents = [0] * len(colonnes)
     for i in range(len(colonnes)):
         devs_tache = [0] * len(taches[i])
+        urgentcol = ['non']*len(taches[i])
         for j in range(len(taches[i])):
             devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                urgentcol[j] = 'oui'
         devs_taches[i] = devs_tache
+        urgents[i] = urgentcol
+
 
 
     if flask.request.method == 'POST':
+
 
         if flask.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             data = flask.request.get_data().decode("utf-8").split('&')
@@ -421,6 +426,7 @@ def colonne_project(user_id, project_id):
 
         else :
             form = flask.request.form
+            print(form["name"])
             if "project" in form:
                 date = form.get("date", "").split("-")
                 devs = form.get("developpeur", "").split(' ')
@@ -441,14 +447,15 @@ def colonne_project(user_id, project_id):
                                          int(date[0]), int(date[1]), int(date[2]), user, developpeur)
                     projets = database.projects_of_user(user)
                     return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, urgents=urgents)
                 else:
                     print('hello')
                     # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-                    return flask.render_template('erreurcolp.html.jinja2', user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, errors=errors)
+                    return flask.render_template('erreur_form_de_colonne_project.html.jinja2', user=user, projects=projets,
+                                                 projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, errors=errors, urgents=urgents)
 
             elif "task" in form:
+
                 date = form.get("date", "").split("-")
                 devs = form.get("developpeur", "").split(' ')
                 developpeur = []
@@ -471,14 +478,19 @@ def colonne_project(user_id, project_id):
                         i += 1
 
                     devs_taches = [0] * len(colonnes)
+                    urgents = [0] * len(colonnes)
                     for i in range(len(colonnes)):
                         devs_tache = [0] * len(taches[i])
+                        urgentcol = ['non'] * len(taches[i])
                         for j in range(len(taches[i])):
                             devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+                            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                                urgentcol[j] = 'oui'
                         devs_taches[i] = devs_tache
+                        urgents[i] = urgentcol
 
                     return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, urgents=urgents)
                 else:
                     # permet de sauvegarder les données en cas d'erreur ou de refresh de page
                     flask.session['name'] = form.get("name", "")
@@ -488,10 +500,11 @@ def colonne_project(user_id, project_id):
                     flask.session['status'] = form.get("status", "")
                     flask.session['prio'] = form.get("prio", "")
                     # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
-                    return flask.render_template('erreurcolp.html.jinja2', user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, errors=errors)
+                    return flask.render_template('erreur_form_de_colonne_project.html.jinja2', user=user, projects=projets,
+                                                 projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, errors=errors, urgents=urgents)
 
             elif "column" in form:
+
                 database.new_column(form.get("name", ""), projet, user)
                 colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
                 taches = [0] * len(colonnes)
@@ -501,24 +514,31 @@ def colonne_project(user_id, project_id):
                     i += 1
 
                 devs_taches = [0] * len(colonnes)
+                urgents = [0] * len(colonnes)
                 for i in range(len(colonnes)):
                     devs_tache = [0] * len(taches[i])
+                    urgentcol = ['non'] * len(taches[i])
                     for j in range(len(taches[i])):
                         devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+                        if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                            urgentcol[j] = 'oui'
                     devs_taches[i] = devs_tache
+                    urgents[i] = urgentcol
 
                 return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                             projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+                                             projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, urgents=urgents)
 
 
     else:
+        print(urgents)
         return flask.render_template("colonne_project.html.jinja2",  user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, urgents=urgents)
 
 
 
 @app.route('/<int:user_id>/<int:project_id>/developpeurs', methods=["GET", "POST"])
 def developpeurs(user_id, project_id):
+
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
@@ -532,11 +552,16 @@ def developpeurs(user_id, project_id):
         i += 1
 
     devs_taches = [0] * len(colonnes)
+    urgents = [0] * len(colonnes)
     for i in range(len(colonnes)):
         devs_tache = [0] * len(taches[i])
+        urgentcol = ['non'] * len(taches[i])
         for j in range(len(taches[i])):
             devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                urgentcol[j] = 'oui'
         devs_taches[i] = devs_tache
+        urgents[i] = urgentcol
 
     if flask.request.method=="POST":
         form=flask.request.form
@@ -548,29 +573,25 @@ def developpeurs(user_id, project_id):
             result = False
             errors = ["L'adresse email ne correspond à aucun utilisateur"]
 
-        elif user.role == 1:
+        elif dev.role == 1:
             result = False
             errors = ["Cette personne n'est pas développeur"]
 
-        elif user not in database.get_dvps_of_project(project_id):
-            result = False
-            errors = ["Cette personne n'est pas développeur sur le projet"]
-
-        elif user in developpeurs:
+        elif dev in developpeurs:
             result = False
             errors = ["Cette personne est déjà sur ce projet"]
 
         if result:
             database.add_dvp_to_project(user, projet, dev)
-            devs = database.get_dvps_of_project(projet)
-            return flask.render_template('developpeurs.html.jinja2', user=user, projects=projets,
-                                         projet=projet, colonnes=colonnes, taches=taches, developpeurs=devs, devs=devs_taches)
+            devs = database.get_dvps_of_project(projet.id)
+            return flask.render_template('vue_developpeurs_de_projet.html.jinja2', user=user, projects=projets,
+                                         projet=projet, colonnes=colonnes, taches=taches, developpeurs=devs, devs=devs_taches, urgents=urgents)
         else:
-            return flask.render_template('developpeurs.html.jinja2', user=user, projects=projets,
-                                         projet=projet, colonnes=colonnes, taches=taches, developpeurs=developpeurs, devs=devs_taches, errordev=errors)
+            return flask.render_template('vue_developpeurs_de_projet.html.jinja2', user=user, projects=projets,
+                                         projet=projet, colonnes=colonnes, taches=taches, developpeurs=developpeurs, devs=devs_taches, errordev=errors, urgents=urgents)
     else :
-        return flask.render_template("developpeurs.html.jinja2", user=user, projects=projets,
-                                 projet=projet, colonnes=colonnes, taches=taches, developpeurs=developpeurs, devs=devs_taches)
+        return flask.render_template("vue_developpeurs_de_projet.html.jinja2", user=user, projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches, developpeurs=developpeurs, devs=devs_taches, urgents=urgents)
 
 
 @app.route('/<int:user_id>/<int:project_id>/<int:task_id>/popUp', methods=["GET", "POST"])
@@ -589,11 +610,16 @@ def popUp(user_id, project_id, task_id):
         i += 1
 
     devs_taches = [0] * len(colonnes)
+    urgents = [0] * len(colonnes)
     for i in range(len(colonnes)):
         devs_tache = [0] * len(taches[i])
+        urgentcol = ['non'] * len(taches[i])
         for j in range(len(taches[i])):
             devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                urgentcol[j] = 'oui'
         devs_taches[i] = devs_tache
+        urgents[i] = urgentcol
 
     tache = database.db.session.get(database.Task, task_id)
     com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
@@ -601,6 +627,11 @@ def popUp(user_id, project_id, task_id):
     for c in com:
         commentaires += [(c, database.db.session.get(database.User, c.author))]
     devs = database.get_dvps_of_task(task_id)
+
+    urgent = 'non'
+    if tache.date < date.today() + timedelta(days=7):
+        urgent= 'oui'
+
 
     if flask.request.method=="POST":
         form = flask.request.form
@@ -611,10 +642,9 @@ def popUp(user_id, project_id, task_id):
             for c in com:
                 commentaires += [(c, database.db.session.get(database.User, c.author))]
 
-            print(commentaires)
             return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
-                                    commentaires=commentaires, developers=devs, devs=devs_taches)
+                                    commentaires=commentaires, developers=devs, devs=devs_taches, urgent=urgent, urgents=urgents)
 
         elif "formdev" in form:
             result = True
@@ -625,15 +655,15 @@ def popUp(user_id, project_id, task_id):
                 result = False
                 errors = ["L'adresse email ne correspond à aucun utilisateur"]
 
-            elif user.role == 1:
+            elif dev.role == 1:
                 result = False
                 errors = ["Cette personne n'est pas développeur"]
 
-            elif user not in database.get_dvps_of_project(project_id):
+            elif dev not in database.get_dvps_of_project(project_id):
                 result = False
                 errors = ["Cette personne n'est pas développeur sur le projet"]
 
-            elif user in database.get_dvps_of_task(task_id):
+            elif dev in database.get_dvps_of_task(task_id):
                 result = False
                 errors = ["Cette personne est déjà assignée à cette tâche"]
 
@@ -646,14 +676,15 @@ def popUp(user_id, project_id, task_id):
                     for j in range(len(taches[i])):
                         devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
                     devs_taches[i] = devs_tache
+                devs = database.get_dvps_of_task(task_id)
                 return flask.render_template('popUpTask.html.jinja2', user=user, projects=projets,
                                              projet=projet, colonnes=colonnes, taches=taches, tache=tache,
-                                             commentaires=commentaires, developers=devs, devs=devs_taches)
+                                             commentaires=commentaires, developers=devs, devs=devs_taches, urgent=urgent, urgents=urgents)
 
             else:
                 return flask.render_template('popUpTask.html.jinja2', user=user, projects=projets,
                                              projet=projet, colonnes=colonnes, taches=taches, tache=tache,
-                                             commentaires=commentaires, developers=devs, devs=devs_taches, errordev=errors)
+                                             commentaires=commentaires, developers=devs, devs=devs_taches, errordev=errors, urgent=urgent, urgents=urgents)
         elif "formstatus" in form:
             print(tache.status)
             ancien_status = tache.status
@@ -666,7 +697,7 @@ def popUp(user_id, project_id, task_id):
 
             return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
-                                    commentaires=commentaires, developers=devs, devs=devs_taches)
+                                    commentaires=commentaires, developers=devs, devs=devs_taches, urgent=urgent, urgents=urgents)
 
         elif "formprio" in form:
             ancien_prio = tache.priority
@@ -678,15 +709,16 @@ def popUp(user_id, project_id, task_id):
                 database.db.session.commit()
             return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
-                                    commentaires=commentaires, developers=devs, devs=devs_taches)
+                                    commentaires=commentaires, developers=devs, devs=devs_taches, urgent=urgent, urgents=urgents)
 
     else :
         return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
                                      projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
-                                    commentaires=commentaires, developers=devs, devs=devs_taches)
+                                    commentaires=commentaires, developers=devs, devs=devs_taches, urgent=urgent, urgents=urgents)
 
 @app.route('/<int:user_id>/<int:project_id>/<int:task_id>/<int:dev_id>/supprdev', methods=["GET", "POST"])
 def supprdev_de_tache(user_id,project_id,task_id, dev_id):
+
     user = database.db.session.get(database.User, user_id)
     dev = database.db.session.get(database.User, dev_id)
     projets = database.projects_of_user(user)
@@ -702,11 +734,16 @@ def supprdev_de_tache(user_id,project_id,task_id, dev_id):
     tache = database.db.session.get(database.Task, task_id)
 
     devs_taches = [0] * len(colonnes)
+    urgents = [0] * len(colonnes)
     for i in range(len(colonnes)):
         devs_tache = [0] * len(taches[i])
+        urgentcol = ['non'] * len(taches[i])
         for j in range(len(taches[i])):
             devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                urgentcol[j] = 'oui'
         devs_taches[i] = devs_tache
+        urgents[i] = urgentcol
 
 
     if flask.request.method == 'POST':
@@ -719,8 +756,8 @@ def supprdev_de_tache(user_id,project_id,task_id, dev_id):
 
 
 
-    return flask.render_template('supprdev.html.jinja2', user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, tache=tache, dev=dev, devs=devs_taches)
+    return flask.render_template('suppr_tache_et_dev.html.jinja2', user=user, projects=projets,
+                                 projet=projet, colonnes=colonnes, taches=taches, tache=tache, dev=dev, devs=devs_taches, urgents=urgents)
 
 
 @app.route('/<int:user_id>/<int:project_id>/<int:dev_id>/supprdev', methods=["GET", "POST"])
@@ -739,11 +776,16 @@ def supprdev_de_projet(user_id, project_id, dev_id):
         i += 1
 
     devs_taches = [0] * len(colonnes)
+    urgents = [0] * len(colonnes)
     for i in range(len(colonnes)):
         devs_tache = [0] * len(taches[i])
+        urgentcol = ['non'] * len(taches[i])
         for j in range(len(taches[i])):
             devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                urgentcol[j] = 'oui'
         devs_taches[i] = devs_tache
+        urgents[i] = urgentcol
 
     if flask.request.method == 'POST':
         database.delete_dvp_of_project(user, projet, dev)
@@ -752,8 +794,8 @@ def supprdev_de_projet(user_id, project_id, dev_id):
 
 
 
-    return flask.render_template('supprdevp.html.jinja2', user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, dev=dev, devs=devs_taches)
+    return flask.render_template('suppr_dev_de_projet.html.jinja2', user=user, projects=projets,
+                                 projet=projet, colonnes=colonnes, taches=taches, dev=dev, devs=devs_taches, urgents=urgents)
 
 @app.route('/<int:user_id>/<int:project_id>/supprproj', methods=["GET", "POST"])
 def suppr_projet(user_id, project_id):
@@ -770,18 +812,23 @@ def suppr_projet(user_id, project_id):
         i += 1
 
     devs_taches = [0] * len(colonnes)
+    urgents = [0] * len(colonnes)
     for i in range(len(colonnes)):
         devs_tache = [0] * len(taches[i])
+        urgentcol = ['non'] * len(taches[i])
         for j in range(len(taches[i])):
             devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                urgentcol[j] = 'oui'
         devs_taches[i] = devs_tache
+        urgents[i] = urgentcol
 
     if flask.request.method == 'POST':
         database.delete_project(project_id, user)
         return "hello"
 
-    return flask.render_template('supprproj.html.jinja2', user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+    return flask.render_template('suppr_projet.html.jinja2', user=user, projects=projets,
+                                 projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, urgents=urgents)
 
 
 @app.route('/<int:user_id>/<int:project_id>/<int:col_id>/suppr_col', methods=["GET", "POST"])
@@ -799,18 +846,23 @@ def suppr_col(user_id, project_id, col_id):
         taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
         i += 1
     devs_taches = [0] * len(colonnes)
+    urgents = [0] * len(colonnes)
     for i in range(len(colonnes)):
         devs_tache = [0] * len(taches[i])
+        urgentcol = ['non'] * len(taches[i])
         for j in range(len(taches[i])):
             devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                urgentcol[j] = 'oui'
         devs_taches[i] = devs_tache
+        urgents[i] = urgentcol
 
     if flask.request.method == 'POST':
         database.delete_column(col, projet, user)
         return "hello"
 
-    return flask.render_template('supprcol.html.jinja2', user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, col=col, devs=devs_taches)
+    return flask.render_template('suppr_colonne.html.jinja2', user=user, projects=projets,
+                                 projet=projet, colonnes=colonnes, taches=taches, col=col, devs=devs_taches, urgents=urgents)
 
 
 if __name__ == '__main__':
