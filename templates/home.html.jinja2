@@ -84,6 +84,15 @@
 
         {%  block content %}
 
+        {% if projects|length == 0 %}
+
+            <div class="content">
+        <div class="vide">
+            <p> Vous n'avez aucun projet</p>
+        </div>
+    </div>
+
+        {% else %}
         <div class="message">
             <div class="semaine">
                 <p class="titre"> Pour cette semaine </p>
@@ -105,7 +114,6 @@
                 {% endfor %}
 
             </div>
-
             <div class="mois">
                 <p class="titre"> Pour ce mois </p>
 
@@ -148,8 +156,11 @@
 
             </div>
 
+
         </div>
-         {%  endblock %}
+
+        {% endif %}
+        {%  endblock %}
 
     {% block plus %}
     {% endblock %}

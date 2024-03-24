@@ -288,7 +288,6 @@ def home(user_id):
 
 @app.route('/<int:user_id>/<int:project_id>/home_project', methods=["GET", "POST"])
 def home_project(user_id, project_id):
-    database.peupler_db()
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
@@ -326,6 +325,7 @@ def home_project(user_id, project_id):
 
 
     else :
+        print(projets)
         return flask.render_template("home_project.html.jinja2", semaines=semaines,
                                      mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
 
