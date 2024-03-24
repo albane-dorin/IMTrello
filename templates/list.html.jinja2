@@ -1,41 +1,31 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends "home.html.jinja2"%}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votre Application Trello</title>
-    <link rel="stylesheet" href="/static/css/list.css">
-    <link rel="icon" href="data:;base64,=">
 
+{% block link%}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="{{ url_for("static", filename="js/list.js") }}"></script>
+    <link rel="stylesheet" href="/static/css/list.css">
 
+    <link rel="icon" href="data:;base64,=">
+    <script>
+              const user_id = {{ user.id }}
+    </script>
 
-</head>
-<body>
+        <title>Vos tâches</title>
+{% endblock %}
 
-    <div class="container">
-
-
-        <div class="top">
-            <div class="profil">
-                <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
-                <div class="nom">
-                    <p class="username"> {{ user.username }} </p>
-                    <a href="/" class="deco">Déconnexion</a>
-                </div>
-            </div>
-            <div class="haut">
-                <div class="vues">
-                    <button class="vue">Vue par échéances</button>
-                    <button class="vue">Vue par projets</button>
-                    <button disabled class="vue">Vue par tâches</button>
-                </div>
-                <div class="plus"><button class="vue"> + </button></div>
-            </div>
+{% block onglet %}
+    <div class="haut">
+        <div class="vues">
+        <a class="lienv" href="{{ url_for("home", user_id=user.id) }}"><button class="vue">Vue par échéances</button> </a>
+            <a class="lienv" href="{{ url_for("colonne", user_id=user.id) }}"> <button class="vue">Vue par projets</button> </a>
+            <button disabled class="vue">Vue par tâches</button>
         </div>
 
+    </div>
+{% endblock %}
+
+{% block inside %}
 
         <div class="content">
             <div class="left">
@@ -160,7 +150,4 @@
                 </table>
             </div>
         </div>
-    </div>
-
-</body>
-</html>
+{% endblock %}
