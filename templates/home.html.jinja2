@@ -28,7 +28,7 @@
             <div class="vues">
                 <button disabled class="vue">Vue par échéances</button>
                 <a class="lienv" href="{{ url_for("colonne", user_id=user.id) }}"> <button class="vue">Vue par projets</button> </a>
-                <button class="vue">Vue par tâches</button>
+                <a class="lienv" href="{{ url_for("list", user_id=user.id) }}"> <button class="vue">Vue par tâches</button> </a>
             </div>
 
         </div>
