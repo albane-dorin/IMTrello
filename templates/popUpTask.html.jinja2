@@ -10,7 +10,16 @@
             <div class="lefttop">
                 <div class="containerUD">
                     <div class="partieFixe">
-                        <h1>{{ tache.name }}</h1>
+                        <div class="tache_header">
+                            <h1>{{ tache.name }}</h1>
+                            {% if user.id==projet.manager %}
+                                <a href="{{ url_for("supprdev_de_tache", user_id=user.id,  project_id=projet.id, task_id=tache.id, dev_id=user.id) }}">
+                                    <button class="suppr_col"> Supprimer la tache </button>
+                                </a>
+
+
+                            {% endif %}
+                        </div>
                             <div class="containerStatusDate">
                             <div class="{{ tache.priority }}">{{ tache.priority }}</div>
                             <div>{{ tache.date }}</div>
@@ -76,6 +85,9 @@
                                 <a href="{{ url_for("supprdev_de_tache", user_id=user.id,  project_id=projet.id, task_id=tache.id, dev_id=dev.id) }}">
                                     <button class="delete close"> - </button>
                                 </a>
+
+                            {% else %}
+                                (Moi)
                             {% endif %}
                         {% endif %}
                     </p>

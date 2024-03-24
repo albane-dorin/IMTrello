@@ -8,12 +8,10 @@
         const user_id = {{ user.id }}
 
         function suppr_de_tache() {
-            console.log('hi')
             $.ajax({
                 url: '{{ url_for("supprdev_de_tache", user_id=user.id, project_id=projet.id, task_id=tache.id, dev_id=dev.id)}}',
                 type: 'POST',
                 success: function(response) {
-                    console.log(response)
                     window.location.href="{{ url_for('popUp', user_id=user.id,  project_id=projet.id, task_id=tache.id) }}"
                 },
                 error: function(error) { console.log(error); }
@@ -21,12 +19,12 @@
 
         }
 
-        function suppr_de_projet(){
+        function suppr_tache(){
             $.ajax({
-                url: '{{ url_for("supprdev_de_projet", user_id=user.id, project_id=projet.id, dev_id=dev.id)}}',
+                url: '{{ url_for("supprdev_de_tache", user_id=user.id, project_id=projet.id, task_id=tache.id, dev_id=user.id)}}',
                 type: 'POST',
                 success: function(response) {
-                    window.location.href="{{ url_for('developpeurs', user_id=user.id,  project_id=projet.id) }}"
+                    window.location.href="{{ url_for('colonne_project', user_id=user.id,  project_id=projet.id) }}"
                 },
                 error: function(error) { console.log(error); }
             });
@@ -41,29 +39,37 @@
 
     <div class="supprdev">
         <div class="text">
+            {% if user.id!=dev.id %}
             <p class="supprdevt"> Voulez vous supprimer l'utilisateur :</p>
+
+
                 <p class="supprdevt">"{{ dev.username }}, {{ dev.mail }}"</p>
 
             <p class="supprdevt">
-            {% if t %}
                 de la tâche {{ tache.name }}
-
-            {% else %}
-                du projet {{ projet.name }}
-            {% endif %}
             </p>
+            {% else %}
+                <p class="supprdevt"> Voulez vous supprimer la tache :</p>
+
+
+                <p class="supprdevt">"{{ tache.name }}"</p>
+
+                <p class="supprdevt">
+                    du projet {{ projet.name }}
+                </p>
+            {% endif %}
         </div>
 
         <div class="button">
-             {% if t %}
+             {% if user.id!=dev.id %}
                  <a href="{{ url_for('popUp', user_id=user.id,  project_id=projet.id, task_id=tache.id) }}">
                 <button>Annuler</button></a>
                 <button onclick="suppr_de_tache()">Supprimer</button>
 
             {% else %}
-                 <a href="{{ url_for('developpeurs', user_id=user.id,  project_id=projet.id) }}">
+                 <a href="{{ url_for('popUp', user_id=user.id,  project_id=projet.id, task_id=tache.id) }}">
                 <button>Annuler</button></a>
-                <button onclick="suppr_de_projet()">Supprimer</button>
+                <button onclick="suppr_tache()">Supprimer</button>
             {% endif %}
 
         </div>

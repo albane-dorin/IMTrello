@@ -122,6 +122,7 @@
         <div class="cols">
 
             {% for col in colonnes %}
+                {% set outer_loop = loop %}
                 <div class="colonne">
                     <div class="col_header">
                     <h2>{{ col.name }}</h2>
@@ -135,7 +136,7 @@
                     </div>
 
                     <div class="taches"  id="col{{ col.id }}" ondrop="drop(event, this, {{ col.id }})" ondragover="allowDrop(event)">
-                    {% for t in taches[loop.index0] %}
+                    {% for t in taches[outer_loop.index0] %}
                         {%  if t.status == "Annulée" %}
                             <div class="tache annule" onclick="window.location.href='{{ url_for('popUp', user_id=user.id, project_id=projet.id, task_id=t.id) }}'"
                                  id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
@@ -146,13 +147,26 @@
                         </div>
 
                         {% else %}
-                            <div class="tache" onclick="window.location.href='{{ url_for('popUp', user_id=user.id, project_id=projet.id, task_id=t.id) }}'"
+
+                            {% if user in devs[outer_loop.index0][loop.index0] %}
+                            <div   class=" tache tachededev" onclick="window.location.href='{{ url_for('popUp', user_id=user.id, project_id=projet.id, task_id=t.id) }}'"
+                                 id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
+                                <div class="tacheint"><h3> {{ t.name }}
+                                    {{ devs[outer_loop.index0][loop.index0][0] }}</h3>
+                                <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
+                                <span> A faire avant le {{ t.date }}</span>
+                                <span> Etat : {{ t.status }}</span>
+                            </div>
+
+                            {% else %}
+                                 <div   class=" tache" onclick="window.location.href='{{ url_for('popUp', user_id=user.id, project_id=projet.id, task_id=t.id) }}'"
                                  id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
                                 <div class="tacheint"><h3> {{ t.name }}</h3>
                                 <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
                                 <span> A faire avant le {{ t.date }}</span>
                                 <span> Etat : {{ t.status }}</span>
                             </div>
+                                {% endif %}
                         {% endif %}
 
                     {% endfor %}
@@ -177,7 +191,7 @@
                                     <input type="date" id="date" name="date" value="" required>
                                 </label>
 
-                                <div class="">
+                                <div class="prioStatus">
                                     <label for="prio">Priorité :</label>
                                     <select name="prio" id="prio" required>
                                         <option value="">--Please choose an option--</option>

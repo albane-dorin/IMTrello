@@ -12,12 +12,14 @@
         <div class="list_dev">
             {% for dev in developpeurs %}
                 <p class="item_dev">
-                    {{dev.username}}, {{ user.mail }}
+                    {{dev.username}},  {{ user.mail }}
                     {% if user.id==projet.manager %}
                         {% if dev.id!=user.id %}
                             <a href="{{ url_for("supprdev_de_projet", user_id=user.id,  project_id=projet.id, dev_id=dev.id) }}">
                                 <button class="delete close"> - </button>
                             </a>
+                        {% else %}
+                            (Moi)
                         {% endif %}
                     {% endif %}
                 </p>

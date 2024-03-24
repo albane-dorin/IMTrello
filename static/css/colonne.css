@@ -370,6 +370,11 @@ input[type="submit"]{
     font-size: 1vw;
     cursor: pointer;
 }
+
+.tachededev{
+    border: 3px solid #b21ea8;
+}
+
 .tacheint{
     display: flex;
     justify-content: space-between;
@@ -393,6 +398,16 @@ input[type="submit"]{
     border-style: solid;
     border-color: rgba(67, 9, 96, 0.65);
 
+}
+
+.prioStatus{
+    display: flex;
+    align-items: center;
+    margin-top: 1.5%;
+}
+
+.prioStatus > label{
+    margin: 0px;
 }
 
 .Facultative{
@@ -511,9 +526,6 @@ input[type="submit"]{
 }
 
 
-.status {
-    font-weight : bold;
-}
 
 .section {
     margin-top: 10px;
@@ -540,7 +552,7 @@ input[type="submit"]{
 }
 
 .commentaire > .author{
-    font-size: .7vw;
+    font-size: .9vw;
     text-align: end;
 }
 
@@ -571,7 +583,6 @@ input[type="submit"]{
 .left h1:after, .right h1:after {
     content: '';
     display: block;
-    border-top: 2px solid black;
     width: 100%;
     margin-top: 5px;
 }
@@ -617,6 +628,12 @@ form{
 
     scrollbar-width: thin;
     scrollbar-color: #a581c7 transparent;
+}
+
+.tache_header{
+    display: flex;
+     border-bottom: 2px solid black;
+    justify-content: space-between;
 }
 
 .formdev{
