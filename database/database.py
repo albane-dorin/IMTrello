@@ -449,7 +449,7 @@ def peupler_db():
     #Notifs
     n1 = Notif(user=2, content="J'ai une notif")
     n2 = Notif(user=2, content="Vous avez rejoint le projet 'Hello'", link_project=1)
-    n3 = Notif(user=2, content="L'échéance de la tâche HelloWorld arrive bientôt", link_task=2)
+    n3 = Notif(user=2, content="L'échéance de la tâche HelloWorld arrive bientôt", link_task=2, link_project=1)
     db.session.add(n1)
     db.session.add(n2)
     db.session.add(n3)

@@ -189,13 +189,19 @@
                                     onclick="return confirm('Are you sure you want to delete this entry?')">
                             </form>
                             </div>
-                            {% if notif.link_project==None %}
-                                <div class="notif-content">
-                                    <p align="center"> {{ notif.content }} <p/>
-                                </div>
+                            {% if notif.link_task==None %}
+                                {% if notif.link_project==None %}
+                                    <div class="notif-content">
+                                        <p align="center"> {{ notif.content }} <p/>
+                                    </div>
+                                {% else %}
+                                    <div class="notif-content" onclick="location.href='/{{ user.id }}/{{ notif.link_project }}/colonne_project';" style="cursor: pointer;">
+                                        <p align="center"> {{ notif.content }}<p/>
+                                    </div>
+                                {% endif %}
                             {% else %}
-                                <div class="notif-content" onclick="location.href='/{{ user.id }}/{{ notif.link_project }}/colonne_project';" style="cursor: pointer;">
-                                    <p align="center"> {{ notif.content }} <p/>
+                                <div class="notif-content" onclick="location.href='/{{ user.id }}/{{ notif.link_project }}/{{ notif.link_task }}/popUp';" style="cursor: pointer;">
+                                    <p align="center"> {{ notif.content }}<p/>
                                 </div>
                             {% endif %}
                         </div>
