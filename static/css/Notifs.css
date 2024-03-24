@@ -1,0 +1,101 @@
+#lateral-panel {
+  z-index: 9999;                  /* pour être au dessus des autres éléments */
+  position: fixed;                /* ne suit pas le scroll de la page et sert de réfèrent */
+  top: 0;                         /* position en haut */
+  right: 0;                        /* à gauche */
+  width: 30em;                    /* valeur de largeur pour tout le contenu */
+  min-height: 100vh;              /* occupe toute la hauteur du viewport */
+  transform: translateX(100%);   /* on déplace à gauche pour ne pas interférer avec le document */
+}
+
+#lateral-panel-input {
+  position: absolute;           /* pour sortir l'élément du flux */
+  left: -999em;                 /* position hors de la fenêtre */
+}
+
+#lateral-panel-bloc {
+  /*-- positions et dimensions --*/
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  /*-- visuel --*/
+  border-right: 1px solid #CCC;
+  background: #FFF;
+  transition: transform .5s;    /* pour animation du panneau */
+}
+
+#lateral-panel-label {
+  /*-- positions et dimensions --*/
+  z-index: 1;                   /* on le met au dessus */
+  position: absolute;           /* pour sortir l'élément du flux, il va bouger */
+  top: 1em;                    /* on décolle légèrement du haut */
+  right: 100%;                   /* alignement sur le bord gauche du parent */
+  width: 3em;                   /* dimensions respectables */
+  height: 3.5em;
+  /*-- visuel --*/
+  border:solid #ddb9ff;
+  border-width: 2px 0px 2px 2px;
+  border-radius: .5em .0em .0em .5em;
+  font-size: inherit;
+  background-color: #0d23b4;
+  transition: all .5s;          /* pour animation éventuelle */
+  cursor: pointer;
+}
+
+#lateral-panel-content {
+  padding: .5em;                /* on décolle le contenu du bord */
+  overflow: auto;               /* rien ne doit déborder */
+  max-height: 100%;             /* pas plus haut que son parent */
+  box-sizing: border-box;       /* modèle de boîte, plus simple à gérer */
+
+  /*contenu*/
+  height: 100%;
+  background: #0d23b4;
+  display: flex;
+  flex-direction: column; /* Afficher les cartes verticalement */
+}
+
+.titre-notif{
+  margin-top: 15px;
+  margin-bottom: 30px;
+  font-size: 2.5vw;
+  font-weight: bold;
+  color: #ddb9ff;
+}
+
+.notif{
+  position: relative;
+  border-radius: .5em .5em .5em .5em;
+  padding: 15px;
+  margin: 5px;
+
+  background: #ddb9ff;
+
+  font-size: 1.4vw;
+}
+
+.supprimer-notif{
+  position: absolute;
+  top:0.5em;
+  right: 0.5em;
+  margin: 10px;
+  display:flex;
+}
+
+.notif-content{
+  margin-right: 30px;
+  padding: 15px;
+}
+
+
+#lateral-panel-input:checked ~ #lateral-panel-bloc {
+  transform: translateX(-100%);  /* translation vers la gauche de 100% */
+}
+
+.bell{
+  vertical-align: middle;
+}

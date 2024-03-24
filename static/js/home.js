@@ -2,8 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const openModalButtons = document.querySelectorAll('[data-modal-target]')
     const closeModalButtons = document.querySelectorAll('[date-close-button]')
     const overlay = document.getElementById('overlay')
-
-
+    const boutonsSupprimerNotif = document.querySelectorAll('.supprimer-notif');
 
 
 
@@ -24,6 +23,15 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     })
 
+    boutonsSupprimerNotif.forEach(bouton => {
+            bouton.addEventListener('click', function() {
+                // Obtenez l'ID de la notification à partir de l'ID du bouton
+                const idNotif = bouton.id.split('_')[1];
+                // Appelez la fonction de suppression avec l'élément bouton et l'ID de la notification
+                supprimerNotif(bouton, idNotif);
+            });
+    });
+
 
 
 
@@ -42,5 +50,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     }
 
+    function supprimerNotif(element, notif) {
+        var NotifASupprimer = element.parentElement;
+        NotifASupprimer.remove();
+        //database.db.session.delete(notif)
+        //database.db.session.commit()
+    }
 
 });
