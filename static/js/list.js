@@ -194,7 +194,7 @@ function filterPrio(){
 }
 
 function printAll() {
-    var checkBox = document.getElementById("blocked");
+    var checkBox = document.getElementById("all");
     if (checkBox.checked===true) {
         $("#taches tbody tr").show();
     }
