@@ -219,7 +219,9 @@ def inscription():
         return redirect(url_for('home', user_id=user.id))  # Change to true url afterwards
 
 
+########################## VUE LISTE ########################
 
+#route pour la liste des tâches
 @app.route('/id/<int:user_id>/list')
 def list(user_id):
     with app.app_context():
@@ -231,6 +233,23 @@ def list(user_id):
         else:
             # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
             return "Utilisateur non trouvé", 404  # Retourne une réponse 404 (Not Found)
+
+#routr pour la liste des tâches avec un popup tâche ouvert
+@app.route('/id/<int:user_id>/<int:task_id>/Taskdetail')
+def taskdetail(user_id,task_id):
+    with app.app_context():
+        user = database.db.session.get(database.User, user_id)
+        if user is not None:
+            projects = database.projects_of_user(user)
+            tasks = database.get_projects_tasks(user_id)
+            tache= database.db.session.get(database.Task, task_id)
+            projet=database.project_of(tache)
+            commentaires=database.db.session.query(database.Comment).filter_by(task=tache.id).all()
+            return flask.render_template("ListPopUp.html.jinja2", tasks=tasks, projects=projects, user=user, tache=tache, projet=projet, commentaires=commentaires)
+        else:
+            # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
+            return "Utilisateur non trouvé", 404
+
 
 
 
