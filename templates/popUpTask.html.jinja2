@@ -1,9 +1,12 @@
 {% extends "colonne_project.html.jinja2" %}
 
 {% block link %}
-            <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
+
 
 {% endblock %}
+
+
 {% block plus %}
     <div class="container">
         <div class="left">
@@ -21,12 +24,49 @@
                             {% endif %}
                         </div>
                             <div class="containerStatusDate">
-                            <div class="{{ tache.priority }}">{{ tache.priority }} </div>
-                            <div>{{ tache.date }}</div>
+                                <div class="section">
+                                    <span id="showprio"><span class="{{ tache.priority }}" >{{ tache.priority }} </span>
+                                    {% if user.id==projet.manager  %}
+                                        <button onclick="document.getElementById('showprio').style.display='none';
+                                                        document.getElementById('formprio').style.display='flex';
+                                                        document.getElementById('select_prio').value= '{{ tache.priority }}'">
+                                            Modifier</button> </span>
+                                        <form class="change" id="formprio" action="{{ url_for("popUp", user_id=user.id,  project_id=projet.id, task_id=tache.id) }}" method="post">
+                                            <select name="prio" id="select_prio" required>
+                                                <option value="Facultative"> Facultative</option>
+                                                <option value="Faible"> Faible</option>
+                                                <option value="Moyenne"> Moyenne</option>
+                                                <option value="Forte"> Forte</option>
+                                                <option value="Importante"> Importante</option>
+                                            </select>
+                                            <input type="submit" value="Modifier" name="formprio">
+                                        </form>
+                                    {% endif %}
+                                </div>
+
+                                <div>{{ tache.date }}</div>
                             </div>
-                            <span class="section">
-                                Status : </span>
-                                <span> {{ tache.status }} </span>
+                            <div class="section">
+                                <span> Statut : </span>
+                                <span class="default" id="show"><span> {{ tache.status }} </span>
+                                {% if user in developers or user.id==projet.manager  %}
+                                    <button onclick="document.getElementById('show').style.display='none';
+                                                    document.getElementById('formstatut').style.display='flex';
+                                                    document.getElementById('select_status').value= '{{ tache.status }}'">
+                                        Modifier</button> </span>
+                                    <form class="change" id="formstatut" action="{{ url_for("popUp", user_id=user.id,  project_id=projet.id, task_id=tache.id) }}" method="post">
+                                        <select name="status" id="select_status" required>
+                                            <option value="En attente" > En attente</option>
+                                            <option value="En cours" > En cours</option>
+                                            <option value="Completée" > Completée</option>
+                                            <option value="En pause"> En pause</option>
+                                            <option value="Annulée"> Annulée</option>
+                                        </select>
+                                        <input type="submit" value="Modifier" name="formstatus">
+                                    </form>
+                                {% endif %}
+
+                            </div>
 
                     </div>
                     <div class="containerPartieScroll">

@@ -579,8 +579,7 @@ def popUp(user_id, project_id, task_id):
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
 
-    print(projet.manager)
-    print(user.id)
+    print('statut')
 
     colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
     taches = [0] * len(colonnes)
@@ -655,7 +654,31 @@ def popUp(user_id, project_id, task_id):
                 return flask.render_template('popUpTask.html.jinja2', user=user, projects=projets,
                                              projet=projet, colonnes=colonnes, taches=taches, tache=tache,
                                              commentaires=commentaires, developers=devs, devs=devs_taches, errordev=errors)
+        elif "formstatus" in form:
+            print(tache.status)
+            ancien_status = tache.status
+            tache.status = form["status"]
+            for dev in devs :
+                database.db.session.add(database.Notif(user=dev.id, link_task=tache.id, link_project=projet.id,
+                              content="La tâche " + tache.name + " du projet" + projet.name + " est passé du status "
+                            + ancien_status + " au status " + tache.status))
+                database.db.session.commit()
 
+            return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
+                                    commentaires=commentaires, developers=devs, devs=devs_taches)
+
+        elif "formprio" in form:
+            ancien_prio = tache.priority
+            tache.priority = form["prio"]
+            for dev in devs :
+                database.db.session.add(database.Notif(user=dev.id, link_task=tache.id, link_project=projet.id,
+                          content="La tâche " + tache.name + " du projet" + projet.name + " est passé de la priorité "
+                        + ancien_prio + " à la priorité " + tache.priority))
+                database.db.session.commit()
+            return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
+                                     projet=projet, colonnes=colonnes, taches=taches,  tache=tache,
+                                    commentaires=commentaires, developers=devs, devs=devs_taches)
 
     else :
         return flask.render_template('popUpTask.html.jinja2', user=user,  projects=projets,
