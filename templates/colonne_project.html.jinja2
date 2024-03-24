@@ -53,9 +53,9 @@
     {% for p in projects %}
         {% if projet.id == p.id  %}
 
-            <a class="lienp" href="{{ url_for("colonne", user_id=user.id)}}">
+            <div class="lienp" onclick="window.location.href='{{ url_for("colonne", user_id=user.id)}}'">
                 <button class="projet" disabled>{{ p.name }}</button>
-            </a>
+            </div>
         {% else %}
                 <a class="lienp" href="{{ url_for("colonne_project", user_id=user.id, project_id=p.id)}}">
                     <button class="projet" >{{ p.name }}</button>

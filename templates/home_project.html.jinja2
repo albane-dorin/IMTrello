@@ -13,7 +13,12 @@
         {% endblock %}
 
 {% block projects %}
+    <a class="lienp" href="{{ url_for("home", user_id=user.id)}}">
+            <button class="projet" style="font-size: 1vw;"> Voir tous vos projets </button>
+    </a>
     {% for projet in projects %}
+
+
         {% if projet.id == project_id  %}
 
             <div class="lienp" onclick="window.location.href='{{ url_for("home", user_id=user.id)}}'">

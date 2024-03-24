@@ -40,6 +40,8 @@
     <div class="in">
         <div class="projets">
 
+        <div class="titreprojet"> Vos projets :</div>
+
         {% block projects %}
             {% for projet in projects %}
                 <a class="lienp" href="{{ url_for("home_project", user_id=user.id, project_id=projet.id)}}">
