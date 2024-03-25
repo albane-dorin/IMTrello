@@ -276,15 +276,47 @@ input[type="submit"]{
     align-items: center;
 }
 
+.projet_header{
+    display: flex;
+    align-items: end;
+}
+
 .titre{
     color: #ddb9ff;
+    margin-right: 10px;
 
+}
+
+.description{
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.description.show{
+    margin-left: 8%;
+    width: 60%;
+    background-color: #e7b2ff;
+    border-radius: 30px;
+    position: fixed;
+    top: 220px;
+    left: 15%;
+    padding: 15px;
+    /*transform: translate(-50%, 0%) scale(1);*/
+    z-index: 1;
 }
 
 .boutons{
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
+
+.boutons > a{
+    display: flex;
+    justify-content: end;
+    text-decoration: none;
+}
+
 
 .dev{
     background-color: rgba(221, 185, 255, 0.3);

@@ -9,6 +9,24 @@
      <script>
         const user_id = {{ user.id }}
 
+        function description(){
+            var description = document.getElementById("descrip");
+            if(description.classList.length==1){
+                description.classList.add('show');
+                description.innerHTML = "{{ projet.description}}";
+
+                description.insertBefore(document.createElement("span"), description.firstChild);
+                console.log(description.children.item(0))
+                description.children.item(0).innerHTML = "Description : ";
+                description.children.item(0).style.fontWeight = "bold";
+
+            }
+            else{
+                description.classList.remove('show')
+                description.innerHTML = "{{ projet.description[:60] }}..."
+            }
+        }
+
         function allowDrop(ev) {
           ev.preventDefault();
         }
@@ -103,8 +121,14 @@
 
     <div class="content">
         <div class="contentTop">
-            <h1 class="titre"> {{ projet.name }}</h1>
+            <div class="projet_header">
+                <h1 class="titre"> {{ projet.name }}</h1>
 
+                <div id="descrip" class="description"
+                     onclick="description()">
+                    {{ projet.description[:60] }}...
+                </div>
+            </div>
             <div class="boutons">
 
                 <a href="{{ url_for("developpeurs", user_id=user.id,  project_id=projet.id) }}">
