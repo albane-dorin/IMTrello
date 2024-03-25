@@ -207,6 +207,8 @@ def delete_project(project_id, user):
         #Développer
         dvp_ps = db.session.query(Project_Dvp).filter_by(id_project=project.id)
         for dvp_p in dvp_ps :
+            notif = Notif(user=dvp_p.id_dvp, content="Le projet" + project.name + "a été supprimé.")
+            db.session.add(notif)
             db.session.delete(dvp_p)
         #Tâches
         task_ps=db.session.query(Project_Task).filter_by(id_project=project.id)
@@ -267,6 +269,8 @@ def delete_task(task, user, project):
     if is_manager(user, project):
         t_dvps=db.session.query(Task_Dvp).filter_by(id_task=task.id).all()
         for t_dvp in t_dvps:
+            notif = Notif(user=t_dvp.id_dvp, content="La tâche " + task.name + "a été supprimée.")
+            db.session.add(notif)
             db.session.delete(t_dvp)
         t_ps = db.session.query(Project_Task).filter_by(id_task=task.id).all()
         for t_p in t_ps:
@@ -288,6 +292,10 @@ def delete_column(column, project, user):
 #Ajout comment
 def new_comment(author, task, content):
     comment = Comment(author=author.id, content=content, task=task.id)
+    for dvp in get_dvps_of_task(task.id):
+        if dvp!=author:
+            notif = Notif(user=dvp.id, content=author.username+' a posté un commentaire sur '+ task.name +".", link_task=task.id, link_project=id_project_of(task))
+            db.session.add(notif)
     db.session.add(comment)
     db.session.commit()
 
@@ -449,7 +457,7 @@ def peupler_db():
     #Notifs
     n1 = Notif(user=2, content="J'ai une notif")
     n2 = Notif(user=2, content="Vous avez rejoint le projet 'Hello'", link_project=1)
-    n3 = Notif(user=2, content="L'échéance de la tâche HelloWorld arrive bientôt", link_task=2)
+    n3 = Notif(user=2, content="L'échéance de la tâche HelloWorld arrive bientôt", link_task=2, link_project=1)
     db.session.add(n1)
     db.session.add(n2)
     db.session.add(n3)

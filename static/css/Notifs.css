@@ -70,25 +70,38 @@
 .notif{
   position: relative;
   border-radius: .5em .5em .5em .5em;
-  padding: 15px;
+  padding: 5px;
   margin: 5px;
 
   background: #ddb9ff;
 
   font-size: 1.4vw;
+  display: flex;
+  flex-direction: column;
 }
 
-.supprimer-notif{
-  position: absolute;
+
+.form_suppr{
+  display: flex;
+  flex-direction: column;
   top:0.5em;
   right: 0.5em;
-  margin: 10px;
-  display:flex;
+  height: fit-content;
+  width: fit-content;
+  padding: 0;
+  margin: 0;
+  align-self: end;
+  font-size: 10px;
+}
+
+.form_suppr > input {
+  font-size: 10px;
 }
 
 .notif-content{
   margin-right: 30px;
-  padding: 15px;
+  align-self: center;
+  padding-bottom: 10px;
 }
 
 

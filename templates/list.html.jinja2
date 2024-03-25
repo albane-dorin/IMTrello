@@ -4,6 +4,7 @@
 {% block link%}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="{{ url_for("static", filename="js/list.js") }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Notifs.css') }}">
     <link rel="stylesheet" href="/static/css/list.css">
 
     <link rel="icon" href="data:;base64,=">
@@ -135,7 +136,7 @@
                     <tbody>
 
                     {% for task in tasks %}
-                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}" data-date="{{ task.date }}" data-project="{{ task.p_id }}" data-prio="{{ task.t_prio }}">
+                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}" data-date="{{ task.date }}" data-project="{{ task.p_id }}" data-prio="{{ task.t_prio }}" onclick="location.href='/id/{{ user.id }}/{{ task.t_id }}/Taskdetail';" style="cursor: pointer;">
                             <td>{{ task.p_name }}</td>
                             <td>{{ task.t_name }}</td>
                             <td>{{ task.status }}</td>
@@ -151,3 +152,4 @@
             </div>
         </div>
 {% endblock %}
+
