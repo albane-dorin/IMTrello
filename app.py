@@ -229,7 +229,8 @@ def list(user_id):
         if user is not None:
             projects = database.projects_of_user(user)
             tasks = database.get_projects_tasks(user_id)
-            return flask.render_template("list.html.jinja2", tasks=tasks, projects=projects, user=user)
+            notifs = database.Notif.query.filter_by(user=user.id).all()
+            return flask.render_template("list.html.jinja2", tasks=tasks, projects=projects, user=user, notifs=notifs)
         else:
             # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
             return "Utilisateur non trouvé", 404  # Retourne une réponse 404 (Not Found)
@@ -266,9 +267,7 @@ def home(user_id):
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     semaines, mois, apres = echeances(user, projets)
-    print(user)
     notifs = database.Notif.query.filter_by(user=user.id).all()
-    print(notifs)
 
 
     if flask.request.method == 'POST':
@@ -309,15 +308,24 @@ def home(user_id):
 
 
 
-@app.post('/<int:user_id>/<int:last_page>/<int:notif_id>/delete/')
-def delete(user_id, notif_id, last_page):
+@app.post('/<int:user_id>/<int:last_page>/<int:notif_id>/<int:project_id>/delete/')
+def delete(user_id, notif_id, last_page, project_id):
+    print('in delete')
     notif = database.Notif.query.get_or_404(notif_id)
+    print(database.db.session.query(database.Notif).all())
     database.db.session.delete(notif)
     database.db.session.commit()
+    print(database.db.session.query(database.Notif).all())
     if last_page==1 :
         return redirect(url_for('home', user_id=user_id ))
     if last_page==2 :
         return redirect(url_for('colonne', user_id=user_id ))
+    if last_page==3:
+        return redirect(url_for('list', user_id=user_id))
+    if last_page==4:
+        return redirect(url_for('home_project', user_id=user_id, project_id=project_id))
+    if last_page==5:
+        return redirect(url_for('colonne_project', user_id=user_id, project_id=project_id))
 
 @app.route('/<int:user_id>/<int:project_id>/home_project', methods=["GET", "POST"])
 def home_project(user_id, project_id):
@@ -325,6 +333,7 @@ def home_project(user_id, project_id):
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
     semaines, mois, apres = echeances(user, projet)
+    notifs = database.Notif.query.filter_by(user=user.id).all()
 
     if flask.request.method == 'POST':
         form = flask.request.form
@@ -349,7 +358,7 @@ def home_project(user_id, project_id):
             projets = database.projects_of_user(user)
             semaines, mois, apres = echeances(user, projet)
             return flask.render_template("home_project.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
+                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id, notifs=notifs)
         else:
             # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
             return flask.render_template('error.html.jinja2', semaines=semaines,
@@ -360,7 +369,7 @@ def home_project(user_id, project_id):
     else :
         print(projets)
         return flask.render_template("home_project.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id)
+                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id, notifs=notifs)
 
 ## VUE COLONNES ##
 @app.route('/<int:user_id>/colonne', methods=["GET", "POST"])
@@ -368,7 +377,6 @@ def colonne(user_id):
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     notifs = database.Notif.query.filter_by(user=user.id).all()
-    print(notifs)
 
     if flask.request.method == 'POST':
 
@@ -392,7 +400,7 @@ def colonne(user_id):
                 database.new_project(form.get("name", ""), form.get("description", ""),
                                      int(date[0]), int(date[1]), int(date[2]), user, developpeur)
                 projets = database.projects_of_user(user)
-                return flask.render_template("colonne.html.jinja2", user=user, projects=projets)
+                return flask.render_template("colonne.html.jinja2", user=user, projects=projets, notifs=notifs)
             else:
                 print('hello')
                 # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
@@ -410,6 +418,9 @@ def colonne_project(user_id, project_id):
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
+    notifs = database.Notif.query.filter_by(user=user.id).all()
+
+    print(url_for('delete', user_id=user.id, last_page=5, notif_id=notifs[0].id, project_id=projet.id))
 
     colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
     taches = [0]*len(colonnes)
@@ -460,7 +471,7 @@ def colonne_project(user_id, project_id):
                                          int(date[0]), int(date[1]), int(date[2]), user, developpeur)
                     projets = database.projects_of_user(user)
                     return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, notifs=notifs)
                 else:
                     print('hello')
                     # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
@@ -497,7 +508,7 @@ def colonne_project(user_id, project_id):
                         devs_taches[i] = devs_tache
 
                     return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, notifs=notifs)
                 else:
                     # permet de sauvegarder les données en cas d'erreur ou de refresh de page
                     flask.session['name'] = form.get("name", "")
@@ -527,12 +538,12 @@ def colonne_project(user_id, project_id):
                     devs_taches[i] = devs_tache
 
                 return flask.render_template("colonne_project.html.jinja2", user=user, projects=projets,
-                                             projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+                                             projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, notifs=notifs)
 
 
     else:
         return flask.render_template("colonne_project.html.jinja2",  user=user, projects=projets,
-                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches)
+                                     projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, notifs=notifs)
 
 
 

@@ -184,7 +184,7 @@
                         <div class="notif" >
                             <div class="supprimer-notif">
                                 <form method="POST"
-                                action="{{ url_for('delete', notif_id=notif.id, user_id=user.id, last_page=1) }}">
+                                action="{{ url_for('delete', notif_id=notif.id, user_id=user.id, last_page=1, project_id=0) }}">
                                 <input type="submit" value="X"
                                     onclick="return confirm('Are you sure you want to delete this entry?')">
                             </form>

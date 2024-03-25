@@ -63,3 +63,47 @@
 {% endblock %}
 
 
+{% block Notif %}
+        <div id="lateral-panel">
+            <input id="lateral-panel-input" type="checkbox">
+            <div id="lateral-panel-bloc">
+                <label id="lateral-panel-label" for="lateral-panel-input"> <div class="bell"><img src="/static/img/bell.png"></div> </label>
+                <div id="lateral-panel-content">
+                    <!-- ici le code HTML du panneau-->
+                    <div class="titre-notif">
+                            <p align="center"> Notifications </p>
+                    </div>
+
+                    {% for notif in notifs %}
+                        <div class="notif" >
+                            <div class="supprimer-notif">
+                                <form method="POST"
+                                action="{{ url_for('delete', notif_id=notif.id, user_id=user.id, last_page=4, project_id=project_id) }}">
+                                <input type="submit" value="X"
+                                    onclick="return confirm('Are you sure you want to delete this entry?')">
+                            </form>
+                            </div>
+                            {% if notif.link_task==None %}
+                                {% if notif.link_project==None %}
+                                    <div class="notif-content">
+                                        <p align="center"> {{ notif.content }} <p/>
+                                    </div>
+                                {% else %}
+                                    <div class="notif-content" onclick="location.href='/{{ user.id }}/{{ notif.link_project }}/colonne_project';" style="cursor: pointer;">
+                                        <p align="center"> {{ notif.content }}<p/>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="notif-content" onclick="location.href='/{{ user.id }}/{{ notif.link_project }}/{{ notif.link_task }}/popUp';" style="cursor: pointer;">
+                                    <p align="center"> {{ notif.content }}<p/>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+
+
+                </div>
+            </div>
+        </div>
+    {% endblock %}
