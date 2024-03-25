@@ -186,10 +186,17 @@
                     {% for notif in notifs %}
                         <div class="notif" >
                         {%  if page_nb %}
-                            <form class="form_suppr" action="{{ url_for('delete', notif_id=notif.id, user_id=user.id, last_page=page_nb, project_id=0) }}" method="POST">
-                                <input type="submit" name="notif" value="X"
-                                onclick="return confirm('Êtes vous sur de vouloir supprimer cette notification ?')">
-                            </form>
+                            {% if projet or project%}
+                                <form class="form_suppr" action="{{ url_for('delete', notif_id=notif.id, user_id=user.id, last_page=page_nb, project_id=projet.id) }}" method="POST">
+                                    <input type="submit" name="notif" value="X"
+                                    onclick="return confirm('Êtes vous sur de vouloir supprimer cette notification ?')">
+                                </form>
+                            {% else %}
+                                <form class="form_suppr" action="{{ url_for('delete', notif_id=notif.id, user_id=user.id, last_page=page_nb, project_id=0) }}" method="POST">
+                                    <input type="submit" name="notif" value="X"
+                                    onclick="return confirm('Êtes vous sur de vouloir supprimer cette notification ?')">
+                                </form>
+                            {% endif %}
                         {% endif %}
 
 

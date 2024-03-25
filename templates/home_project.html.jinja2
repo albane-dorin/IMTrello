@@ -5,7 +5,7 @@
         <div class="haut">
             <div class="vues">
                 <button disabled class="vue">Vue par échéances</button>
-                <a class="lienv" href="{{ url_for("colonne_project", user_id=user.id, project_id=project_id) }}"> <button class="vue">Vue par projets</button> </a>
+                <a class="lienv" href="{{ url_for("colonne_project", user_id=user.id, project_id=projet.id) }}"> <button class="vue">Vue par projets</button> </a>
                 <a class="lienv" href="{{ url_for("list", user_id=user.id) }}"> <button class="vue">Vue par tâches</button> </a>
             </div>
 
@@ -13,15 +13,15 @@
         {% endblock %}
 
 {% block projects %}
-    {% for projet in projects %}
-        {% if projet.id == project_id  %}
+    {% for p in projects %}
+        {% if p.id == projet.id  %}
 
             <div class="lienp" onclick="window.location.href='{{ url_for("home", user_id=user.id)}}'">
-                <button class="projet" disabled>{{ projet.name }}</button>
+                <button class="projet" disabled>{{ p.name }}</button>
             </div>
         {% else %}
-                <a class="lienp" href="{{ url_for("home_project", user_id=user.id, project_id=projet.id)}}">
-                    <button class="projet" >{{ projet.name }}</button>
+                <a class="lienp" href="{{ url_for("home_project", user_id=user.id, project_id=p.id)}}">
+                    <button class="projet" >{{ p.name }}</button>
                 </a>
         {% endif %}
 
@@ -34,7 +34,7 @@
 
         <div id="form" class="new">
 
-            <form  id="formnp" action="{{ url_for("home_project", user_id=user.id, project_id=project_id) }}" method="post">
+            <form  id="formnp" action="{{ url_for("home_project", user_id=user.id, project_id=projet.id) }}" method="post">
 
                 <div class="bandeaux"><h3>Nouveau Projet</h3>  <button date-close-button class="close"> X </button> </div>
 

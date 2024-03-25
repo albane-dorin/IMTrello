@@ -356,18 +356,18 @@ def home_project(user_id, project_id):
             projets = database.projects_of_user(user)
             semaines, mois, apres = echeances(user, projet)
             return flask.render_template("home_project.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id, notifs=notifs)
+                                     mois=mois, apres=apres, user=user, projects=projets, projet=projet, notifs=notifs)
         else:
             # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
             return flask.render_template('error.html.jinja2', semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, errors=errors)
+                                     mois=mois, apres=apres, user=user, projects=projets, projet=projet, errors=errors)
 
 
 
     else :
         print(projets)
         return flask.render_template("home_project.html.jinja2", semaines=semaines,
-                                     mois=mois, apres=apres, user=user, projects=projets, project_id=project_id, notifs=notifs, page_nb=4)
+                                     mois=mois, apres=apres, user=user, projects=projets, projet=projet, notifs=notifs, page_nb=4)
 
 ## VUE COLONNES ##
 @app.route('/<int:user_id>/colonne', methods=["GET", "POST"])
@@ -417,8 +417,6 @@ def colonne_project(user_id, project_id):
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
     notifs = database.Notif.query.filter_by(user=user.id).all()
-
-    print(url_for('delete', user_id=user.id, last_page=5, notif_id=notifs[0].id, project_id=projet.id))
 
     colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
     taches = [0]*len(colonnes)
