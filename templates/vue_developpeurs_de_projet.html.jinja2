@@ -3,26 +3,37 @@
 {% block plus %}
     <div class="dev_project">
         <div class="devs">
-            <span class="bold">Développeurs :</span>
+            <span class="bold">Manager :</span>
             <a href="{{ url_for('colonne_project', user_id=user.id, project_id=projet.id) }}">
                 <button class="close">X</button>
             </a>
         </div>
 
+        <p class="item_dev">
+            {{manager.username}},  {{ manager.mail }}
+                </p>
+
+        <div class="devs">
+            <span class="bold">Développeurs :</span>
+        </div>
+
         <div class="list_dev">
             {% for dev in developpeurs %}
-                <p class="item_dev">
-                    {{dev.username}},  {{ user.mail }}
-                    {% if user.id==projet.manager %}
-                        {% if dev.id!=user.id %}
+                {% if dev.id!=manager.id %}
+                    <p class="item_dev">
+
+                        {{dev.username}}
+                        {% if user.id==projet.manager %}
                             <a href="{{ url_for("supprdev_de_projet", user_id=user.id,  project_id=projet.id, dev_id=dev.id) }}">
                                 <button class="delete close"> - </button>
                             </a>
-                        {% else %}
-                            (Moi)
+                        {% elif user.id==dev.id %}
+                             ( Moi )
                         {% endif %}
-                    {% endif %}
-                </p>
+
+                    </p>
+                {% endif %}
+
 
 
             {% endfor %}

@@ -274,7 +274,7 @@ def home(user_id):
     if flask.request.method == 'POST':
         form = flask.request.form
         date = form.get("date", "").split("-")
-        devs = form.get("developpeur", "").split(' ')
+        devs = form.get("developpeurs", "").split(' ')
         developpeur = [user]
         if devs != ['']:
             for d in devs:
@@ -286,7 +286,6 @@ def home(user_id):
         flask.session['des'] = form.get("des", "")
         flask.session['date'] = form.get("date", "")
         flask.session['dev'] = form.get("dev", "")
-
 
         if result :
             database.new_project(form.get("name", ""), form.get("description", ""),
@@ -338,7 +337,7 @@ def home_project(user_id, project_id):
     if flask.request.method == 'POST':
         form = flask.request.form
         date = form.get("date", "").split("-")
-        devs = form.get("developpeur", "").split(' ')
+        devs = form.get("developpeurs", "").split(' ')
         developpeur = [user]
         if devs != ['']:
             for d in devs:
@@ -384,7 +383,7 @@ def colonne(user_id):
         form = flask.request.form
         if "project" in form:
             date = form.get("date", "").split("-")
-            devs = form.get("developpeur", "").split(' ')
+            devs = form.get("developpeurs", "").split(' ')
             developpeur = [user]
             if devs != ['']:
                 for d in devs:
@@ -436,7 +435,7 @@ def colonne_project(user_id, project_id):
         devs_taches[i] = devs_tache
         urgents[i] = urgentcol
 
-
+    print(colonnes)
 
     if flask.request.method == 'POST':
 
@@ -453,10 +452,9 @@ def colonne_project(user_id, project_id):
 
         else :
             form = flask.request.form
-            print(form["name"])
             if "project" in form:
                 date = form.get("date", "").split("-")
-                devs = form.get("developpeur", "").split(' ')
+                devs = form.get("developpeurs", "").split(' ')
                 developpeur = [user]
                 if devs != ['']:
                     for d in devs:
@@ -477,7 +475,6 @@ def colonne_project(user_id, project_id):
                                      projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, urgents=urgents, notifs=notifs)
 
                 else:
-                    print('hello')
                     # Si les données ne sont pas valides, affichez un message d'erreur ou continuez à afficher le formulaire
                     return flask.render_template('erreur_form_de_colonne_project.html.jinja2', user=user, projects=projets,
                                                  projet=projet, colonnes=colonnes, taches=taches, devs=devs_taches, errors=errors, urgents=urgents)
@@ -485,12 +482,16 @@ def colonne_project(user_id, project_id):
             elif "task" in form:
 
                 date = form.get("date", "").split("-")
-                devs = form.get("developpeur", "").split(' ')
+                devs = form.get("developpeurs", "").split(' ')
                 developpeur = []
                 if devs != ['']:
                     for d in devs:
                         developpeur += [database.db.session.query(database.User).filter(database.User.mail == d).first()]
-                column = database.db.session.get(database.Project, form.get("colonne", ""))
+                column = database.db.session.get(database.Column, form.get("colonne", ""))
+                print(form.get("developpeurs", ""))
+                print(devs)
+                print(developpeur)
+
 
                 result, errors = formulaire_new_task(form, project_id)
 
@@ -571,6 +572,7 @@ def developpeurs(user_id, project_id):
     user = database.db.session.get(database.User, user_id)
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
+    manager = database.db.session.get(database.User, projet.manager)
 
     colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
     taches = [0] * len(colonnes)
@@ -579,8 +581,7 @@ def developpeurs(user_id, project_id):
     for col in colonnes:
         taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
         i += 1
-
-    devs_taches = [0] * len(colonnes)
+        devs_taches = [0] * len(colonnes)
     urgents = [0] * len(colonnes)
     for i in range(len(colonnes)):
         devs_tache = [0] * len(taches[i])
@@ -613,13 +614,13 @@ def developpeurs(user_id, project_id):
         if result:
             database.add_dvp_to_project(user, projet, dev)
             devs = database.get_dvps_of_project(projet.id)
-            return flask.render_template('vue_developpeurs_de_projet.html.jinja2', user=user, projects=projets,
+            return flask.render_template('vue_developpeurs_de_projet.html.jinja2', user=user, projects=projets, manager=manager,
                                          projet=projet, colonnes=colonnes, taches=taches, developpeurs=devs, devs=devs_taches, urgents=urgents)
         else:
-            return flask.render_template('vue_developpeurs_de_projet.html.jinja2', user=user, projects=projets,
+            return flask.render_template('vue_developpeurs_de_projet.html.jinja2', user=user, projects=projets, manager=manager,
                                          projet=projet, colonnes=colonnes, taches=taches, developpeurs=developpeurs, devs=devs_taches, errordev=errors, urgents=urgents)
     else :
-        return flask.render_template("vue_developpeurs_de_projet.html.jinja2", user=user, projects=projets,
+        return flask.render_template("vue_developpeurs_de_projet.html.jinja2", user=user, projects=projets, manager=manager,
                                      projet=projet, colonnes=colonnes, taches=taches, developpeurs=developpeurs, devs=devs_taches, urgents=urgents)
 
 
@@ -629,7 +630,6 @@ def popUp(user_id, project_id, task_id):
     projets = database.projects_of_user(user)
     projet = database.db.session.get(database.Project, project_id)
 
-    print('statut')
 
     colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
     taches = [0] * len(colonnes)

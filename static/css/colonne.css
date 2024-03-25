@@ -123,6 +123,10 @@ img{
 
 /* PARTIE GAUCHE (Liste de projets) */
 
+.titreprojet{
+    font-size: 2vw;
+    color: #ddb9ff;
+}
 
 .projets{
     display: flex;
@@ -304,7 +308,6 @@ input[type="submit"]{
     overflow: auto;
 
     scrollbar-width: thin;
-    scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
     scrollbar-color: rgba(221, 185, 255, 0.5) transparent;
 
     align-items: stretch;
@@ -772,12 +775,18 @@ form{
 .dev_project{
     width: 50%;
     max-height: 60%;
+    height: fit-content;
+    min-height: fit-content;
+
 }
 
 .list_dev{
     display: flex;
     flex-direction: column;
     width: 90%;
+    overflow: auto;
+    scrollbar-color: rgba(121, 4, 231, 0.5) transparent;
+
 }
 
 .item_dev{
@@ -787,9 +796,9 @@ form{
     align-items: center;
     border-radius: 20px;
     margin: 5px 0px;
-    padding: 0px 15px;
+    padding: 5px 15px;
     width: 90%;
-    height: 2vw;
+    height: fit-content;
 }
 
 .errordevp{

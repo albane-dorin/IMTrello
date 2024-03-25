@@ -127,7 +127,7 @@
                 {% set outer_loop = loop %}
                 <div class="colonne">
                     <div class="col_header">
-                    <h2>{{ col.name }}</h2>
+                    <h2>{{ col.name }} {{ col.id }}</h2>
                      {% if user.id==projet.manager %}
                         <a href="{{ url_for("suppr_col", user_id=user.id,  project_id=projet.id, col_id=col.id) }}">
                             <button class="suppr_col"> Supprimer la colonne </button>
@@ -189,7 +189,7 @@
 
                             <form  id="form" action="{{ url_for("colonne_project", user_id=user.id,  project_id=projet.id) }}" method="post">
 
-                                <div class="bandeaux"><h3>Nouvelle Tâche </h3>  <button date-close-button class="close"> X </button> </div>
+                                <div class="bandeaux"><h3>Nouvelle Tâche {{ col.id }} </h3>  <button date-close-button class="close"> X </button> </div>
 
                                 <label for="name">Nom de la tâche :</label>
                                    <input type="text" id="name" name="name" value="" required>
