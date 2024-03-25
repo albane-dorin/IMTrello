@@ -17,7 +17,7 @@ database.db.init_app(app) # (1) flask prend en compte la base de donnee
 with app.test_request_context(): # (2) bloc exécuté à l'initialisation de Flask
  database.init_database()
  app.app_context()
- database.peupler_db()
+ database.peupler()
 
 
                                                   ############# FONCTIONS FORMULAIRE #######################
@@ -162,6 +162,7 @@ def echeances(user, projets):
     #Ajout des échéances des tâches
     if isinstance(projets, type([])):
         for t in database.tasks_of_user(user):
+            print(t)
             if today <= t.date <= today + timedelta(days=7):
                 semaines += [(t.date, t, database.project_of(t))]
             elif today <= t.date <= today + timedelta(days=30) :
@@ -193,7 +194,6 @@ def echeances(user, projets):
 
 @app.route('/', methods=["GET", "POST"])
 def connexion():
-    database.peupler_db()
     form = flask.request.form
     valide, errors = form_valide(form, 0)
     if not valide:
@@ -230,25 +230,55 @@ def list(user_id):
         user = database.db.session.get(database.User, user_id)
         if user is not None:
             projects = database.projects_of_user(user)
-            tasks = database.get_projects_tasks(user_id)
+            tasks = database.tasks_of_user(user)
+            for i in range(len(tasks)):
+                tasks[i] = [tasks[i], database.project_of(tasks[i]), database.db.session.get(database.User, database.project_of(tasks[i]).manager)]
             notifs = database.Notif.query.filter_by(user=user.id).all()
+            print(tasks)
             return flask.render_template("list.html.jinja2", tasks=tasks, projects=projects, user=user, notifs=notifs, page_nb=3)
         else:
             # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
             return "Utilisateur non trouvé", 404  # Retourne une réponse 404 (Not Found)
 
 #routr pour la liste des tâches avec un popup tâche ouvert
-@app.route('/id/<int:user_id>/<int:task_id>/Taskdetail')
+@app.route('/id/<int:user_id>/<int:task_id>/Taskdetail', methods=["GET", "POST"])
 def taskdetail(user_id,task_id):
+    print('hello')
     with app.app_context():
+
+
         user = database.db.session.get(database.User, user_id)
         if user is not None:
             projects = database.projects_of_user(user)
-            tasks = database.get_projects_tasks(user_id)
-            tache= database.db.session.get(database.Task, task_id)
-            projet=database.project_of(tache)
-            commentaires=database.db.session.query(database.Comment).filter_by(task=tache.id).all()
-            return flask.render_template("ListPopUp.html.jinja2", tasks=tasks, projects=projects, user=user, tache=tache, projet=projet, commentaires=commentaires)
+            tasks = database.tasks_of_user(user)
+            for i in range(len(tasks)):
+                tasks[i] = [tasks[i], database.project_of(tasks[i])]
+            tache = database.db.session.get(database.Task, task_id)
+            projet = database.project_of(tache)
+            com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
+            commentaires = []
+            for c in com:
+                commentaires += [(c, database.db.session.get(database.User, c.author))]
+            devs = database.get_dvps_of_task(task_id)
+            urgent = 'non'
+            if tache.date < date.today() + timedelta(days=7):
+                urgent = 'oui'
+
+            if flask.request.method == "POST":
+                form = flask.request.form
+                if "formcomment" in form:
+                    database.new_comment(user, tache, form["comment"])
+                    com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
+                    commentaires = []
+                    for c in com:
+                        commentaires += [(c, database.db.session.get(database.User, c.author))]
+
+                    return flask.render_template("ListPopUp.html.jinja2", tasks=tasks, projects=projects, user=user,
+                                                 tache=tache, projet=projet,
+                                                 commentaires=commentaires, developers=devs, urgent=urgent)
+
+            return flask.render_template("ListPopUp.html.jinja2", tasks=tasks, projects=projects, user=user, tache=tache, projet=projet,
+                                         commentaires=commentaires, developers=devs, urgent=urgent)
         else:
             # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
             return "Utilisateur non trouvé", 404

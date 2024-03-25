@@ -136,13 +136,16 @@
                     <tbody>
 
                     {% for task in tasks %}
-                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}" data-date="{{ task.date }}" data-project="{{ task.p_id }}" data-prio="{{ task.t_prio }}" onclick="location.href='/id/{{ user.id }}/{{ task.t_id }}/Taskdetail';" style="cursor: pointer;">
-                            <td>{{ task.p_name }}</td>
-                            <td>{{ task.t_name }}</td>
-                            <td>{{ task.status }}</td>
-                            <td>{{ task.t_prio }}</td>
-                            <td>{{ task.date }}</td>
-                            <td>{{ task.m_name }}</td>
+
+                        <tr data-name-task = "{{ task[0].name }}" data-status="{{ task[0].status }}"
+                            data-date="{{ task[0].date }}" data-project="{{ task[1].id }}" data-prio="{{ task[0].priority }}"
+                            onclick="location.href='/id/{{ user.id }}/{{ task[0].id }}/Taskdetail';" style="cursor: pointer;">
+                            <td>{{ task[1].name }}</td>
+                            <td>{{ task[0].name }}</td>
+                            <td>{{ task[0].status }}</td>
+                            <td>{{ task[0].priority }}</td>
+                            <td>{{ task[0].date }}</td>
+                            <td>{{ task[2].username }}</td>
                         </tr>
                     {% endfor %}
 

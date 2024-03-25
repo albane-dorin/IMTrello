@@ -107,9 +107,14 @@
                     {% if object|length==3 %}
                         <div class="echeance">
                             <span>Fin de tâches : {{ object[1].name }}</span>
-                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
-                            <span class="{{ object[1].priority }}"> {{ object[1].priority }}</span>
-                            <span> {{ object[1].status }} </span></p>
+                            <div class="fin">
+                                <span> Dans " {{ object[2].name }} "</span>
+                                <p class="infoecheance">
+                                    <span class="{{ object[1].priority }}"> {{ object[1].priority }}</span>
+                                    <span> {{ object[1].status }} </span>
+                                </p>
+
+                            </div>
                         </div>
                     {% endif %}
                     {% if object|length==2 %}
@@ -126,9 +131,14 @@
                     {% if object|length ==3 %}
                         <div class="echeance">
                             <span>Fin de tâches : {{ object[1].name }}</span>
-                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
-                            <span class="{{ object[1].priority }}"> {{ object[1].priority }}</span>
-                            <span> {{ object[1].status }} </span></p>
+                            <div class="fin">
+                                <span> Dans " {{ object[2].name }} "</span>
+                                <p class="infoecheance">
+                                    <span class="{{ object[1].priority }}"> {{ object[1].priority }}</span>
+                                    <span> {{ object[1].status }} </span>
+                                </p>
+
+                            </div>
                         </div>
                     {% endif %}
                     {% if object|length ==2 %}
@@ -148,9 +158,14 @@
                     {% if object|length==3 %}
                         <div class="echeance">
                             <span>Fin de tâches : {{ object[1].name }}</span>
-                            <p class="fin"><span> Dans " {{ object[2].name }} "</span>
-                            <span class="{{ object[1].priority }}"> {{ object[1].priority }}</span>
-                            <span> {{ object[1].status }}</span></p>
+                            <div class="fin">
+                                <span> Dans " {{ object[2].name }} "</span>
+                                <p class="infoecheance">
+                                    <span class="{{ object[1].priority }}"> {{ object[1].priority }}</span>
+                                    <span> {{ object[1].status }} </span>
+                                </p>
+
+                            </div>
                         </div>
                     {% endif %}
                     {% if object|length==2 %}

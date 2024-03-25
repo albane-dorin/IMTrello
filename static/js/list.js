@@ -44,6 +44,8 @@ function filterByProject(n){
         $("#taches tbody tr[data-project='" + n + "']").show();
     }
     else {
+        console.log(n)
+        console.log($("#taches tbody tr[data-project='" + n + "']"))
         $("#taches tbody tr[data-project='" + n + "']").hide();
     }
     updateRows()

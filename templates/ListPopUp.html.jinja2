@@ -25,7 +25,13 @@
                         </div>
                             <div class="containerStatusDate">
                             <div class="{{ tache.priority }}">{{ tache.priority }} </div>
-                            <div>{{ tache.date }}</div>
+                            <div>
+                                {% if urgent=='oui' %}
+                                    <div class="urgent">{{ tache.date }}</div>
+                                {% else %}
+                                    <div class="nonurgent">{{ tache.date }}</div>
+                                {% endif %}
+                            </div>
                             </div>
                             <span class="section">
                                 Status : </span>
@@ -51,7 +57,7 @@
                 </div>
             </div>
             <div class="leftdown">
-                <form class="formcom" action="{{ url_for("popUp", user_id=user.id,  project_id=projet.id, task_id=tache.id) }}" method="post">
+                <form class="formcom" action="{{ url_for("taskdetail", user_id=user.id, task_id=tache.id) }}" method="post">
                     <label for="comment">Ajouter un commentaire :</label>
                         <textarea id="comment" name="comment" required></textarea>
                     <p><input name="formcomment" id="formcomment" type="submit"></p>

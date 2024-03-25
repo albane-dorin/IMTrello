@@ -296,11 +296,19 @@ input[type="submit"]{
 }
 
 .fin{
-    width: 35%;
+    width: 55%;
     justify-self: end;
     padding-right: 1vw;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.infoecheance{
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .Facultative{
