@@ -1,5 +1,5 @@
 #lateral-panel {
-  z-index: 9999;                  /* pour être au dessus des autres éléments */
+  z-index: 5;                  /* pour être au dessus des autres éléments */
   position: fixed;                /* ne suit pas le scroll de la page et sert de réfèrent */
   top: 0;                         /* position en haut */
   right: 0;                        /* à gauche */

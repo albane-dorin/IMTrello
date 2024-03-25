@@ -172,6 +172,7 @@ position: fixed;
     bottom: 0;
     background-color: rgba(0,0,0,.6);
     pointer-events: none;
+    z-index: 7;
 }
 
 #overlay.active{
@@ -491,6 +492,7 @@ input[type="submit"]{
     bottom: 0;
     background-color: rgba(0,0,0,.6);
     pointer-events: all;
+    z-index: 8;
 }
 
 
