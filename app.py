@@ -162,7 +162,7 @@ def echeances(user, projets):
     #Ajout des échéances des tâches
     if isinstance(projets, type([])):
         for t in database.tasks_of_user(user):
-            print(t)
+            print(database.project_of(t))
             if today <= t.date <= today + timedelta(days=7):
                 semaines += [(t.date, t, database.project_of(t))]
             elif today <= t.date <= today + timedelta(days=30) :
@@ -205,7 +205,6 @@ def connexion():
 
 @app.route('/inscription', methods=["GET", "POST"])
 def inscription():
-    database.clean()
     form = flask.request.form
     valide, errors = form_valide(form, 1)
     if not valide:
@@ -226,62 +225,57 @@ def inscription():
 #route pour la liste des tâches
 @app.route('/id/<int:user_id>/list')
 def list(user_id):
-    with app.app_context():
-        user = database.db.session.get(database.User, user_id)
-        if user is not None:
-            projects = database.projects_of_user(user)
-            tasks = database.tasks_of_user(user)
-            for i in range(len(tasks)):
-                tasks[i] = [tasks[i], database.project_of(tasks[i]), database.db.session.get(database.User, database.project_of(tasks[i]).manager)]
-            notifs = database.Notif.query.filter_by(user=user.id).all()
-            print(tasks)
-            return flask.render_template("list.html.jinja2", tasks=tasks, projects=projects, user=user, notifs=notifs, page_nb=3)
-        else:
-            # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
-            return "Utilisateur non trouvé", 404  # Retourne une réponse 404 (Not Found)
+    user = database.db.session.get(database.User, user_id)
+    if user is not None:
+        projects = database.projects_of_user(user)
+        tasks = database.tasks_of_user(user)
+        for i in range(len(tasks)):
+            tasks[i] = [tasks[i], database.project_of(tasks[i]), database.db.session.get(database.User, database.project_of(tasks[i]).manager)]
+        notifs = database.Notif.query.filter_by(user=user.id).all()
+        print(tasks)
+        return flask.render_template("list.html.jinja2", tasks=tasks, projects=projects, user=user, notifs=notifs, page_nb=3)
+    else:
+        # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
+        return "Utilisateur non trouvé", 404  # Retourne une réponse 404 (Not Found)
 
 #routr pour la liste des tâches avec un popup tâche ouvert
 @app.route('/id/<int:user_id>/<int:task_id>/Taskdetail', methods=["GET", "POST"])
 def taskdetail(user_id,task_id):
-    print('hello')
-    with app.app_context():
+    user = database.db.session.get(database.User, user_id)
+    if user is not None:
+        projects = database.projects_of_user(user)
+        tasks = database.tasks_of_user(user)
+        for i in range(len(tasks)):
+            tasks[i] = [tasks[i], database.project_of(tasks[i])]
+        tache = database.db.session.get(database.Task, task_id)
+        projet = database.project_of(tache)
+        com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
+        commentaires = []
+        for c in com:
+            commentaires += [(c, database.db.session.get(database.User, c.author))]
+        devs = database.get_dvps_of_task(task_id)
+        urgent = 'non'
+        if tache.date < date.today() + timedelta(days=7):
+            urgent = 'oui'
 
+        if flask.request.method == "POST":
+            form = flask.request.form
+            if "formcomment" in form:
+                database.new_comment(user, tache, form["comment"])
+                com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
+                commentaires = []
+                for c in com:
+                    commentaires += [(c, database.db.session.get(database.User, c.author))]
 
-        user = database.db.session.get(database.User, user_id)
-        if user is not None:
-            projects = database.projects_of_user(user)
-            tasks = database.tasks_of_user(user)
-            for i in range(len(tasks)):
-                tasks[i] = [tasks[i], database.project_of(tasks[i])]
-            tache = database.db.session.get(database.Task, task_id)
-            projet = database.project_of(tache)
-            com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
-            commentaires = []
-            for c in com:
-                commentaires += [(c, database.db.session.get(database.User, c.author))]
-            devs = database.get_dvps_of_task(task_id)
-            urgent = 'non'
-            if tache.date < date.today() + timedelta(days=7):
-                urgent = 'oui'
+                return flask.render_template("ListPopUp.html.jinja2", tasks=tasks, projects=projects, user=user,
+                                             tache=tache, projet=projet,
+                                             commentaires=commentaires, developers=devs, urgent=urgent)
 
-            if flask.request.method == "POST":
-                form = flask.request.form
-                if "formcomment" in form:
-                    database.new_comment(user, tache, form["comment"])
-                    com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
-                    commentaires = []
-                    for c in com:
-                        commentaires += [(c, database.db.session.get(database.User, c.author))]
-
-                    return flask.render_template("ListPopUp.html.jinja2", tasks=tasks, projects=projects, user=user,
-                                                 tache=tache, projet=projet,
-                                                 commentaires=commentaires, developers=devs, urgent=urgent)
-
-            return flask.render_template("ListPopUp.html.jinja2", tasks=tasks, projects=projects, user=user, tache=tache, projet=projet,
-                                         commentaires=commentaires, developers=devs, urgent=urgent)
-        else:
-            # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
-            return "Utilisateur non trouvé", 404
+        return flask.render_template("ListPopUp.html.jinja2", tasks=tasks, projects=projects, user=user, tache=tache, projet=projet,
+                                     commentaires=commentaires, developers=devs, urgent=urgent)
+    else:
+        # Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
+        return "Utilisateur non trouvé", 404
 
 
 
@@ -299,7 +293,7 @@ def home(user_id):
     projets = database.projects_of_user(user)
     semaines, mois, apres = echeances(user, projets)
     notifs = database.Notif.query.filter_by(user=user.id).all()
-
+    print(database.tasks_of_user(user))
 
     if flask.request.method == 'POST':
         form = flask.request.form
@@ -472,10 +466,13 @@ def colonne_project(user_id, project_id):
 
         if flask.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             data = flask.request.get_data().decode("utf-8").split('&')
-            tid = data[0]
-            cid = data[1]
-            task = database.db.session.get(database.Task, tid[-1])
-            task.column = cid[-1]
+            tid = data[0].replace("id=t", "")
+            print(tid)
+            cid = data[1].replace("elid=col", "")
+            print(cid)
+            task = database.db.session.get(database.Task, tid)
+            print(task)
+            task.column = cid
             database.db.session.commit()
             return data
 
