@@ -1,0 +1,63 @@
+# IMTrello
+
+IMTrello est une application qui vise à faciliter la collaboration entre les membres d'une équipe sur des projets de développement, en offrant une plateforme intuitive pour organiser, suivre et gérer le travail de manière efficace.
+
+## Table des matières
+
+1. [Introduction](#introduction)
+2. [Fonctionnalités](#fonctionnalités)
+4. [Installation](#installation)
+5. [Utilisation](#utilisation)
+6. [Structure](#structure)
+
+## Introduction
+
+IMTrello propose une interface conviviale permettant aux équipes de travailler de manière collaborative sur des projets de développement. Que vous soyez un manager cherchant à organiser les tâches ou un développeur travaillant sur des fonctionnalités spécifiques, IMTrello vous offre les outils nécessaires pour une gestion de projet efficace.
+
+## Fonctionnalités
+
+- Deux types d’utilisateurs : les managers et les développeurs
+- Gestion des projets contenant des tâches facilement organisables et assignables
+- Communication facilitée au sein de l’équipe
+- Interface intuitive pour une expérience utilisateur fluide
+
+## Installation
+
+Pour installer IMTrello localement, suivez ces étapes :
+
+1. Clonez le dépôt GitHub : git clone https://github.com/albane-dorin/IMTrello.git
+2. Assurez-vous d'avoir Python et les modules nécessaires installés, tels que Flask, SQLAlchemy, etc.
+3. Lancez l'application en exécutant le fichier app.py dans votre environnement Python.
+
+Les bibliothèques nécessaires sont :
+-	flask
+-	sqlalchemy
+-	flask_sqlalchemy
+-	datetime
+
+
+## Utilisation
+
+Pour utiliser IMTrello, suivez ces instructions :
+
+- Lancez l'application en exécutant le fichier app.py.
+- Pour avoir une base de données vide, supprimez la ligne 18 du fichier app.py : `database.peupler()`. Conserver cette ligne peuplera la base de données avec des exemples d'utilisateurs, de projets, de tâches, etc.
+
+## Structure
+
+IMTrello est organisé comme suit :
+
+- **app.py**: Fichier principal contenant les différents chemins et configurations de l'application.
+- **database**: Contient le code de construction de la base de données, ainsi que les méthodes d'accès et de modification. Inclut également databaseTest.py pour tester les méthodes de la base de données.
+- **instance**: Contient l'instance de la base de données utilisée par app.py.
+- **templates**: Contient les templates Jinja pour les différentes vues de l'application.
+- **static**: Contient les fichiers statiques tels que le CSS, le JavaScript et les images.
+
+Pour template, voici une distribution des templates en fonction des vues :
+-	Vue de connexion et d’inscription : connexion.html.jinja2, inscription.html.jinja2
+-	Vue des échéances/tableau de bord/page d’accueil : home.html.jinja2, home_project.html.jinja2, erreur_form_de_home. .html.jinja2
+-	Vue par projet/par colonne : colonne.html.jinja2, colonne_project.html.jinja2, erreur_for_de_colonne.html.jinja2, erreur_for_de_colonne_project.html.jinja2, miniatureColonne.html.jinja2, popUpTask.html.jinja2, suppr_colonne.html.jinja2, suppr_dev_de_projet.html.jinja2, suppr_projet.html.jinja2, suppr_tache_et_dev.html.jinja2, vue_developpeurs_de_projet.html.jinja2
+-	Vue par liste des tâches : list.html.jinja2, ListPopUp.html.jinja2
+
+
+
