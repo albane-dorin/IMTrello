@@ -390,7 +390,13 @@ def peupler_db():
     db.session.commit()
 
     project1 = Project(name="Project 1", description="Mon premier projet", date=datetime(2024, 3, 6), manager=user2.id)
-    project2 = Project(name="Project 2", description="Mon deuxième projet", date=datetime(2024, 3, 6), manager=user1.id)
+    project2 = Project(name="Project 2", description="ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ",
+                       date=datetime(2024, 3, 6), manager=user1.id)
     db.session.add(project1)
     db.session.add(project2)
     db.session.commit()
@@ -615,13 +621,13 @@ def peupler():
     db.session.commit()
 
     #Association tâches à leur projet
-    for task in tasks[:7+1]:
+    for task in tasks[:7]:
         project_task = Project_Task(id_project=project1.id, id_task=task.id)
         db.session.add(project_task)
-    for task in tasks[8:11+1]:
+    for task in tasks[7:11]:
         project_task = Project_Task(id_project=project2.id, id_task=task.id)
         db.session.add(project_task)
-    for task in tasks[12:]:
+    for task in tasks[11:]:
         project_task = Project_Task(id_project=project3.id, id_task=task.id)
         db.session.add(project_task)
     db.session.commit()
