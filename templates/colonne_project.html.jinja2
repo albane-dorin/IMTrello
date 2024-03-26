@@ -150,7 +150,7 @@
                 {% set outer_loop = loop %}
                 <div class="colonne">
                     <div class="col_header">
-                    <h2>{{ col.name }} {{ col.id }}</h2>
+                    <h2>{{ col.name }}</h2>
                      {% if user.id==projet.manager %}
                         <a href="{{ url_for("suppr_col", user_id=user.id,  project_id=projet.id, col_id=col.id) }}">
                             <button class="suppr_col"> Supprimer la colonne </button>
@@ -176,8 +176,7 @@
                             {% if user in devs[outer_loop.index0][loop.index0] %}
                             <div   class=" tache tachededev" onclick="window.location.href='{{ url_for('popUp', user_id=user.id, project_id=projet.id, task_id=t.id) }}'"
                                  id="t{{ t.id }}" draggable="true" ondragstart="drag(event)">
-                                <div class="tacheint"><h3> {{ t.name }}
-                                    {{ devs[outer_loop.index0][loop.index0][0] }}</h3>
+                                <div class="tacheint"><h3> {{ t.name }} </h3>
                                 <span class="{{ t.priority }}"> {{ t.priority }}</span></div>
                                 {% if urgents[outer_loop.index0][loop.index0]=='oui' %}
                                     <span> A faire avant le <span class="urgent_col"> {{ t.date }} </span></span>
