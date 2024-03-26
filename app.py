@@ -702,27 +702,32 @@ def developpeurs(user_id, project_id):
     colonnes = database.db.session.query(database.Column).filter_by(project=project_id).all()
     developpeurs = database.get_dvps_of_project(project_id)
 
+    taches=[]
+    if len(colonnes)!=0:
+        # On crée une list taches où taches[colonne] fournira la liste des tâches de la colonne
+        taches = [0] * len(colonnes)
+        i = 0
+        for col in colonnes:
+            taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
+            i += 1
 
-    # On crée une list taches où taches[colonne] fournira la liste des tâches de la colonne
-    taches = [0] * len(colonnes)
-    i = 0
-    for col in colonnes:
-        taches[i] = database.db.session.query(database.Task).filter_by(column=colonnes[i].id).all()
-        i += 1
-        devs_taches = [0] * len(colonnes)
-
-    # On crée une liste développeurs ou développeurs[colonne][tache] forunira la liste de développeurs de la tâche
-    # On crée une liste urgents où urgents[colonne][tache] indiquera si la tâche est urgente ou non
+    devs_taches = [0] * len(colonnes)
     urgents = [0] * len(colonnes)
-    for i in range(len(colonnes)):
-        devs_tache = [0] * len(taches[i])
-        urgentcol = ['non'] * len(taches[i])
-        for j in range(len(taches[i])):
-            devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
-            if taches[i][j].date < datetime.date.today() + timedelta(days=7):
-                urgentcol[j] = 'oui'
-        devs_taches[i] = devs_tache
-        urgents[i] = urgentcol
+
+    if taches!=[] :
+
+
+        # On crée une liste développeurs ou développeurs[colonne][tache] forunira la liste de développeurs de la tâche
+        # On crée une liste urgents où urgents[colonne][tache] indiquera si la tâche est urgente ou non
+        for i in range(len(colonnes)):
+            devs_tache = [0] * len(taches[i])
+            urgentcol = ['non'] * len(taches[i])
+            for j in range(len(taches[i])):
+                devs_tache[j] = database.get_dvps_of_task(taches[i][j].id)
+                if taches[i][j].date < datetime.date.today() + timedelta(days=7):
+                    urgentcol[j] = 'oui'
+            devs_taches[i] = devs_tache
+            urgents[i] = urgentcol
 
 
     # Pour traiter les formulaires et les requètes ajax
