@@ -271,7 +271,8 @@ def taskdetail(user_id,task_id):
         tasks = database.tasks_of_user(user)
 
         for i in range(len(tasks)):
-            tasks[i] = [tasks[i], database.project_of(tasks[i])]
+            tasks[i] = [tasks[i], database.project_of(tasks[i]),
+                        database.db.session.get(database.User, database.project_of(tasks[i]).manager)]
         tache = database.db.session.get(database.Task, task_id)
         projet = database.project_of(tache)
         com = database.db.session.query(database.Comment).filter_by(task=task_id).all()
