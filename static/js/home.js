@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const boutonsSupprimerNotif = document.querySelectorAll('.supprimer-notif');
 
 
-
+    //Permet pour tous les boutons "data-modal-target" d'ouvrir le formulaire associer quand on clique dessus
     openModalButtons.forEach(button => {
         button.addEventListener("click", () => {
             const form = document.querySelector(button.dataset.modalTarget)
@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     })
 
+    // Permet au formulaire de se fermer en cliquant sur la croix
     closeModalButtons.forEach(button => {
         button.addEventListener("click", () => {
             const form = button.closest('.new');

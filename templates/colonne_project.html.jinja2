@@ -8,6 +8,7 @@
      <script>
         const user_id = {{ user.id }}
 
+        //Permet de changer l'affichage de la description en cliquant dessus
         function description(){
             var description = document.getElementById("descrip");
             if(description.classList.length==1){
@@ -35,11 +36,13 @@
             ev.preventDefault();
             const data = ev.dataTransfer.getData("text");
             el.appendChild(document.getElementById(data));
+            // Permet d'envoyer les id de tache et colonne a python pour modifer la database
             $.ajax({
                 url: '{{ url_for("colonne_project", user_id=user.id, project_id=projet.id)}}',
                 type: 'POST',
                 data: { 'id': data, 'elid' : el.id },
                 beforeSend: function(xhr) {
+                    //Permet de différencier cette requête des envoies de formulairee
                     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 },
                 success: function(response) { },
