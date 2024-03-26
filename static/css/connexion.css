@@ -1,0 +1,103 @@
+html{
+    background-image: linear-gradient(to bottom left, #0d23b4, #9f0375);
+    height: 100%;
+}
+
+*{
+    font-size: 1vw;
+}
+
+body{
+    margin: 0px;
+}
+.all{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+.window{
+    display: flex;
+    flex-direction: column;
+    background-color: #e7b2ff;
+    opacity: .9;
+
+    border-color: #e7b2ff;
+    border: 100px;
+    width: 50%;
+    height: fit-content;
+
+    margin: auto;
+    align-items: center;
+    border-radius: 5%;
+}
+
+
+.button{
+    padding: 2em;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+button{
+
+    font-size: 2vw;
+    height: auto;
+    border: 5px;
+    border-color: black;
+    border-radius: 10px;
+    background-color: #f4ecff;
+}
+
+button:enabled{
+    cursor: pointer;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    height: 95%;
+    width: 90%;
+}
+label{
+    display: inline-block;
+    text-align: left;
+    margin-top: 1.5%;
+}
+
+input[type="text"] input[type="email"] input[type="password"]{
+    display: inline-block;
+    width: 80%;
+}
+
+input[type="submit"]{
+    font-size: 1.5vw;
+}
+
+p{
+    text-align: right;
+    margin-bottom: 1.5vw;
+    margin-top: 1.5vw;
+}
+
+.choix {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    margin-top: 1.5%;
+    }
+
+.radio{
+    margin: 0;
+}
+
+input[type=radio] {
+      margin-right: 5px;
+    }
+
+.error{
+    font-size: 1.5vw;
+    color: #c50000;
+    text-align: center;
+}

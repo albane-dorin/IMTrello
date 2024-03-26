@@ -2,32 +2,47 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../static/css/styleco.css">
+    <link rel="stylesheet" href="../static/css/connexion.css">
 
     <title>Connexion IMTrello</title>
 
   </head>
   <body>
     <div class="all">
-        <div class="window">
-            <div class="button">
-                {% block button %}
-                    <button disabled>Connexion</button>
-                    <button> Inscription</button>
-                {% endblock %}
-            </div>
+        {% block window %}
+            <div class="window">
+                <div class="button">
+                    {% block button %}
+                        <button disabled>Connexion</button>
+                        <a href="{{ url_for("inscription") }}">
+                            <button> Inscription</button>
+                        </a>
+                    {% endblock %}
+                </div>
 
-
-            <form class="formulaire">
                 {% block form %}
-                    <p>Email : <input type="text" placeholder="ex: name.surname@thing.com" value="" required> </p>
-                    <p>Password : <input type="text" value="" required> </p>
+
+                <form class="formulaire" action="{{ url_for("connexion") }}" method="post">
+
+                    <label for="email">Email :</label>
+                       <input type="email" id="email" name="email" placeholder="ex: name.surname@thing.com" value="" required>
+                    <label for="p">Mot de passe :</label>
+                       <input type="password" id="p" name="password" value="" required>
+
+
+                    <p><input type="submit"></p>
+
+                </form>
+
                 {% endblock %}
 
-                <p><input type="submit"></p>
+                {% if error %}
 
-            </form>
-        </div>
+                    <p class="error"> Erreur : {{ error[0] }} </p>
+
+                {% endif %}
+            </div>
+        {% endblock %}
     </div>
 
   </body>

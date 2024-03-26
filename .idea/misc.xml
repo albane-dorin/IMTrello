@@ -3,9 +3,8 @@
   <component name="Black">
     <option name="sdkName" value="flaskProject" />
   </component>
-<<<<<<< HEAD
-  <component name="ProjectRootManager" version="2" project-jdk-name="flaskProject (2)" project-jdk-type="Python SDK" />
-=======
+
+
   <component name="ProjectRootManager" version="2" project-jdk-name="flaskProject" project-jdk-type="Python SDK" />
->>>>>>> 2aba970ec06acc144f5f694366e2ff5716178240
+
 </project>

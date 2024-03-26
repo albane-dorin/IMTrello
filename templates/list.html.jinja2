@@ -1,43 +1,34 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends "home.html.jinja2"%}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votre Application Trello</title>
-    <link rel="stylesheet" href="/static/css/list.css">
-    <link rel="icon" href="data:;base64,=">
 
+{% block link%}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="{{ url_for("static", filename="js/list.js") }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Notifs.css') }}">
+    <link rel="stylesheet" href="/static/css/list.css">
 
+    <link rel="icon" href="data:;base64,=">
+    <script>
+              const user_id = {{ user.id }}
+    </script>
 
-</head>
-<body>
+        <title>Vos tâches</title>
+{% endblock %}
 
-    <div class="container">
-
-
-        <div class="top">
-            <div class="profil">
-                <div class="image"><img src="/static/img/pp1.png" alt="Photo de profil"></div>
-                <div class="nom">
-                    <p class="username"> {{ user.username }} </p>
-                    <a href="/" class="deco">Déconnexion</a>
-                </div>
-            </div>
-            <div class="haut">
-                <div class="vues">
-                    <button class="vue">Vue par échéances</button>
-                    <button class="vue">Vue par projets</button>
-                    <button disabled class="vue">Vue par tâches</button>
-                </div>
-                <div class="plus"><button class="vue"> + </button></div>
-            </div>
+{% block onglet %}
+    <div class="haut">
+        <div class="vues">
+        <a class="lienv" href="{{ url_for("home", user_id=user.id) }}"><button class="vue">Vue par échéances</button> </a>
+            <a class="lienv" href="{{ url_for("colonne", user_id=user.id) }}"> <button class="vue">Vue par projets</button> </a>
+            <button disabled class="vue">Vue par tâches</button>
         </div>
 
+    </div>
+{% endblock %}
 
-        <div class="content">
+{% block inside %}
+
+        <div class="in">
             <div class="left">
 
                 <div class="titre">Filtres</div>
@@ -145,13 +136,16 @@
                     <tbody>
 
                     {% for task in tasks %}
-                        <tr data-name-task = "{{ task.t_name }}" data-status="{{ task.status }}" data-date="{{ task.date }}" data-project="{{ task.p_id }}" data-prio="{{ task.t_prio }}">
-                            <td>{{ task.p_name }}</td>
-                            <td>{{ task.t_name }}</td>
-                            <td>{{ task.status }}</td>
-                            <td>{{ task.t_prio }}</td>
-                            <td>{{ task.date }}</td>
-                            <td>{{ task.m_name }}</td>
+
+                        <tr data-name-task = "{{ task[0].name }}" data-status="{{ task[0].status }}"
+                            data-date="{{ task[0].date }}" data-project="{{ task[1].id }}" data-prio="{{ task[0].priority }}"
+                            onclick="location.href='/id/{{ user.id }}/{{ task[0].id }}/Taskdetail';" style="cursor: pointer;">
+                            <td>{{ task[1].name }}</td>
+                            <td>{{ task[0].name }}</td>
+                            <td>{{ task[0].status }}</td>
+                            <td>{{ task[0].priority }}</td>
+                            <td>{{ task[0].date }}</td>
+                            <td>{{ task[2].username }}</td>
                         </tr>
                     {% endfor %}
 
@@ -160,7 +154,5 @@
                 </table>
             </div>
         </div>
-    </div>
+{% endblock %}
 
-</body>
-</html>

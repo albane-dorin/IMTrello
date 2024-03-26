@@ -80,6 +80,14 @@ class Task_Dvp(db.Model):
     id_task = db.Column(db.Integer, ForeignKey('task.id') , primary_key=True)
     id_dvp = db.Column(db.Integer, ForeignKey('user.id') , primary_key=True)
 
+class Notif(db.Model):
+    __tablename__ = 'notif'
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    content = db.Column(db.Text)
+    link_task = db.Column(db.Integer, db.ForeignKey('task.id'))
+    link_project = db.Column(db.Integer, db.ForeignKey('project.id'))
+
 #Fonctions d'obtention d'informatio
 
 #Est-ce que l'utilisateur est le manager du projet ?
@@ -183,9 +191,13 @@ def new_project(name, description, year, month, day, manager, users : list[User]
     project = Project(name=name, description=description, date=datetime(year, month, day), manager=manager.id)
     db.session.add(project)
     db.session.commit()
+    p_id=project.id
     for user in users:
-        project_dvp = Project_Dvp(id_project=project.id, id_dvp=user.id)
+        project_dvp = Project_Dvp(id_project=p_id, id_dvp=user.id)
         db.session.add(project_dvp)
+        notif = Notif(user=user.id,content="Une nouvelle aventure vous attend, vous avez rejoit le projet "+name,
+                      link_project=p_id)
+        db.session.add(notif)
     db.session.commit()
 
 def delete_project(project_id, user):
@@ -195,6 +207,8 @@ def delete_project(project_id, user):
         #Développer
         dvp_ps = db.session.query(Project_Dvp).filter_by(id_project=project.id)
         for dvp_p in dvp_ps :
+            notif = Notif(user=dvp_p.id_dvp, content="Le projet" + project.name + "a été supprimé.")
+            db.session.add(notif)
             db.session.delete(dvp_p)
         #Tâches
         task_ps=db.session.query(Project_Task).filter_by(id_project=project.id)
@@ -227,6 +241,8 @@ def new_column(name, project, user):
     else:
         return
 
+
+
 #Ajout tâche
 def new_task(user, project, name, year, month, day, description, column, status, priority, dvps):
     if is_manager(user, project):
@@ -235,10 +251,16 @@ def new_task(user, project, name, year, month, day, description, column, status,
         db.session.commit()
         project_task = Project_Task(id_project=project.id, id_task=task.id)
         db.session.add(project_task)
-        for dvp in dvps:
-            dvp_task = Task_Dvp(id_task=task.id, id_dvp=dvp.id)
-            db.session.add(dvp_task)
         db.session.commit()
+        t_id = task.id
+        p_id=id_project_of(task)
+        for dvp in dvps:
+            dvp_task = Task_Dvp(id_task=t_id, id_dvp=dvp.id)
+            db.session.add(dvp_task)
+            notif = Notif(user=dvp.id, link_task=t_id, link_project=p_id,
+                          content="Une nouvelle mission ! Vous avez été ajouté à la tâche "+name)
+            db.session.add(notif)
+            db.session.commit()
         return
     else:
         return
@@ -247,6 +269,8 @@ def delete_task(task, user, project):
     if is_manager(user, project):
         t_dvps=db.session.query(Task_Dvp).filter_by(id_task=task.id).all()
         for t_dvp in t_dvps:
+            notif = Notif(user=t_dvp.id_dvp, content="La tâche " + task.name + "a été supprimée.")
+            db.session.add(notif)
             db.session.delete(t_dvp)
         t_ps = db.session.query(Project_Task).filter_by(id_task=task.id).all()
         for t_p in t_ps:
@@ -257,10 +281,21 @@ def delete_task(task, user, project):
         db.session.delete(task)
         db.session.commit()
 
+def delete_column(column, project, user):
+    if is_manager(user, project):
+        for t in db.session.query(Task).filter_by(column=column.id).all():
+            delete_task(t, user, project)
+        db.session.delete(column)
+        db.session.commit()
+
 
 #Ajout comment
 def new_comment(author, task, content):
     comment = Comment(author=author.id, content=content, task=task.id)
+    for dvp in get_dvps_of_task(task.id):
+        if dvp!=author:
+            notif = Notif(user=dvp.id, content=author.username+' a posté un commentaire sur '+ task.name +".", link_task=task.id, link_project=id_project_of(task))
+            db.session.add(notif)
     db.session.add(comment)
     db.session.commit()
 
@@ -270,6 +305,7 @@ def add_dvp_to_project(user, project, dvp):
     if is_manager(user, project):
         dvp_project = Project_Dvp(id_project=project.id, id_dvp=dvp.id)
         db.session.add(dvp_project)
+        notif = Notif(user=dvp.id, link_project=project.id, content="Une nouvelle aventure vous attend, vous avez rejoit le projet "+project.name)
         db.session.commit()
 
 def delete_dvp_of_project(user, project, dvp):
@@ -283,6 +319,20 @@ def delete_dvp_of_project(user, project, dvp):
         for dvp_t in dvps_tasks:
             db.session.delete(dvp_t)
         db.session.commit()
+def add_dvp_to_task(user, task, dvp):
+    id = id_project_of(task)
+    dvp_in_project = Project_Dvp.query.filter_by(id_project=id).all()
+    dvps = []
+    for d in dvp_in_project:
+        dvps.append(d.id_dvp)
+    for i in range(0, len(dvps)):
+        if dvp.id==dvps[i]:
+            td = Task_Dvp(id_task=task.id, id_dvp=dvp.id)
+            db.session.add(td)
+            notif = Notif(user=dvp.id, link_task=task.id, link_project=id,
+                          content="Une nouvelle mission ! Vous avez été ajouté à la tâche " + task.name)
+            db.session.add(notif)
+            db.session.commit()
 
 def add_dvp_to_task(user, task, dvp):
     if is_manager(user, project_of(task)):
@@ -298,9 +348,12 @@ def add_dvp_to_task(user, task, dvp):
                 db.session.commit()
 
 def delete_dvp_of_task(user, task, dvp):
+    print("A")
     if is_manager(user, project_of(task)):
+        print('in')
         task_dvps=db.session.query(Task_Dvp).filter_by(id_task=task.id).filter_by(id_dvp=dvp.id).all()
         for t in task_dvps:
+            print('youhou')
             db.session.delete(t)
     db.session.commit()
 
@@ -331,13 +384,19 @@ def peupler_db():
     clean()
 
     user1 = User(username="One", password="<PASSWORD>", mail="<EMAIL>", role=1)
-    user2 = User(username="Two", password="<PASSWORD>", mail="<EMAIL>", role=2)
-    db.session.add(user2)
+    user2 = User(username="lovely", password="coeur", mail="lovely@gmail", role=3)
     db.session.add(user1)
+    db.session.add(user2)
     db.session.commit()
 
-    project1 = Project(name="Project 1", description="Mon premier projet", date=datetime(2024, 3, 6), manager=user1.id)
-    project2 = Project(name="Project 2", description="Mon deuxième projet", date=datetime(2024, 3, 6), manager=user1.id)
+    project1 = Project(name="Project 1", description="Mon premier projet", date=datetime(2024, 3, 6), manager=user2.id)
+    project2 = Project(name="Project 2", description="ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho "
+                                                     "ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ho ",
+                       date=datetime(2024, 3, 6), manager=user1.id)
     db.session.add(project1)
     db.session.add(project2)
     db.session.commit()
@@ -400,6 +459,15 @@ def peupler_db():
     db.session.add(task_dvp)
     task_dvp = Task_Dvp(id_task=task21.id, id_dvp=user2.id)
     db.session.add(task_dvp)
+
+    #Notifs
+    n1 = Notif(user=2, content="J'ai une notif")
+    n2 = Notif(user=2, content="Vous avez rejoint le projet 'Hello'", link_project=1)
+    n3 = Notif(user=2, content="L'échéance de la tâche HelloWorld arrive bientôt", link_task=2, link_project=1)
+    db.session.add(n1)
+    db.session.add(n2)
+    db.session.add(n3)
+
 
     db.session.commit()
 
@@ -553,13 +621,13 @@ def peupler():
     db.session.commit()
 
     #Association tâches à leur projet
-    for task in tasks[:7+1]:
+    for task in tasks[:7]:
         project_task = Project_Task(id_project=project1.id, id_task=task.id)
         db.session.add(project_task)
-    for task in tasks[8:11+1]:
+    for task in tasks[7:11]:
         project_task = Project_Task(id_project=project2.id, id_task=task.id)
         db.session.add(project_task)
-    for task in tasks[12:]:
+    for task in tasks[11:]:
         project_task = Project_Task(id_project=project3.id, id_task=task.id)
         db.session.add(project_task)
     db.session.commit()

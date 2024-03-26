@@ -1,0 +1,68 @@
+{% extends "home.html.jinja2" %}
+
+
+{% block onglet %}
+        <div class="haut">
+            <div class="vues">
+                <button disabled class="vue">Vue par échéances</button>
+                <a class="lienv" href="{{ url_for("colonne_project", user_id=user.id, project_id=projet.id) }}"> <button class="vue">Vue par projets</button> </a>
+                <a class="lienv" href="{{ url_for("list", user_id=user.id) }}"> <button class="vue">Vue par tâches</button> </a>
+            </div>
+
+        </div>
+        {% endblock %}
+
+{% block projects %}
+    <a class="lienp" href="{{ url_for("home", user_id=user.id)}}">
+            <button class="projet" style="font-size: 1vw;"> Voir tous vos projets </button>
+    </a>
+
+    {% for p in projects %}
+        {% if p.id == projet.id  %}
+
+            <div class="lienp" onclick="window.location.href='{{ url_for("home", user_id=user.id)}}'">
+                <button class="projet" disabled>{{ p.name }}</button>
+            </div>
+        {% else %}
+                <a class="lienp" href="{{ url_for("home_project", user_id=user.id, project_id=p.id)}}">
+                    <button class="projet" >{{ p.name }}</button>
+                </a>
+        {% endif %}
+
+
+    {% endfor %}
+     {% if user.role==1 or user.role==3 %}
+        <a class="lienp">
+            <button data-modal-target="#form" class="projet"> + </button>
+        </a>
+
+        <div id="form" class="new">
+
+            <form  id="formnp" action="{{ url_for("home_project", user_id=user.id, project_id=projet.id) }}" method="post">
+
+                <div class="bandeaux"><h3>Nouveau Projet</h3>  <button date-close-button class="close"> X </button> </div>
+
+                <label for="name">Nom du projet :</label>
+                   <input type="text" id="name" name="name" value="" required>
+                <label for="des">Description du projet :</label>
+                <textarea type="text" id="des" name="description" value="" required></textarea>
+                <label for="date">Date de fin prévisionnel :
+                    <input type="date" id="date" name="date" value="" required>
+                </label>
+
+                <label for="dev">Ajouter des développeurs :</label>
+                    <input type="text" id="dev" name="developpeurs" value="" multiple>
+                <div class="precision"> Entrer les adresses emails des développeurs en les séparant simplement avec un espace</div>
+
+
+
+                <p ><input name="project" type="submit"></p>
+
+            </form>
+        </div>
+    {% endif %}
+
+
+
+{% endblock %}
+

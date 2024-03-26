@@ -1,0 +1,25 @@
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/miniatureColonne.css">
+    <title>Tâche : {{ dataTask.titreTache }}</title>
+</head>
+<header>
+    <div class="container">
+    <div class="titleTask">{{ dataTask.titreTache }}</div>
+    <div class="rectangle" style="--rectangle-color: {{dataTask.taskColor}}"></div>
+    </div>
+</header>
+<body>
+    <p>
+        Pour le : {{ dataTask.endDate}}
+    </p>
+    <p>
+        {% for developer in dataTask.developers %}
+            {{ developer }},
+        {% endfor %}
+    </p>
+</body>
+</html>

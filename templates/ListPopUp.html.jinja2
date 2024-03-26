@@ -1,0 +1,111 @@
+{% extends "list.html.jinja2" %}
+
+{% block link %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/list.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/colonne.css') }}">
+            <script src="{{ url_for("static", filename="js/list.js") }}"></script>
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/Notifs.css') }}">
+{% endblock %}
+
+{% block plus %}
+    <div class="container">
+        <div class="left">
+            <div class="lefttop">
+                <div class="containerUD">
+                    <div class="partieFixe">
+                        <div class="tache_header">
+                            <h1>{{ tache.name }}</h1>
+                            {% if user.id==projet.manager %}
+                                <a href="{{ url_for("supprdev_de_tache", user_id=user.id,  project_id=projet.id, task_id=tache.id, dev_id=user.id) }}">
+                                    <button class="suppr_col"> Supprimer la tache </button>
+                                </a>
+
+
+                            {% endif %}
+                        </div>
+                            <div class="containerStatusDate">
+                            <div class="{{ tache.priority }}">{{ tache.priority }} </div>
+                            <div>
+                                {% if urgent=='oui' %}
+                                    <div class="urgent">{{ tache.date }}</div>
+                                {% else %}
+                                    <div class="nonurgent">{{ tache.date }}</div>
+                                {% endif %}
+                            </div>
+                            </div>
+                            <span class="section">
+                                Status : </span>
+                                <span> {{ tache.status }} </span>
+
+                    </div>
+                    <div class="containerPartieScroll">
+                        <p>
+                            <div class="description section">
+                                <span class="bold">Description :<br></span> {{ tache.description }}
+                            </div>
+                        </p>
+                        <div class ="commentairebox section">
+                            <div class="bold"> Commentaires : </div>
+                            {% for com in commentaires %}
+                                <div class="commentaire">
+                                    <div class="text">{{ com[0].content }}</div>
+                                    <p class="author"> Par {{ com[1].username }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="leftdown">
+                <form class="formcom" action="{{ url_for("taskdetail", user_id=user.id, task_id=tache.id) }}" method="post">
+                    <label for="comment">Ajouter un commentaire :</label>
+                        <textarea id="comment" name="comment" required></textarea>
+                    <p><input name="formcomment" id="formcomment" type="submit"></p>
+                </form>
+
+            </div>
+        </div>
+        <div class="right">
+            <div class="topdevs">
+                <a href="{{ url_for('list', user_id=user.id) }}">
+                    <button class="close">X</button>
+                </a>
+            </div>
+            <span class="bold">Développeurs :</span>
+            {% if user.id==projet.manager %}
+                <form class="formdev" action="{{ url_for("popUp", user_id=user.id,  project_id=projet.id, task_id=tache.id) }}" method="post">
+                    <label for="dev">Ajouter un developpeur :</label>
+                        <input id="dev" type="email" name="dev" required>
+                    <p><input name="formdev" id="formdev" type="submit"></p>
+                </form>
+
+                {% if errordev %}
+                    <p class="errordev"> Erreur : {{ errordev[0] }} </p>
+                {% endif %}
+            {% endif %}
+
+            <ul>
+                {% for dev in developers %}
+                <li>
+                    <p class="devs">
+                        {{dev.username}}
+                        {% if user.id==projet.manager %}
+                            {% if dev.id!=user.id %}
+                                <a href="{{ url_for("supprdev_de_tache", user_id=user.id,  project_id=projet.id, task_id=tache.id, dev_id=dev.id) }}">
+                                    <button class="delete close"> - </button>
+                                </a>
+
+                            {% else %}
+                                (Moi)
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                </li>
+
+
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+<div id="overlayerreur"></div>
+{% endblock %}
